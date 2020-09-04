@@ -18,3 +18,18 @@ vector<int> shuffle(vector<int> &nums, int n)
     }
     return newVector;
 }
+
+vector<int> shuffle(vector<int> &nums, int n)
+{
+    int j = 0;
+    // vector<int> newVector;
+    nums.clear();
+
+    for (int i = n; i < nums.size(); i++)
+    {
+        // newVector.push_back(nums[j]);
+        // newVector.push_back(nums[i]);
+        j++;
+    }
+    return nums;
+}
