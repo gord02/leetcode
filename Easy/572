@@ -1,0 +1,414 @@
+     bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+         // queue<TreeNode*> q;
+         if(subRoot == nullptr || root == nullptr) {
+             return false;
+         }
+         stack<TreeNode*> p;
+         stack<TreeNode*> q;
+        queue<TreeNode*> qp;
+         queue<TreeNode*> qq;
+         
+         qp.push(subRoot);
+         qq.push(root);
+         bool matched = false;
+         while(qp.empty() != true) {
+             TreeNode* front = qp.front();
+             qp.pop();
+             p.push(front);
+             if(front->left != nullptr) {
+                 qp.push(front->left);
+             }
+             if(front->right != nullptr) {
+                 qp.push(front->right);
+             }
+         }
+        while(qq.empty() != true) {
+             TreeNode* front = qq.front();
+             qq.pop();
+             q.push(front);
+             if(front->left != nullptr) {
+                 qq.push(front->left);
+             }
+             if(front->right != nullptr) {
+                 qq.push(front->right);
+             }
+         }
+         
+//          while(q.top()->left != nullptr || q.top()->right != nullptr) {
+            
+//              if( q.top()->left != nullptr) {
+//                q.push(q.top()->left);
+//              }
+//                if( q.top()->right != nullptr) {
+//                q.push(q.top()->right);
+//              }
+//          }
+//          while(p.top()->left != nullptr || p.top()->right != nullptr) {
+           
+//              if( p.top()->left != nullptr) {
+//                p.push(p.top()->left);
+//              }
+//                if( p.top()->right != nullptr) {
+//                p.push(p.top()->right);
+//              }
+//          }
+//          while(p.empty() != true) {
+//              cout << p.top()->val << " " << flush;
+//              p.pop();
+//          }
+//          cout << endl;
+//          while(q.empty() != true) {
+//              cout << q.top()->val << " " << flush;
+//              q.pop();
+//          }
+//          cout << endl;
+         
+//          return false;
+         
+         
+        while(q.empty() != true) {
+            if(p.empty() == true) {    
+                return true;
+            }
+            TreeNode* qtop = q.top();
+            TreeNode* ptop = p.top();
+            // cout << "qtop->val: " << qtop->val << " ptop->val: " << ptop->val<< endl;      
+            q.pop();
+            if(qtop->val == ptop->val) {
+//              stucture possibility one
+                if((qtop->left != nullptr) && (ptop->left != nullptr)) { //check left
+                    cout << "structure 1 considered" << endl;    
+    //                  data's val possibilty 1
+                    if((qtop->right != nullptr) && (ptop->right != nullptr)) { //check right, only if left was true
+                        if((qtop->left->val == ptop->left->val) && (qtop->right->val == ptop->right->val)) {
+ //                         matched binary stucture!  
+                            cout << "matched poss #1" << endl;
+                            matched = true;
+                            p.pop();
+                        }
+                        
+                    }
+    //                  data's val possibilty 2
+                    else if((qtop->right == nullptr) && (ptop->right == nullptr)) {
+                        if(qtop->left->val == ptop->left->val) {
+//                         matched binary stucture!  
+                            matched = true;
+                            cout << "matched poss #2" << endl;
+                            p.pop();      
+                        } 
+                    }
+                    // else{// being carried out for some reason
+    //                  data's val possibilty 3
+                    // if((qtop->left == nullptr && ptop->left != nullptr) || (qtop->left != nullptr && ptop->left == nullptr)) {}
+                    else{
+                        cout << "else, strcture 1" << endl;
+                        if(matched) {
+                            return false;
+                        }
+                    }
+                }
+//              stucture possibilty two
+                else if((qtop->left == nullptr) && (ptop->left == nullptr)) { //check left
+                    cout << "structure 2 considered" << endl;    
+                //                  data's val possibilty 1
+                    // if((qtop->left->val == ptop->left->val)) {
+//                         matched binary stucture!  
+                            if((qtop->right != nullptr) && (ptop->right != nullptr)) { //check right, only if left was true
+                                if(qtop->right->val == ptop->right->val) {
+                                                     //                         matched binary stucture!  
+                                    cout << "matched poss #1" << endl;
+                            matched = true;
+                                    p.pop();
+                                }
+                            }
+                        //                  data's val possibilty 2
+                            else if((qtop->right == nullptr) && (ptop->right == nullptr)) {
+                                    cout << "matched poss #2" << endl;
+                            matched = true;
+                                
+                                    p.pop();     
+                            }
+                    // }
+
+                //                  data's val possibilty 3, do nothing
+//                     if((qtop->left == nullptr && ptop->left != nullptr) || (qtop->left != nullptr && ptop->left == nullptr)) {    }
+                    else{
+                        cout << "else, strcutre 2" << endl;
+                        if(matched) {
+                            return false;
+                        }
+                    }
+                }
+//              the other two possibilites are mistach and covered by this else, therefore reset 
+                // else{ // same issue, why is this iterating if the other ifs are ?
+                // if((qtop->left == nullptr && ptop->left != nullptr) || (qtop->left != nullptr && ptop->left == nullptr)) {}
+                else{ //running when it shouldn't
+                        cout << "else " << endl;
+                        if(matched) {
+                            return false;
+                        }
+                    }
+             }else{ 
+                    cout << "else highest level " << endl;
+                    if(matched) {
+                        return false;
+                    }
+                }
+          }
+//          while(p.empty() != true) {
+//             if(q.empty() == true) {
+//                 cout << "no more of main tree" << endl;
+//                 return false;
+//             }
+//             TreeNode* qfront = q.front();
+//             TreeNode* pfront = p.front();
+//              cout << "qfront->val: " << qfront->val << " pfront->val: " << pfront->val << endl;
+//              if(qfront->val == pfront->val) {
+//                  // cout << "same vals" << endl;
+// //              stucture possibility one
+//                 if((qfront->left != nullptr) && (pfront->left != nullptr)) { //check left
+//                     cout << "structure 1 considered" << endl;    
+//     //                  data's val possibilty 1
+//                     if((qfront->right != nullptr) && (pfront->right != nullptr)) { //check right, only if left was true
+//                         if((qfront->left->val == pfront->left->val) && (qfront->right->val == pfront->right->val)) {
+//                                              //                         matched binary stucture!  
+//                         cout << "matched poss #1" << endl;
+//                         matched = true;
+// //                      deque node and enqueu chlidren
+//                         p.pop();
+//                         if(pfront->left != nullptr) {
+//                              p.push(pfront->left);
+//                         }
+//                         if(pfront->right != nullptr) {
+//                              p.push(pfront->right);
+//                         }
+//                         }
+                        
+//                     }
+//     //                  data's val possibilty 2
+//                     if((qfront->right == nullptr) && (pfront->right == nullptr)) {
+//                         if((qfront->left->val == pfront->left->val) && (qfront->right->val == pfront->right->val)) {
+// //                         matched binary stucture!  
+//                         cout << "matched poss #1" << endl;
+//                         matched = true;
+// //                      deque node and enqueu chlidren
+//                         p.pop();
+//                         if(pfront->left != nullptr) {
+//                              p.push(pfront->left);
+//                         }
+//                         if(pfront->right != nullptr) {
+//                              p.push(pfront->right);
+//                         }         
+//                     } 
+//                     }
+//                     // else{// being carried out for some reason
+//     //                  data's val possibilty 3
+//                     if((qfront->left == nullptr && pfront->left != nullptr) || (qfront->left != nullptr && pfront->left == nullptr)) {
+//                         if(matched) {
+//                             cout << "resting strcut 1" << endl;
+//                          queue<TreeNode*> empty;
+//                         swap( p, empty );
+//                          p.push(subRoot);
+//                      }
+//                     }
+//                 }
+// //              stucture possibilty two
+//                 if((qfront->left == nullptr) && (pfront->left == nullptr)) { //check left
+//                     cout << "structure 2 considered" << endl;    
+//                 //                  data's val possibilty 1
+//                     if((qfront->right != nullptr) && (pfront->right != nullptr)) { //check right, only if left was true
+//                         if((qfront->right->val == pfront->right->val)) {
+//                                              //                         matched binary stucture!  
+//                             cout << "matched poss #1" << endl;
+//                             matched = true;
+//     //                      deque node and enqueu chlidren
+//                             p.pop();
+//                             if(pfront->left != nullptr) {
+//                                  p.push(pfront->left);
+//                             }
+//                             if(pfront->right != nullptr) {
+//                                  p.push(pfront->right);
+//                             }
+//                         }
+//                     }
+//                 //                  data's val possibilty 2
+//                     if((qfront->right == nullptr) && (pfront->right == nullptr)) {
+//                         if((qfront->right->val == pfront->right->val)) {
+//       //                    matched binary stucture!  
+//                             cout << "matched poss #1" << endl;
+//                             matched = true;
+//     //                      deque node and enqueu chlidren
+//                             p.pop(); 
+//                             if(pfront->left != nullptr) {
+//                                  p.push(pfront->left);
+//                             }
+//                             if(pfront->right != nullptr) {
+//                                  p.push(pfront->right);
+//                             }     
+//                         }
+//                     }
+//                     // else{
+//                     //     q.push(qfront);
+//                     // } 
+//                     // else{// being carried out for some reason
+//                 //                  data's val possibilty 3
+//                     if((qfront->left == nullptr && pfront->left != nullptr) || (qfront->left != nullptr && pfront->left == nullptr)) {
+//                         if(matched) {
+//                             cout << "resting strcut 1" << endl;
+//                          queue<TreeNode*> empty;
+//                         swap( p, empty );
+//                          p.push(subRoot);
+//                      }
+//                     }
+//                 }
+                 
+// //              the other two possibilites are mistach and covered by this else, therefore reset 
+//                 // else{ // same issue, why is this iterating if the other ifs are ?
+//                 if((qfront->left == nullptr && pfront->left != nullptr) || (qfront->left != nullptr && pfront->left == nullptr)) {
+//                    // cout << "else iterating " << endl;
+// //                      either rest or do nothing
+//                      if(matched) {
+//                             cout << "resting in codition 3" << endl;
+//                         queue<TreeNode*> empty;
+//                         swap( p, empty );
+//                          p.push(subRoot);
+//                      }
+//                  }
+//              }      
+             
+//         //  base q logic that always needs to happen
+//             q.pop();
+//             if(qfront->left != nullptr) {
+//                  q.push(qfront->left);
+//              }
+//             if(qfront->right != nullptr) {
+//                  q.push(qfront->right);
+//              }
+
+//          }
+//          cout << "out" << endl;
+//          // if(q.empty() != true) {
+//          //  while(q.empty() != true) {
+//          //      cout << q.front()->val << " " << flush;
+//          //      q.pop();
+//          //  }
+//          //     return false;
+//          // }
+         if(q.empty() == true && p.empty() == true) {
+             return true;
+         }
+         
+         return false;
+     }
+    
+//     bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+//         queue<TreeNode*> q1; 
+//         queue<TreeNode*> q2;
+//         q2.push(subRoot);
+//         queue<TreeNode*> tempQ;
+//         tempQ = q2;
+//         bool refreshNeeded = false;
+//         q1.push(root);
+//         while(q2.empty() != true) {
+//             cout << "here" << endl;
+//             if(q1.empty() == true) {
+//                 cout << "not enough nodes" << endl;
+//                 return false;
+//             }
+ 
+//             // if(q1.front()->val == q2.front()->val) { // doesnt account for mulitple same values
+// //          if they are equalvent in sturcture
+//             if(
+//                 ((q1.front()->left != nullptr && q2.front()->left != nullptr) || (q1.front()->left == nullptr && q2.front()->left == nullptr)) && 
+//                (
+//                    (q1.front()->right != nullptr && q2.front()->right != nullptr) || ((q1.front()->right == nullptr) && (q2.front()->right == nullptr))
+//                )
+//               )  { 
+//                 cout << "same structure" << endl;
+//                     if(q1.front()->left != nullptr) {
+//                         if(q1.front()->left->val == q2.front()->left->val) {
+//                             if(q1.front()->right != nullptr) {
+//                                   if(q1.front()->right->val == q2.front()->right->val) {
+//                                         cout << "if - matched" << endl;
+//                                         TreeNode* front = q2.front();
+//                                         q2.pop();
+
+//                                         if(front->left != nullptr) {
+//                                             q2.push(front->left);
+//                                         }
+//                                         if(front->right != nullptr) {
+//                                             q2.push(front->right);
+//                                         }
+//                                   }else{
+//                                       refreshNeeded = true;
+//                                   }
+//                             }else{
+//                                  cout << "else - matched" << endl;
+//                                         TreeNode* front = q2.front();
+//                                         q2.pop();
+
+//                                         if(front->left != nullptr) {
+//                                             q2.push(front->left);
+//                                         }
+//                                         if(front->right != nullptr) {
+//                                             q2.push(front->right);
+//                                         }
+//                             }
+//                         }else{
+//                             refreshNeeded = true;
+//                         }
+//                     }
+// //                     if(q1.front()->right != nullptr) {
+// //                         if(q1.front()->right->val == q2.front()->right->val) {
+// //                             if(q1.front()->left != nullptr) {
+// //                                   if(q1.front()->left->val == q2.front()->left->val) {
+// //                                         cout << "matched" << endl;
+// //                                         TreeNode* front = q2.front();
+// //                                         q2.pop();
+
+// //                                         if(front->left != nullptr) {
+// //                                             q2.push(front->left);
+// //                                         }
+// //                                         if(front->right != nullptr) {
+// //                                             q2.push(front->right);
+// //                                         }
+// //                                   }else{
+// //                                       refreshNeeded = true;
+// //                                   }
+// //                             }else{
+// //                                  cout << "matched" << endl;
+// //                                         TreeNode* front = q2.front();
+// //                                         q2.pop();
+
+// //                                         if(front->left != nullptr) {
+// //                                             q2.push(front->left);
+// //                                         }
+// //                                         if(front->right != nullptr) {
+// //                                             q2.push(front->right);
+// //                                         }
+// //                             }
+// //                         }else{
+// //                             refreshNeeded = true;
+// //                         }
+// //                     }
+            
+//             }
+//             if(refreshNeeded) {
+//                 q2 = tempQ;
+//                 refreshNeeded = false;
+//             }
+//             TreeNode* front = q1.front();
+//             q1.pop();
+//             if(front->left != nullptr) {
+//                 q1.push(front->left);
+//             }
+//             if(front->right != nullptr) {
+//                 q1.push(front->right);
+//             }
+            
+//         }
+//         if(q1.empty() == false) {
+//             return false;
+//         }
+//         return true;
+//     }

@@ -1,0 +1,49 @@
+   // 22. Generate Parentheses
+//    Time taken: really long time, forgot to pop from stack after leaving. Lesson: undo everything done from recurions after leaving the recursion.
+//     Runtime: 16 ms, faster than 9.80% of C++, Memory Usage: 36.9 MB, less than 5.01% 
+    vector<string> answer;
+    int opens =1;
+    int closes =0;
+        void combos(stack<char> st, string &s, int n) {
+//         base cases and constraints
+//               not well fromed
+          if(opens > n) {
+            return;
+        }
+       if(s[s.length()-1] == ')') {
+//             check stack
+            if(st.empty()){
+                return;
+            }else{
+                st.pop();
+            }
+        }
+//             found combo
+        if(opens == n && closes == n) {
+            answer.push_back(s);
+            return;
+        }
+            
+        s = s + "(";
+        st.push('(');
+        opens++;        
+        combos(st, s, n);
+    
+        s.erase(s.begin()+s.length()-1);
+        st.pop();
+        opens--;
+            
+        s = s + ")";
+        closes++;
+        combos(st, s, n);
+            
+        s.erase(s.begin()+s.length()-1);
+        closes--;
+    }
+    vector<string> generateParenthesis(int n) {
+        string s = "(";
+        stack<char> st;
+        st.push('(');
+        combos(st, s, n);
+        return answer;
+    }

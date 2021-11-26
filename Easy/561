@@ -1,0 +1,12 @@
+   // 561. Array Partition I
+//     Time taken: roughly 4 minutes for idea, three for impelmentation 
+    // Runtime: 11 ms, faster than 59.26% of Java, Memory Usage: 41.2 MB, less than 57.76%
+    public int arrayPairSum(int[] nums) {
+        Arrays.sort(nums);
+        int count = 0;
+        for(int i=0; i<nums.length-1; i++) {
+            count = count + Math.min(nums[i], nums[i+1]);
+            i++;
+        }
+        return count;
+    }

@@ -1,0 +1,17 @@
+//     121. Best Time to Buy and Sell Stock
+// Time taken: A ridiculous long time, serveral apporaches for this seemingly easily problem
+//     Runtime: 132 ms, faster than 50.60% of C++ Memory Usage: 93.2 MB, less than 99.62%
+    int maxProfit(vector<int>& prices) { 
+        int hold = prices[0];
+        int max = 0;
+        for(int point =0; point<prices.size(); point++) {
+            if(prices[point] < hold) {
+                hold = prices[point];
+            }else{
+                if((prices[point] - hold) > max) {
+                    max = (prices[point] - hold);
+                }
+            }
+        }
+        return max;
+    }    

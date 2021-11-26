@@ -1,0 +1,52 @@
+  // 86. Partition List
+//     TIme taken: an hour and 25 minutes, issue lied in the last variable, make sure last isnt being updated to a node that is supposed to have been removed
+//     Runtime: 4 ms, faster than 89.18% of C++ Memory Usage: 10.3 MB, less than 71.21% 
+    ListNode* partition(ListNode* head, int x) {
+//         base case
+        if(head == nullptr) {
+            return head;
+        }
+        
+//         initilaize vairbles such as vector and last
+        vector<ListNode*> nodes;
+        ListNode* last = nullptr;
+//         new head for start of list
+        ListNode* newHead = head;
+        
+//         while loop for list
+        while(head != nullptr) {
+            ListNode* next = head->next;
+            if(head->next != nullptr) {
+            }
+            if(head->val < x) {
+                nodes.push_back(head);
+                if(last != nullptr) {
+                    last->next = next;
+                }
+//                 makes sure we have the start of the list if the first node is being removed
+                if(head == newHead) {
+                    newHead = next;
+                }
+//                 removes the current node from list 
+                head->next = nullptr;
+            }
+//             updating last with current element 
+            if(head->next != nullptr) {
+                last = head;
+            }
+            
+            //    move onto next node in list
+            head = next;
+        }
+//         second while loop to attach nodes in vector to list 
+        for(int i = nodes.size()-1; i>=0; i--) {
+             nodes[i]->next = newHead;
+            newHead = nodes[i];
+        }
+        
+        if(nodes.size() == 0) {
+            return newHead;
+        }
+        return nodes[0];
+        
+    }

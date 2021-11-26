@@ -1,0 +1,28 @@
+//     643. Maximum Average Subarray I
+//     A long time to work out logistics of sliding window 
+//     Runtime: 4 ms, faster than 79.73% of Java Memory Usage: 53.4 MB, less than 71.16%
+    public double findMaxAverage(int[] nums, int k) {
+        double max = Integer.MIN_VALUE;
+        double sum = 0;
+        int left = 0; 
+        int right = 0;
+        if(nums.length == 1) {
+            return nums[0];
+        }
+        while(right != nums.length) {
+            if(right - left + 1 <k) {
+                sum = sum + nums[right];
+                right++;
+                
+            }else{
+                sum = sum + nums[right];
+                if((sum/k) > max) {
+                    max = (sum/k);
+                }
+                    sum = sum - nums[left];
+                    right++;
+                    left++;
+            }
+        }
+        return max;
+    }

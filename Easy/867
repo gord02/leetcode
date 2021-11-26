@@ -1,0 +1,15 @@
+//     867. Transpose Matrix
+//     time: Runtime: 17 minutes, stupid error, already did this question, 
+    // 8 ms, faster than 96.12% of C++ Memory Usage: 10.6 MB, less than 40.53% of C++ online submissions for Transpose Matrix.
+    vector<vector<int>> transpose(vector<vector<int>>& matrix) {
+        vector<vector<int>> grid(matrix[0].size(), vector<int>(matrix.size()));
+//             have to add 
+            for(int row = 0; row<matrix.size(); row++) {
+                for(int col = 0; col<matrix[row].size(); col++) {
+                    // cout << matrix[col][row] << endl;
+                    grid[col][row] =  matrix[row][col];
+                }
+                
+            }
+            return grid;
+    }

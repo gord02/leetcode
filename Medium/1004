@@ -1,0 +1,26 @@
+//     1004. Max Consecutive Ones III
+//     TIme taken: 23 minutes, i learned techinque elaier so job was only ot implement, error in width calcualtion, add 1
+    // Runtime: 44 ms, faster than 96.34%, Memory Usage: 55.5 MB, less than 14.49%
+    int longestOnes(vector<int>& nums, int k) {
+        int left =0;
+        int right =0;
+        int max = 0;
+        int one_count = 0;
+        while(right != nums.size() ) {
+            if(nums[right] == 1) {
+                one_count++;
+            }
+            if(right - left +1 - one_count <= k) {
+                if(min(right -left +1, one_count+k) > max) {
+                    max = min(right -left +1, one_count+k);
+                }
+                right++;
+            }else{
+                if(nums[left] == 1) {
+                    one_count--;
+                }
+                left++;
+            }
+        }
+        return max;
+    }

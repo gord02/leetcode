@@ -1,0 +1,19 @@
+//     78. Subsets
+    // Time taken: 12 minutes to work out the mechanics, had pattern porvided 
+    // Runtime: 6 ms, faster than 12.43% of C++, Memory Usage: 7.2 MB, less than 45.28% 
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<int> empty;
+        vector<vector<int>> res{empty};
+        
+        for(int i: nums) {
+//             get copy of existing answer vector of vector 
+             vector<vector<int>> copy = res; // O(n) complexity 
+//             add new element to every vector in copy 
+                for(vector<int> vec: copy) {
+                    vec.push_back(i);
+                    // push new set of arrays to copy, which also updates original
+                    res.push_back(vec);
+                }
+        }
+        return res;
+    }

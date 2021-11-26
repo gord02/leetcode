@@ -1,0 +1,47 @@
+//     19. Remove Nth Node From End of List
+//     Time taken: 25 minutes, 5 minutes for idea, many small bugs to fix,
+    // Runtime: 4 ms, faster than 79.20% of C++ Memory Usage: 10.7 MB, less than 73.70%
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        int count = 0;
+//         base case
+        if(head == nullptr) {
+            return head;
+        }
+        
+        ListNode* node = head;
+        while(node != nullptr) {
+            count++;
+            node = node->next;
+        }
+        ListNode* prev = nullptr;
+        node = head;
+        while(node!=nullptr) {
+            if(count == n) {
+                ListNode* temp = node->next;
+                
+//                 if next is null either at end or onyly a single value in list
+                 if(node->next == nullptr) {
+                     cout << "here" << endl;
+                     if(prev != nullptr) {
+                        prev->next = nullptr;
+                     }else{
+                        return nullptr;
+                     }
+                 }
+                node->next = nullptr;
+                if(prev != nullptr) {
+                    prev->next = temp;
+                }
+                if(node == head) {
+                    cout << "is head" << endl;
+                    head = temp;
+                }
+                node = temp;
+                break;
+            }
+            count--;
+            prev = node;
+            node = node->next;
+        }
+        return head;
+    }

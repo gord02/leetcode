@@ -1,0 +1,78 @@
+//     242. Valid Anagram
+//     Time Taken: 5 minutes, this is my second attempt so... saved time just directl comparing dicts instead of iteraing through them 
+    // Runtime: 12 ms, faster than 55.05% of C++, Memory Usage: 7.3 MB, less than 45.01%
+    bool isAnagram(string s, string t) {
+        map<char, int> dict_s;
+        map<char, int> dict_t;
+        
+        for(char c: s) {
+            auto it = dict_s.find(c);
+            if(it == dict_s.end()) {
+//                 add it to dict
+                dict_s.insert(pair<char, int>(c, 1));
+            }else{
+                it->second = it->second + 1;
+            }
+        }
+        for(char c: t) {
+            auto it = dict_t.find(c);
+            if(it == dict_t.end()) {
+//                 add it to dict
+                dict_t.insert(pair<char, int>(c, 1));
+            }else{
+                it->second = it->second + 1;
+            }
+        }
+        
+        if(dict_s == dict_t) {
+            return true;
+        }
+        return false;
+    }
+// //     242. Valid Anagram
+// //     TIME TAKEN: 24 minutes
+// //     implementation is slow in comparison to others  faster than 5.05%, less than 7.20% space
+//     bool isAnagram(string s, string t) {
+// //         count to make sure the strings are fo the same length, if not return false
+//         if(s.length() != t.length()) {
+//             return false;
+//         }
+// //         push strings into maps
+//         map<char, int> map_s;
+//         map<char, int> map_t;
+    
+//         for(char i: s) {
+//             if(map_s.find(i) == map_s.end()) {
+//                 map_s.insert(pair<char, int> (i, 1));   
+//             }else{
+//                 map_s[i] = map_s[i] + 1;
+//             }
+//         }
+//         for(char i: t) {
+//             if(map_t.find(i) == map_t.end()) {
+//                 map_t.insert(pair<char, int> (i, 1));
+//             }else{
+//                 map_t[i] = map_t[i] + 1;
+//             }
+//         }
+// //         with one map see if all the values inside of it are in other dictionary
+// //             compare frequences AND chars
+//         map<char,int>::iterator it_s = map_s.begin();
+//         // map<char,int>::iterator it_t = map_t.begin();
+//         while(it_s!=map_s.end()) {
+//             auto current_pair = map_t.find(it_s->first);
+//             // pair<char,int> current_pair = map_t.find(it_s->first);
+//             if(current_pair == map_t.end()) {
+//                 return false;
+//             }
+//               cout << "current_pair key: " << current_pair->first << " it_s key: " << it_s->first << endl;
+//         cout << "current_pair val: " << current_pair->second << " it_s val: " << it_s->second << endl;
+//             // if(current_pair->first != it_s->first && current_pair->second != it_s->second) {
+//             if(current_pair->second != it_s->second) {
+              
+//                 return false; 
+//             }
+//             it_s++;
+//         }
+//         return true;
+//     }

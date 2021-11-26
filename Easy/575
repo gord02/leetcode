@@ -1,0 +1,16 @@
+//     575. Distribute Candies
+//     Time taken: 17 minutes, 7 minutes for idea and undestanding, 10 minutes due to java
+    // Runtime: 35 ms, faster than 51.27% of Java Memory Usage: 40.6 MB, less than 96.24% 
+    public int distributeCandies(int[] candyType) {
+        int unique_count = 0;
+        Map dict = new HashMap();
+        
+        for(int i=0; i<candyType.length; i++) {
+            if( dict.containsKey(candyType[i]) == false) {
+                unique_count++;
+                dict.put(candyType[i], 1);
+            }
+            
+        }
+            return Math.min(candyType.length/2, unique_count);
+    }

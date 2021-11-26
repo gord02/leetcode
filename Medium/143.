@@ -1,0 +1,32 @@
+//     143. Reorder List
+//     50 minutes total maybe
+//     Runtime: 44 ms, faster than 42.38% of C++ Memory Usage: 18.8 MB, less than 15.86% 
+    void reorderList(ListNode* head) {
+        vector<ListNode*> list;
+        
+        while(head != nullptr) {
+            list.push_back(head);
+            head = head->next;
+        }
+        
+        ListNode* newHead = list[0];
+        ListNode* node  = newHead;
+        int left = 1;
+        int right = list.size()-1;
+        
+        bool back = true;
+        while(left <= right) {
+            if(!back) {
+                node->next = list[left];
+                left++;
+                back = true;
+            }else{
+                node->next = list[right];
+                right--;
+                back = false;
+            }
+            node = node->next;
+        }
+        node->next = nullptr;
+        head = newHead;
+    }

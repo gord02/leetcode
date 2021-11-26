@@ -1,0 +1,26 @@
+//     832. Flipping an Image
+//     time taken: 6 minutes
+//     Runtime: 4 ms, faster than 86.06% of C++ Memory Usage: 8.9 MB, less than 8.37%
+    vector<vector<int>> flipAndInvertImage(vector<vector<int>>& image) {
+        for(int row=0; row<image.size(); row++) {
+            int left = 0;
+            int right = image[row].size()-1;
+            while(left<= right) {
+                swap(image[row][left], image[row][right]);
+                left++;
+                right--;
+            }
+        }
+        
+        for(int row=0; row<image.size(); row++) {
+            for(int col=0; col<image[row].size(); col++) {
+                if(image[row][col] == 1) {
+                    image[row][col] = 0;
+                }else{
+                    image[row][col] =1;
+                }
+            }
+        }
+        return image;
+        
+    }

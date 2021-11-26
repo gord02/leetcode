@@ -1,0 +1,41 @@
+  // 821. Shortest Distance to a Character
+//     Time taken: spent seven minutes trying to come up with more optimzited version to no avail, realized i was asked to compute the distance from c for each indeex vaules in s therefore I would need to iterate through every value anyway so went with burte force method
+//     Runtime: 4 ms, faster than 62.63% of C++ Memory Usage: 6.8 MB, less than 12.42%
+    vector<int> shortestToChar(string s, char c) {
+        vector<int> dists(s.length(), 0);
+        map<char, vector<int>> occs;
+        
+      for(int i=0; i<s.length(); i++) {
+            if(s[i] == c) {
+                auto it = occs.find(s[i]);
+                if(it == occs.end() ) {
+                    vector<int> inds{i};
+                    occs.insert(pair<char, vector<int>>(c, inds));
+                }else{
+                    it->second.push_back(i);
+                }
+            }
+        }
+        
+        for(int i=0; i<dists.size(); i++) {
+            if(s[i] == c) {
+                continue;
+            }else{
+                // map<char, vector<int>>::iterator it= occs.begin();
+                auto it = occs.find(c);
+                int min = s.length();
+                for(int ind: it->second) {
+                    if( abs(i - ind) == 1) {
+                        min = 1;
+                        break;
+                    }else{
+                        if(min > abs(i - ind)) {
+                           min = abs(i - ind);
+                        }
+                    }
+                }
+                dists[i] = min;
+            }
+        }
+        return dists;
+    }

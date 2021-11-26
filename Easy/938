@@ -1,0 +1,22 @@
+// 938. Range Sum of BST
+// 7 minutes, made stupid error, delayed very SIMPLE problem
+// faster than 13.17%, : 64.7 MB, less than 17.57%
+class Solution {
+public:
+    void depthFirst(TreeNode* node, int low, int high, int &sum) {
+        if(node == nullptr) {
+            return;
+        }
+        if((node->val <= high && node->val>= low)) {
+            cout << "val added: " << node->val << endl;
+            sum = sum + node->val;
+        }
+        depthFirst(node->left, low, high, sum);
+        depthFirst(node->right, low, high, sum);
+    }
+    int rangeSumBST(TreeNode* root, int low, int high) {
+        int sum = 0;
+        depthFirst(root, low, high, sum);
+        return sum;
+    }
+};

@@ -1,0 +1,37 @@
+//     23. Merge k Sorted Lists
+    // Time taken: 29 minutes, after first seven minutes switched ideas to go to new aproach with took two minutes to implement so 20 minutes to implement in total due to working out base cases
+    // Runtime: 20 ms, faster than 89.39% Memory Usage: 13.7 MB, less than 33.62% 
+    static bool func(ListNode* i, ListNode* j) {
+        return(i->val<j->val);
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.empty()){
+            return nullptr;
+        }
+        vector<ListNode*> nodes;
+        bool null = false;
+        for(ListNode* list: lists) {
+            ListNode*  node = list;
+            if(node == nullptr) {
+                null = true;
+            }
+            while(node != nullptr) {
+                ListNode* next = node->next;
+                node->next = nullptr;
+                nodes.push_back(node);
+                node = next;
+            } 
+        }
+
+        sort(nodes.begin(), nodes.end(), func);
+        if(nodes.size() == 0) {
+            return nullptr;
+        }
+        for(int i=0; i<nodes.size()-1; i++) {
+                nodes[i]->next = nodes[i+1];
+            
+        }
+        
+        
+        return nodes[0];
+    }

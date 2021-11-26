@@ -1,0 +1,101 @@
+//     73. Set Matrix Zeroes
+//     TIme taken: 23 minutes, took a while to realize a simler way of using the rows and colmuns I knew had zeroes in them
+// Runtime: 12 ms, faster than 87.39%, Memory Usage: 13.3 MB, less than 20.00%
+//     
+       void setZeroes(vector<vector<int>>& matrix) {
+           vector<int> rows;
+           vector<int> cols;
+
+           for(int row= 0; row<matrix.size(); row++) {
+                for(int col= 0; col<matrix[row].size(); col++) {
+                    if(matrix[row][col] == 0) {
+                        rows.push_back(row);
+                        cols.push_back(col);
+                    }
+                }
+           }
+//            alters rows
+           for(int row: rows) {
+               for(int col = 0; col<matrix[row].size(); col++) {
+                   matrix[row][col] = 0;
+               }
+            }
+           
+            for(int col: cols) {
+                 for(int row= 0; row<matrix.size(); row++) {
+                     matrix[row][col] = 0;
+                 }
+            }   
+           //     void setZeroes(vector<vector<int>>& matrix) {
+//         int rowPlace = 0;
+//         queue<int> rows;
+//         // int colPlace = 0;
+//         // vector<int> colPlace;
+//         queue<int> colPlace;
+//         int foundZero = false;
+//         map<int, int> dict;
+//         bool rowFix = false;
+//         for(int row=0; row<matrix.size(); row++) {
+//             cout << "outter row: "<< row << endl;
+//             if(foundZero) {
+//                 // row = 0;
+//                 while(colPlace.empty() != true){
+//                     int front = colPlace.front();
+//                     colPlace.pop();
+//                     int nrow = 0;
+//                     while(nrow < matrix.size()) {
+//                         if(matrix[nrow][front] == 0 && row != nrow ) {
+//                             rows.push(nrow);
+//                         }
+//                         cout << "inner while" << endl; 
+//                         matrix[nrow][front] = 0;
+//                         nrow++;
+//                     }
+//                 }
+//                 row = rowPlace;
+//                 foundZero = false;
+//                 continue;
+//             }
+//             for(int col=0; col < matrix[row].size(); col++) {
+//                 cout << "inner for, col: " << col << endl;
+                
+//                 if(foundZero) {
+//                     if( matrix[row][col] == 0) {
+//                         colPlace.push(col);
+//                         dict.insert(pair<int, int> (col, 1));  
+//                     }
+//                     matrix[row][col] = 0;
+//                 }
+//                 if((matrix[row][col] == 0) && !foundZero) {
+//                     if(rows.empty() != true) {
+//                     cout <<"front: " << rows.front()<< " row: " << row << endl;
+//                         if(rows.front() == row) {
+//                             rows.pop();
+//                             cout << "row fix" << endl;
+//                             rowFix = true;
+//                         }
+//                     }
+//                     if((dict.find(col) != dict.end()) && !rowFix){
+//                         continue;
+//                     }
+//                     cout << "found zero" << endl;
+//                     foundZero = true;
+//                     rowPlace = row;
+//                     // colPlace = col;
+//                     colPlace.push(col);
+//                     dict.insert(pair<int, int> (col, 1));
+//                     // col = col -2;
+//                     col = -1;
+//                 }
+//                 if((col == matrix[row].size() -1) && foundZero) {
+//                     cout << "end of row" << endl;
+// //                     end of row now begin replacing current column
+// //                     these two steps will keep you on the same row you were just on 
+//                     row--;
+//                     break;
+//                 }
+//             }
+//         }
+        
+//         return;
+//     }

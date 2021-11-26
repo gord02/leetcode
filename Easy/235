@@ -1,0 +1,70 @@
+//     235. Lowest Common Ancestor of a Binary Search Tree
+//     Time Taken: intial problem and psedo code, 11 minutes, implementation was 19 minutes. From there there were issues such as with mis reading thw question, then fixing up the way dF worked since, my understand is still a bit shacky. Additional hour roughly to get everything up and running.
+//     Runtime: 62 ms, faster than 5.98% of C++. Memory Usage: 23.3 MB, less than 11.59% 
+    void dF(TreeNode* node, int target, vector<TreeNode*> &nums, bool &found) {
+        if(node == nullptr) {
+            return;
+        }else{
+            if(node->val != target) {
+//                 if at leaf of tree
+                if(node->left == nullptr && node->right == nullptr) {
+                    // nums.pop_back();
+                // nums.push_back(node);
+                    return;
+                }else{
+                    nums.push_back(node);
+                }
+            }else{
+                nums.push_back(node);
+                found = true;
+                cout << "found" << endl;
+                return;
+            }
+        }
+        dF(node->left, target, nums, found);
+        if(found) {
+            cout << "in found" << endl;
+            return;
+        }
+        dF(node->right, target, nums, found);
+          if(found) {
+            cout << "in found" << endl;
+            return;
+        }else{
+            nums.pop_back();
+        }
+    }
+    
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector <TreeNode*> pvec;
+        bool found = false;
+         vector <TreeNode*> qvec;
+        dF(root, p->val, pvec, found);
+        found = false;
+        dF(root, q->val, qvec, found);
+        reverse(qvec.begin(),qvec.end());
+        reverse(pvec.begin(),pvec.end());
+        for(TreeNode* i: pvec) {
+            cout << i->val << " " << flush;
+        }
+        cout<< endl;
+         for(TreeNode* i: qvec) {
+            cout << i->val << " " << flush;
+        }
+        cout << endl;
+        TreeNode* common = root;
+        
+
+        while(qvec.empty() != true) {
+            if(pvec.empty() == true) {
+                return common;
+            }
+            if(pvec.back()->val == qvec.back()->val) {
+                
+                common = qvec.back();
+                pvec.pop_back();
+            }
+                qvec.pop_back();
+        }
+        return common;
+     }

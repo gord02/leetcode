@@ -1,0 +1,167 @@
+//     34. Find First and Last Position of Element in Sorted Array
+//     Time taken: maybe like 40 minutes unfortunaltely but its optomizted this time: Runtime: 8 ms, faster than 72.29%. Memory Usage: 13.7 MB, less than 64.65%
+    static bool func(int i, int j){return(i<j);}
+     vector<int> searchRange(vector<int>& nums, int target) {
+         int left =0;
+         int right = nums.size()-1;
+         vector<int> inds;
+         while(left <= right) {
+             int m = floor((right - left)/2) + left;
+             cout << "m: " << m << endl;
+             cout << nums[m] << " " << target << endl;
+            if(nums[m] == target ){
+                 inds.push_back(m);
+                cout << "found in 1"<< endl;
+                
+//              go right for this loop
+                left = m+1;
+                cout << "r: " << right << endl;
+                continue;
+            }
+             else if(nums[m] < target) {
+                    left = m+1;
+                 
+             }
+                else{
+                 right = m-1;
+                }             
+         }
+         left = 0;
+         right = nums.size()-1;
+        while(left <= right) {
+             int m = floor((right - left)/2) + left;
+            if(nums[m] == target ){
+                cout << "found in 2"<< endl;
+                 inds.push_back(m);
+//              go left for this loop
+                right = m-1;
+                // continue;
+            }
+             else if(nums[m] < target) {
+                    left = m+1;
+                 
+             }
+                else{
+                 right = m-1;
+                    
+                }             
+         }
+         
+         if(inds.empty() == true) {
+             inds.push_back(-1);
+             inds.push_back(-1);
+         }else{
+             sort(inds.begin(), inds.end(), func);
+//              resuing vairbles to save memeory
+             cout << inds.size() << endl;
+             left = inds[0];
+             right = inds[inds.size()-1];
+             inds.clear();
+             inds.push_back(left);
+             inds.push_back(right);
+         }
+         return inds;
+     }
+//     vector<int> searchRange(vector<int>& nums, int target) {
+//         vector<int> range(2, -1);
+//         // if(nums.size() == 1) {
+//         //     return range;
+//         // }
+//         //  if(nums.size() == 0) {
+//         //     return range;
+//         // }
+//         int left = 0;
+//         int right = nums.size()-1;
+//         bool found = false;
+//         bool wasnotfound = true;
+//         // for(int i=left; i<=right; i++) {
+//         while(left <= right) {
+//             int m = floor((right-left)/2) + left;
+//             if(nums[m] == target) {
+//                 cout << "got here" << endl;
+//                 int new_ind = 0;
+//                 if(m-1 > 0) {
+//                     for(int i=m-1; i>=0; i--) {
+//                         cout << "loop" << endl;
+//                         if(nums[i] == target) {
+//                             new_ind = i;
+//                         }else{
+//                             break;
+//                         }
+//                     }
+//                 }
+//                 cout << "doewn here" << endl;
+//                 found = true;
+//                 range[0] = new_ind;
+//                 break;
+//             }
+//             if(nums[m] > target) {
+//                 right = m -1;
+//             }
+//             if(nums[m] < target) {
+//                 left = m+1;
+//             }
+//         }
+        
+//         while(left <= right) {
+//             int m = floor((right-left)/2) + left;
+//             if(nums[m] == target && m != range[0]) {
+//                 int new_ind = 0;
+//                 cout << "just before loop" << endl;
+//                 for(int i=m; i<nums.size(); i++) {
+//                     if(nums[i] == target) {
+//                         new_ind = i;
+//                     }else{
+//                         break;
+//                     }
+//                 }
+//                 cout << "just after loop" << endl;
+                
+//                 wasnotfound = false;
+//                 range[1] = new_ind;
+//                 break;  
+//             }
+//             if(nums[m] > target) {
+//                 right = m -1;
+//             }
+//             if(nums[m] < right) {
+//                 left = m+1;
+//             }
+//         }
+//         if(wasnotfound && found) {
+//             range[1] = range[0];
+//         }
+        
+//         return range;
+//     }
+//     apporch 2
+//     vector<int> searchRange(vector<int>& nums, int target) {
+//         map<int, vector<int>> dict;
+//         for(int i=0; i<nums.size(); i++) {
+//             auto it = dict.find(nums[i]);
+//             if(it == dict.end()) {
+//                 vector<int> inds;
+//                 inds.push_back(i);
+//                 dict.insert(pair<int, vector<int>> (nums[i], inds));
+//             }else{
+//                 it->second.push_back(i);
+//             }
+//         }
+        
+//         auto it = dict.find(target);
+//         if(it != dict.end()) {
+//             nums = it->second;
+//             int start = nums[0];
+//             int end = nums[nums.size()-1];
+//             nums.clear();
+//             nums.push_back(start);
+//             nums.push_back(end);
+//         }else{
+//             nums.clear();
+//             nums.push_back(-1);
+//             nums.push_back(-1);
+//         }
+//         return nums;
+        
+//     }
+    

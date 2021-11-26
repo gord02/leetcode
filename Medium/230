@@ -1,0 +1,18 @@
+//     230. Kth Smallest Element in a BST
+    // 10 minutes, tried to explored a potentially more efficient solution whic ended up not being very efficient and didnt work at all
+//     Runtime: 24 ms, faster than 37.72% of C++ online submissions for Kth Smallest Element in a BST.
+// Memory Usage: 24.4 MB, less than 25.74% of C++
+//     
+    void dF(TreeNode* node, vector<int> &nums) {
+        if(node == nullptr) {
+            return;
+        }
+        dF(node->left, nums);
+        nums.push_back(node->val);
+        dF(node->right, nums);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        vector<int> nums;
+        dF(root, nums);
+        return nums[k-1];
+    }

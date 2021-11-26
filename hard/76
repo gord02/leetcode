@@ -1,0 +1,66 @@
+//     76. Minimum Window Substring
+//     Time taken: 45 minutes to implelemnt once I was GIVEN the implementation, many small errors to debug mostly
+//     Runtime: 212 ms, faster than 6.61% Memory Usage: 369.3 MB, less than 5.01% 
+     string minWindow(string s, string t) {
+         int left = 0;
+         int right = 0;
+         bool found = false;
+         string min = s;
+         int finds = 0;
+        map<char, int> dict;
+        
+        for(char c: t) {
+            auto it = dict.find(c);
+            if(it == dict.end()) {
+                dict.insert(pair<char, int> (c, 1));
+            }else{
+                it->second = it->second + 1;
+            }
+        }
+
+         while(right != s.length() || found) {
+//              start minimizing window
+             if(found) {
+
+                 if(s.substr(left, right-left).length() < min.length()) {
+                     min = s.substr(left, right-left);
+                 }
+                 auto it = dict.find(s[left]);
+                 if(it != dict.end()) {
+                     it->second = it->second + 1;
+                 }
+                 left++;
+                 
+             }
+             if(!found) {
+
+                 auto it = dict.find(s[right]);
+//                  character is among t
+                 if(it != dict.end()) {
+                     it->second = it->second -1;
+                 }
+                 right++;
+             }
+                              
+//                  check to see if all chars are found
+                 map<char, int>::iterator it = dict.begin();
+                 int count = 0;
+                 while(it!=dict.end()) {
+                     if(it->second > 0) {
+                         count++;
+                     }
+                     it++;
+                 }
+                 if(count == 0) {
+                     found = true;
+                     finds++;
+                 }else{
+                     found = false;
+                 }
+       
+         }
+         if(finds == 0) {
+             return "";
+         }
+         return min;
+     }

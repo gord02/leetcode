@@ -1,0 +1,95 @@
+
+Runtime: 20 ms, faster than 20.96% of C++ online submissions for Validate Binary Search Tree.
+Memory Usage: 22 MB, less than 7.02% 
+
+//     void depthFirst(TreeNode* node, bool &valid) {
+//         if(node != nullptr) {
+//             if(node->left != nullptr) {
+//                 if(node->val <= node->left->val) {
+//                     valid = false;
+//                     return;
+//                 }
+//             }
+//             if(node->right != nullptr) {
+//                 if(node->val >= node->right->val) {
+//                     valid = false;
+//                     return;
+//                 }
+//             }
+//         }else{
+//             return;
+//         } 
+//         depthFirst(node->left, valid);
+//         depthFirst(node->right, valid);
+        
+//     }
+//     bool isValidBST(TreeNode* root) {
+//         bool valid = true;
+//         depthFirst(root, valid);
+//         return valid;
+        
+//     }
+//      void depthFirst(TreeNode* node, int &num, bool &valid) {
+//         if(node != nullptr) {
+//              if(node->val > num) {
+//                 cout << "node->val: " << node->val  <<" num: "<< num << endl;
+//                 valid = false;
+//                 return;
+//             }
+//             // if(node->val > num) {
+//             //     cout << "node->val: " << node->val  <<" num: "<< num << endl;
+//             //     valid = false;
+//             //     return;
+//             // }
+//             // if(node->left != nullptr) {
+//             //     if(node->val <= node->left->val) {
+//             //         valid = false;
+//             //         return;
+//             //     }
+//             // }
+//             // if(node->right != nullptr) {
+//             //     if(node->val >= node->right->val) {
+//             //         valid = false;
+//             //         return;
+//             //     }
+//             // }
+//         }else{
+//             return;
+//         } 
+//         depthFirst(node->left,num, valid);
+//          num = node->val;
+//          cout << num << endl;
+//         depthFirst(node->right,num, valid);
+        
+//     }
+     void depthFirst(TreeNode* node, vector<int> &nums) {
+        if(node == nullptr) {
+            return;
+        } 
+        depthFirst(node->left, nums);
+         nums.push_back(node->val);
+         // num = node->val;
+         // cout << num << endl;
+        depthFirst(node->right,nums);
+        
+    }
+    bool isValidBST(TreeNode* root) {
+        bool valid = true;
+        // int num = root->val;
+        vector<int> nums;
+        
+        depthFirst(root, nums);
+        for(int i: nums) {
+            cout << i << " " << flush;
+        }
+        cout << endl;
+        for(int i=0; i<nums.size()-1; i++) {
+            
+            if(nums[i] >= nums[i+1]) {
+                cout << nums[i] << " " << nums[i+1] << endl;
+                return false;
+            }
+        }
+        return true;
+        
+    }

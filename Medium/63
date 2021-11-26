@@ -1,0 +1,36 @@
+//     63. Unique Paths II
+//     Time taken: 26 minutes, a lot of base cases I did not account for
+//     Runtime: 4 ms, faster than 66.49% of C++ Memory Usage: 7.5 MB, less than 84.66%
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+          for(int row=0; row<obstacleGrid.size(); row++) {
+             for(int col=0; col<obstacleGrid[row].size(); col++) {
+                if(obstacleGrid[row][col] == 1) {
+                    obstacleGrid[row][col] = -1;
+                }
+             }
+          }
+        if(obstacleGrid[obstacleGrid.size()-1][obstacleGrid[0].size()-1] == -1 || obstacleGrid[0][0 == -1]) {
+            return 0;
+        }
+        obstacleGrid[0][0]  = 1;
+          for(int row=0; row<obstacleGrid.size(); row++) {
+             for(int col=0; col<obstacleGrid[row].size(); col++) {
+//                  make sure to skip obstalce
+               if(obstacleGrid[row][col] == -1) {
+                   continue;
+               }
+                 if(row -1 >=0) {
+                 
+               if(obstacleGrid[row-1][col] != -1) {
+                   obstacleGrid[row][col] = obstacleGrid[row][col] + obstacleGrid[row-1][col];
+                }
+                 }
+                 if(col -1 >=0) {
+                if(obstacleGrid[row][col-1] != -1) {
+                    obstacleGrid[row][col] = obstacleGrid[row][col] + obstacleGrid[row][col-1];
+                }
+                 }
+            }
+        }
+        return obstacleGrid[obstacleGrid.size()-1][obstacleGrid[0].size()-1];
+    }

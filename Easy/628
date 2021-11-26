@@ -1,0 +1,7 @@
+    // 628. Maximum Product of Three Numbers
+//     11 minutes
+    // Runtime: 9 ms, faster than 63.02% of Java, Memory Usage: 40.5 MB, less than 67.11% 
+    public int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        return Math.max(nums[0]*nums[1]*nums[nums.length -1], nums[nums.length -1]*nums[nums.length -2]*nums[nums.length -3]); 
+    }

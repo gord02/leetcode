@@ -1,0 +1,29 @@
+// 49. Group Anagrams
+//     11 minutes to implement, couldnt arrive at the solution by myself
+//     Runtime: 64 ms, faster than 27.40% of C++ Memory Usage: 20.8 MB, less than 32.27%
+    
+//     Sort Stirng, then push to map
+    
+      vector<vector<string>> groupAnagrams(vector<string>& strs) {
+          map<string, vector<string>> dict;
+          for(string s: strs) {
+                string sortedS = s;
+                sort(sortedS.begin(), sortedS.end());
+                 auto it = dict.find(sortedS);
+                if(it == dict.end()) {
+                    vector<string> strings;
+                    strings.push_back(s);
+                    dict.insert(pair<string, vector<string> >(sortedS, strings));
+                }else{
+                    it->second.push_back(s);
+                }
+          }
+          
+          vector<vector<string>> results; 
+          map<string, vector<string>>::iterator it = dict.begin();
+          while(it != dict.end()) {
+              results.push_back(it->second);
+              it++;
+          }
+          return results;
+      }
