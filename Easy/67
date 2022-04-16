@@ -1,0 +1,46 @@
+class Solution {
+public:
+    // 67. Add Binary
+//     11 minutes to implement
+//     Runtime: 24 ms, faster than 6.68% of C++ online submissions for Add Binary.
+// Memory Usage: 7.3 MB, less than 6.79% of C++ online submissions for Add Binary
+     string addBinary(string a, string b) {
+         while(a.length() < b.length()) {
+             a = "0" + a;
+         }
+        while(a.length() > b.length()) {
+             b = "0" + b;
+         }
+         cout << "a: " << a.length() << " " << b.length() << endl;
+         int carry = 0;
+        // int 
+         string s= ""; 
+        for(int i =a.length()-1; i>=0;i--) {
+            int sum = (a[i] - '0') + (b[i] - '0') + carry;
+            cout << "sum " << sum << endl;
+            if(sum == 3) {
+                carry = 1;
+                // a[i] = 1;
+                s = "1" + s;
+            }
+            else if(sum == 2) {
+                carry = 1;
+                // a[i] = 0;
+                s = "0" + s;
+                
+                // cout << "a: " << a << endl;
+            }else{
+                carry = 0;
+                // a[i] = sum;
+                s = to_string(sum) + s;
+                
+            }
+        }
+         if(carry != 0) {
+             // a = "1" + a;
+                s = "1" + s;
+             
+         }
+         return s;
+     }
+};

@@ -1,0 +1,75 @@
+class Solution {
+public:
+    // 24. Swap Nodes in Pairs
+    // Time taken: 18 minutes , didnt fully consider and work out algo 
+//     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Swap Nodes in Pairs.
+// Memory Usage: 7.5 MB, less than 54.59% of C++ online submissions for Swap Nodes in Pairs.
+    ListNode* swapPairs(ListNode* head) {
+        int ind = 0;
+        ListNode* last = nullptr;
+        ListNode* back = nullptr;
+        ListNode* new_head = head;
+        while(head != nullptr) {
+            if(ind % 2 != 0) {
+                cout << "head val: " << head->val<< endl;
+                cout << "last val: " << last->val<< endl;
+                
+//                 do swap
+                last->next = head->next;
+                head->next = last;
+                
+                if(back != nullptr) {
+                    back->next = head;
+                }
+                
+                if(ind == 1) {
+                    new_head = head;
+                }
+            
+                back = head;
+                head = last->next;
+            }else{
+                back = last;
+                last = head;
+                head= head->next;
+            }
+            ind++;
+        }
+        return new_head;
+    }
+};
+
+//     24. Swap Nodes in Pairs
+//     time taken: 20 minutes, negelted to cosider needing back as well as last, since last refers to the two nodes I am swapping not the last node used to reatch any changes
+//     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Swap Nodes in Pairs.
+// Memory Usage: 7.6 MB, less than 7.38% of C++ online submissions for Swap Nodes in Pairs.
+    ListNode* swapPairs(ListNode* head) {
+        ListNode* last = nullptr;
+        ListNode* cur = head;
+        ListNode* back = nullptr;
+        int count = 0;
+        
+        while(cur != nullptr) {
+            count++;
+            if(count %2 == 0) {
+//                 do swap
+                ListNode* next= cur->next;
+                last->next = next;
+                cur->next = last;
+                if(back != nullptr) {
+                    back->next = cur;
+                }
+                back = cur;
+                if(count == 2) {
+                    head = cur;
+                }
+                cur= next;
+                continue;
+            }
+            back = last;
+            last = cur;
+            cur=cur->next;
+        }
+        return head;
+        
+    }

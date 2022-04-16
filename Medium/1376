@@ -1,0 +1,33 @@
+class Solution {
+public:
+    // 1376. Time Needed to Inform All Employees
+//     time taken: 32 minutes
+//     Runtime: 780 ms, faster than 13.97% of C++ online submissions for Time Needed to Inform All Employees.
+// Memory Usage: 154.9 MB, less than 21.31% of C++ online submissions for Time Needed to Inform All Employees.
+    map<int, vector<int>> adj;
+    int dF(int curNode,int time, vector<int>& informTime) {
+        auto it = adj.find(curNode);
+        int ans = time;
+        if(it != adj.end()) {
+            for(int nextNode: it->second) {
+               ans = max(ans, dF(nextNode, time + informTime[curNode], informTime));
+            }
+        }
+        return ans;
+    }
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        for(int i=0; i<manager.size(); i++) {
+            int a = manager[i];
+            int b = i;
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                vector<int> subs{b};
+                adj.insert(pair<int, vector<int>> (a, subs));
+            }else{
+                it->second.push_back(b);
+            }
+        } 
+        return dF(headID, 0, informTime);
+        // return res;
+    }
+};

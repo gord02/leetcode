@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // 169. Majority Element
+//     Runtime: 23 ms, faster than 66.09% of C++ online submissions for Majority Element.
+// Memory Usage: 19.7 MB, less than 43.51% of C++ online submissions for Majority Element.
+
+    int majorityElement(vector<int>& nums) {
+        int choice = nums[0];
+        int sum = 1;
+        for(int i=1; i<nums.size(); i++) {
+            if(nums[i] != choice) {
+                sum--;
+            }else{
+                sum++;
+            }
+//            even number of chosen number and non chosen numbers, therefore all the numbers up to this point don't need to be coinsdered when finding the jaority number becuase the rest will still have th emajority element in it
+            if(sum == 0) {
+                choice = nums[i+1];
+            }
+            
+        }
+        return choice;
+    }
+};

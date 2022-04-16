@@ -1,4 +1,38 @@
 //     19. Remove Nth Node From End of List
+//     time taken: 2 tries and 15 minutes later on
+//     Runtime: 5 ms, faster than 29.26% of C++ online submissions for Remove Nth Node From End of List.
+// Memory Usage: 10.7 MB, less than 31.48% of C++ online submissions for Remove Nth Node From End of List.
+        ListNode* removeNthFromEnd(ListNode* head, int n) {
+            ListNode* copy = head;
+            int count = 0;
+            
+            while(copy != nullptr) {
+                count++;
+                copy= copy->next;
+            }
+            copy = head;
+            ListNode* last = nullptr;
+            while(copy != nullptr) {
+                if(count == n) {
+                    if(last != nullptr) {
+                        last->next = copy->next;
+                        copy->next = nullptr;
+                    }else{
+                        ListNode* temp = copy->next;
+                        copy->next = nullptr;
+                        copy = temp;
+//                         removing front of list
+                        return copy;
+                    }
+                    break;
+                }
+                last = copy;
+                copy = copy->next;
+                count--;
+            }
+            return head;
+            
+        }
 //     Time taken: 25 minutes, 5 minutes for idea, many small bugs to fix,
     // Runtime: 4 ms, faster than 79.20% of C++ Memory Usage: 10.7 MB, less than 73.70%
     ListNode* removeNthFromEnd(ListNode* head, int n) {

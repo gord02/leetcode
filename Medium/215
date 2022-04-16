@@ -1,0 +1,19 @@
+class Solution {
+public:
+    // 215. Kth Largest Element in an Array
+//     Time tkaen:6 minutes slopping coding create complication error
+//     Runtime: 16 ms, faster than 33.68% of C++ online submissions for Kth Largest Element in an Array.
+// Memory Usage: 10 MB, less than 59.63% of C++ online submissions for Kth Largest Element in an Array.
+    int findKthLargest(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        return nums[nums.size() -k];
+    }
+};
+
+//     215. Kth Largest Element in an Array
+//     time taken: 4 minutes
+//     Runtime: 8 ms, faster than 74.91% Memory Usage: 10.1 MB, less than 56.37% of C++ online submissions for Kth Largest Element in an Array.
+    int findKthLargest(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        return nums[nums.size()-k];
+    }

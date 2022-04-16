@@ -1,0 +1,56 @@
+class Solution {
+public:
+//     437. Path Sum III
+//     time taken: 30 minutes, MANY errors in logic due to not thinking thorugh all base case and logicistics 
+//     Runtime: 7 ms, faster than 99.87% of C++ online submissions for Path Sum III.
+// Memory Usage: 20.4 MB, less than 21.86% of C++ online submissions for Path Sum III.
+    map<int, int> dict;
+    int count = 0;
+    void df(TreeNode* node, long long sum, int t) {
+        if(node == nullptr) {
+            return;
+        }
+//         no otehr base cases
+        sum = sum + node->val;
+        // auto it = dict.find(sum); // dont do this here
+        // if(it == dict.end()) {
+        //     dict.insert(pair<int, int> (sum, 1));
+        // }else{
+        //     it->second++;
+        // }
+//         found sum subsquence 
+        // if()
+        if(sum == t) {
+            count++;
+        }
+        auto it = dict.find(sum - t);
+        if(it != dict.end()) {
+            count = count + it->second;
+        }
+        // cout << "sum: "<< sum << endl;
+        it = dict.find(sum); 
+        if(it == dict.end()) {
+            dict.insert(pair<int, int> (sum, 1));
+        }else{
+            it->second++;
+        }
+        
+        df(node->left, sum, t);
+        df(node->right, sum, t);
+              
+//         bt
+         it = dict.find(sum); 
+        if(it->second == 1) {
+            dict.erase(sum);  
+        }else{
+            it->second--;
+        }
+        sum = sum - node->val;
+              
+    }
+    int pathSum(TreeNode* root, int targetSum) {
+        // int sum = 0;
+        df(root, 0, targetSum);
+        return count;
+    }
+};

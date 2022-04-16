@@ -1,0 +1,94 @@
+  // Time taken: 12 minutes
+//     Runtime: 63 ms, faster than 15.29% of C++, Memory Usage: 13.6 MB, less than 12.66% 
+     int lengthOfLongestSubstring(string s) {
+         map<char, int> dict;
+         int left = 0;
+         int right = 0;
+         int max = 0;
+         while(right < s.length()) {
+             auto it = dict.find(s[right]);
+             if(it == dict.end()) {
+                 dict.insert(pair<char, int> (s[right], 1));
+                 if(right - left + 1 > max) {
+                     max = right - left + 1;
+                 }
+                 right++;
+             }else{
+                 it = dict.find(s[left]);
+                 dict.erase(it);
+                 left++;
+             }
+         }
+         return max;
+     }
+//     int lengthOfLongestSubstring(string s) {
+//         int max = 0;
+//         for(int i=0; i<s.length();i++) {
+//             map<char, int> dict;
+//             int count = 0;
+//             for(int j=i; j<s.length();j++) {
+//                 auto it = dict.find(s[j]);
+//                 if(it == dict.end()) {
+// //                     unqie value, keep going
+//                     dict.insert(pair<char, int>(s[j], j));
+//                     count++;
+//                 }else{
+//                     if(count > max) {
+//                         max = count;
+//                     }
+//                         count = 0;
+//                         dict.clear();
+//                     break;
+//                 }
+//                  if(count > max) {
+//                     max = count;
+//                 }
+//             }
+//         }
+//         return max;
+//     }
+//     24 minutes and counting
+//     int lengthOfLongestSubstring(string s) {
+//         if(s.length() == 0) {
+//             return 0;
+//         }
+//         vector<int> counts;
+//         int count = 0;
+//         map<char, int> dict;
+        
+//         int start = 1;
+//         for(int i=0; i<s.size(); i++) {
+
+//             cout << "i begin: " << i << endl;
+            
+//             auto it = dict.find(s[i]);
+//             if(it != dict.end()) {
+// //                 char is arleady in map
+//                 counts.push_back(count);
+//                 dict.clear();
+//                 count = 0;
+//                 cout << "i: " << i << endl;
+//                 // i--;
+//                 // i = s.size() -i-1-1;
+//                 i = start-1;
+//                 start++;
+//                 // co
+//                 cout << "i after: " << i << endl;
+                
+//             }else{
+//                 count++;
+//                 dict.insert(pair<char, int> (s[i], 1));
+//             }
+//             if(i == s.size() -1) {
+//                 counts.push_back(count);
+//             }
+//         }
+        
+//         count = 0;
+//         for(int i=0; i<counts.size(); i++) {
+//             if(counts[i] > count) {
+//                 count = counts[i];
+//             }
+//         }
+//         return count;
+//     }

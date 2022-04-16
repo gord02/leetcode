@@ -1,0 +1,72 @@
+//     844. Backspace String Compare
+//     Time taken: 19 minutes, idea came quickly, logistics took a while
+    // Runtime: 0 ms, faster than 100.00% of C++ Memory Usage: 6.3 MB, less than 65.67% of 
+    bool backspaceCompare(string s, string t) {
+        for(int i=0; i<s.length(); i++) {
+            if(s[i] == '#') {
+                if(i == 0) {
+                    s.erase(i, 1);  
+                }else{
+                    s.erase(i-1, 2);
+                    i--;
+                }
+                i--;
+            }
+        }
+        
+        for(int i=0; i<t.length(); i++) {
+            if(t[i] == '#') {
+                if(i == 0) {
+                    t.erase(i, 1);  
+                }else{
+                    t.erase(i-1, 2);
+                    i--;
+                }
+                i--;
+            }
+        }
+        if(s == t) {
+            return true;
+        }
+        return false;
+    }
+
+
+class Solution {
+public:
+    // 844. Backspace String Compare
+//     6 minutes for idea, 13 to implement, NUMEROUS erorrs in logic 
+    bool backspaceCompare(string s, string t) {
+        string new_s = "";
+        string new_t = "";
+        int skips = 0;
+        for(int i=s.length()-1; i>=0; i--) {
+            if(s[i] == '#') {
+                skips++;
+                continue;
+            }
+            if(skips > 0) {
+                skips--;
+                continue;
+            }
+            new_s = s[i] + new_s;
+        }
+        skips = 0;
+        for(int i=t.length()-1; i>=0; i--) {
+           if(t[i] == '#') {
+                skips++;
+                continue;
+            }
+            if(skips > 0) {
+                skips--;
+                continue;
+            }
+            new_t = t[i] + new_t;
+        }
+        // cout << "s: " << new_s << " t: " << new_t << endl;
+        if(new_s == new_t) {
+            return true;
+        }
+        return false;
+    }
+};

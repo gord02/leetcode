@@ -1,0 +1,35 @@
+//     1721. Swapping Nodes in a Linked List
+    // Time taken: 19 minutes
+    // Runtime: 600 ms, faster than 67.35% of C++, Memory Usage: 180.1 MB, less than 59.17% 
+    ListNode* swapNodes(ListNode* head, int k) {
+        int count = 0;
+        ListNode* copy = head;
+        ListNode* node1 = nullptr;
+        while(copy != nullptr) {
+            count++;
+             
+            if(count == k) {
+                node1 = copy;
+                if(k == 1) {
+                    node1 = head;
+                }
+            }
+            copy = copy->next;
+        }
+        copy = head;
+        int ind = 0;
+        while(copy != nullptr) {
+            ind++;
+            if(ind == count - k + 1) {
+                int temp = copy->val;
+                copy->val = node1->val;
+                node1->val = temp;
+                if(k == 1) {
+                   head->val = temp; 
+                }
+                break;
+            }
+            copy= copy->next;
+        }
+        return head;
+    }

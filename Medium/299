@@ -1,0 +1,37 @@
+   // Time taken: 17 miuntes
+//     Runtime: 8 ms, faster than 24.68% of C++, Memory Usage: 6.6 MB, less than 41.66% of C++ online submissions for Bulls and Cows.
+    string getHint(string secret, string guess) {
+        int m = 0;
+        for(int i=0; i<guess.length(); i++) {
+            if(guess[i] == secret[i]) {
+                m++;
+                guess.erase(guess.begin()+i);
+                secret.erase(secret.begin()+i);
+                i--;
+            }
+        }
+        int s = 0;
+        map<char, int> dict;
+        for(int i=0; i<secret.length(); i++) {
+            auto it = dict.find(secret[i]);
+            if(it == dict.end()) {
+                dict.insert(pair<char, int> (secret[i], 1));
+            }else{
+                it->second = it->second + 1;
+            }
+        }
+        
+        for(int i=0; i<guess.length(); i++) {
+            auto it = dict.find(guess[i]);
+            if(it != dict.end()) {
+                it->second = it->second -1;
+                if(it->second == 0) {
+                    dict.erase(it);
+                }
+                s++;
+            }
+        }
+        string res = to_string(m)+ "A" + to_string(s) + "B";
+            return res;
+        
+    }

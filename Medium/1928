@@ -1,0 +1,172 @@
+// class Solution {
+// public:
+//     int minCost(int maxTime, vector<vector<int>>& edges, vector<int>& passingFees) {
+//         // adj list
+//         map<int, vector< pair<int, int> > > adj_l;
+//         for(int i=0; i<edges.size(); i++) {
+//             int a = edges[i][0]; // start node 
+//             int b = edges[i][1]; // destination node
+//             int time = edges[i][2];
+//             auto it = adj_l.find(a);
+//             if(it == adj_l.end()) {
+//                 vector<pair<int, int>> edge{make_pair(b, time)};
+//                 adj_l.insert(pair<int, vector<pair<int, int>>> (a, edge));
+//             }else{
+//                 it->second.push_back(make_pair(b,time));
+//             }
+// //             bi-driectional so go both ways
+//             it = adj_l.find(b);
+//             if(it == adj_l.end()) {
+//                 vector<pair<int, int>> edge{make_pair(a, time)};
+//                 adj_l.insert(pair<int, vector<pair<int, int>>> (b, edge));
+//             }else{
+//                 it->second.push_back(make_pair(a,time));
+//             }
+//         }
+        
+//         vector<int> minFees(passingFees.size(), INT_MAX);
+//         vector<int> node_time(passingFees.size(), 0);
+//         minFees[0] = passingFees[0];
+//         // node_time[0] = 0;
+//         // priority_queue<int, vector<int>, std::greater<int> > my_min_heap;
+//         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>> > min_q; // first is fee seocnd is curNode index
+//         min_q.push(make_pair(passingFees[0], 0)); // negative 
+//         while(min_q.empty() == false) {
+//             auto pair = min_q.top();
+//             min_q.pop();
+//             int curNode = pair.second;
+//             // int cost = pair.first;
+//             if(curNode == passingFees.size()-1) {
+//                 return minFees[curNode];
+//             }
+// //             no point in trying any adcent nodes since time will only go up
+//             if(node_time[curNode] >= maxTime) {
+//                 continue;
+//             }
+//             auto it = adj_l.find(curNode);
+//             if(it == adj_l.end()) {
+//                 continue;
+//             }
+//              // pair<int, int>
+//             for(auto edge: it->second) {
+// //                 update time and cost as you move from current node to negihbour
+//                 int nextNode = edge.first;
+//                 int time = edge.second;
+//                 // cout << "nextNode: " << nextNode << " " << time << endl;
+//                 cout << "curNode: " << curNode << " NEXTNODE:" << nextNode<< endl; 
+//                     node_time[nextNode] = node_time[curNode] + time;  
+//                     if(node_time[nextNode] > maxTime) {
+//                         continue;
+//                     }
+//                 // cout << minFees[curNode] <<" "<<  passingFees[nextNode]<< " " << minFees[nextNode] << endl;
+//                 if(minFees[curNode] + passingFees[nextNode] < minFees[nextNode]) {
+//                    minFees[nextNode] =  minFees[curNode] + passingFees[nextNode];
+//                     // cout << "new min fee: "<< minFees[nextNode] << " time: " << node_time[nextNode]<< endl;
+//                     node_time[nextNode] = node_time[curNode] + time;  
+//                     min_q.push(make_pair(minFees[nextNode], nextNode));
+//                 }
+// //                 optmize time    
+//                 else if(node_time[nextNode] > node_time[curNode] + time) {
+//                     node_time[nextNode] = node_time[curNode] + time;
+//                      min_q.push(make_pair(minFees[nextNode], nextNode));
+//                 }
+//                 //       if(minFees[curNode] - passingFees[nextNode] > minFees[nextNode]) {
+//                 //    minFees[nextNode] =  minFees[curNode] - passingFees[nextNode];
+//                 //     node_time[nextNode] = node_time[curNode] + time;  
+//                 //     cout << "new min fee: "<< minFees[nextNode] << endl;
+//                 //     min_q.push(make_pair(minFees[nextNode], nextNode));
+//                 // }
+//             }
+//         }
+//         return -1;
+//     }
+// };
+class Solution {
+public:
+    int minCost(int maxTime, vector<vector<int>>& edges, vector<int>& passingFees) {
+        // adj list
+        map<int, vector< pair<int, int> > > adj_l;
+        for(int i=0; i<edges.size(); i++) {
+            int a = edges[i][0]; // start node 
+            int b = edges[i][1]; // destination node
+            int time = edges[i][2];
+            auto it = adj_l.find(a);
+            if(it == adj_l.end()) {
+                vector<pair<int, int>> edge{make_pair(b, time)};
+                adj_l.insert(pair<int, vector<pair<int, int>>> (a, edge));
+            }else{
+                it->second.push_back(make_pair(b,time));
+            }
+//             bi-driectional so go both ways
+            it = adj_l.find(b);
+            if(it == adj_l.end()) {
+                vector<pair<int, int>> edge{make_pair(a, time)};
+                adj_l.insert(pair<int, vector<pair<int, int>>> (b, edge));
+            }else{
+                it->second.push_back(make_pair(a,time));
+            }
+        }
+        
+        vector<int> minFees(passingFees.size(), INT_MAX);
+        vector<int> node_time(passingFees.size(), INT_MAX);
+        
+        minFees[0] = passingFees[0];
+        node_time[0] = 0;
+
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>> > min_q; // first is fee seocnd is curNode index
+        min_q.push(make_pair(passingFees[0], 0)); 
+        
+        while(min_q.empty() == false) {
+            auto pair = min_q.top();
+            min_q.pop();
+            int curNode = pair.second;
+                 // no point in trying any adcent nodes since time will only go up
+            if(node_time[curNode] > maxTime) {
+                continue;
+            }
+            if(curNode == passingFees.size()-1) {
+                return minFees[curNode];
+            }
+       
+            auto it = adj_l.find(curNode);
+            if(it == adj_l.end()) {continue;} // no edges
+
+            for(auto edge: it->second) {
+           
+//                 update time and cost as you move from current node to negihbour
+                int nextNode = edge.first;
+                int time = edge.second;
+      if(node_time[curNode] + time >= node_time[nextNode]) {
+                     continue;
+                 }
+                // node_time[nextNode] = node_time[curNode] + time;  
+                // if(node_time[nextNode] > maxTime ) {
+                //     continue;
+                // }
+
+                if(minFees[curNode] + passingFees[nextNode] < minFees[nextNode]) {
+                    // if(node_time[curNode] + time < node_time[nextNode]) {
+                        minFees[nextNode] =  minFees[curNode] + passingFees[nextNode];
+                        node_time[nextNode] = node_time[curNode] + time; 
+                        min_q.push(make_pair(minFees[nextNode], nextNode));
+                    // }else{
+                    //     continue;
+                    // }
+                // if(node_time[nextNode] >= maxTime ) {
+                //     continue;
+                // }
+                }
+//                 optmize time    
+                else if(node_time[nextNode] > node_time[curNode] + time) {
+                    minFees[nextNode] =  minFees[curNode] + passingFees[nextNode];
+                    node_time[nextNode] = node_time[curNode] + time;
+                    
+                    min_q.push(make_pair(minFees[nextNode], nextNode));
+                }else{
+                    continue;
+                }
+            }
+        }
+        return -1;
+    }
+};

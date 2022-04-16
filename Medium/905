@@ -1,0 +1,34 @@
+class Solution {
+public:
+    // 904. Fruit Into Baskets
+//     Runtime: 128 ms, faster than 88.65% of C++ online submissions for Fruit Into Baskets.
+// Memory Usage: 65.3 MB, less than 17.67% of C++ online submissions for Fruit Into Baskets.
+//     50 miuntes, easy question and implmentation but error with using l insteand of[l] too forver to debug and for some reason implmentration took a while too
+    int totalFruit(vector<int>& fruits) {
+        int max = 0;
+        map<int, int> dict;
+        int l = 0;
+        for(int r = 0; r<fruits.size(); r++) {
+                auto it = dict.find(fruits[r]);
+                if(it != dict.end()) {
+                    it->second++;
+                }else{
+                    if(dict.size() == 2) {
+                        while(dict.size() == 2) {
+                            auto fd = dict.find(fruits[l]);
+                            fd->second--;
+                            if( fd->second == 0) {
+                                dict.erase(fd);
+                            }
+                            l++;
+                        }
+                    }
+                dict.insert(pair<int, int> (fruits[r],1 )); 
+            }
+            if(r-l +1 > max) {
+                max = r-l+1;
+            }
+        }
+        return max;
+    }
+};

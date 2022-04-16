@@ -1,0 +1,52 @@
+class Solution {
+public:
+    // map<int, int> dict; // integer as value and INDEX as key
+//     Runtime: 10 ms, faster than 15.72% of C++ online submissions for Permutations.
+// Memory Usage: 7.8 MB, less than 56.86% of C++ online submissions for Permutations.
+    vector<vector<int> > res;
+    void swapBt(vector<int> &nums, int i) {
+        if(i>=nums.size()) {
+            res.push_back(nums);
+            return;
+        }
+        for(int j = i; j<nums.size(); j++) {
+            swap(nums[i], nums[j]);
+            swapBt(nums, i+1);
+            swap(nums[i], nums[j]);
+        }
+    }
+//     dict method
+//     Runtime: 7-8 ms
+// Memory Usage: 9.0-9.2 MB
+//     void bt(vector<int> &nums, vector<int> vec) {
+//         if(vec.size() == nums.size()) {
+//             res.push_back(vec);
+//             return;
+//         }
+        
+//         for(int i=0; i<nums.size(); i++) {
+//             auto it = dict.find(i);
+//             if(it != dict.end()) {
+//                 continue;
+//             }else{
+//                 dict.insert(pair<int, int>(i, 1));
+//                 vec.push_back(nums[i]);
+                
+//                 bt(nums, vec);
+                
+// //                 undoing backtrack
+//                 vec.pop_back();
+//                 it = dict.find(i); // why do i need to find this again?
+//                 dict.erase(it);
+                
+//             }
+//         }
+//     }
+    
+    vector<vector<int>> permute(vector<int>& nums) {
+        // vector<int> vec;
+        // bt(nums, vec);
+        swapBt(nums, 0);
+        return res;
+    }
+};

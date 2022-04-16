@@ -1,0 +1,43 @@
+class Solution {
+public:
+    // 695. Max Area of Island
+//     Runtime: 59 ms, faster than 7.70% of C++ online submissions for Max Area of Island.
+// Memory Usage: 35.5 MB, less than 5.02% of C++ online submissions for Max Area of Island.
+    int max = 0;
+    map<pair<int, int>, int> dict;
+    
+    void df(vector<vector<int>>& grid, int i, int j, int &sum) {
+        if(i<0 || j < 0 || i>=grid.size() || j>=grid[0].size()) {
+            return;
+        }
+        if(grid[i][j] == 0 || dict.find(make_pair(i,j)) != dict.end()){
+            return;
+        }
+        dict.insert(pair<pair<int, int>, int>(make_pair(i, j), 1));
+
+        sum++; // this now measures all occurences of 1s in an island
+        df(grid, i+1, j, sum);
+        df(grid, i-1, j, sum);
+        df(grid, i, j+1, sum);
+        df(grid, i, j-1, sum);
+//         if i was calulating sum as a value(not as refrence as above), it woulf get sum along a path of recusion but we dont want that, we want sum of all paths of recursion so use variable that transencds the recusion and saves the memory
+        
+     
+//         sum vairble wont maintain total count
+    }
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        for(int i=0; i<grid.size(); i++) {
+            for(int j=0; j<grid[i].size(); j++) {
+                if(grid[i][j] == 1 && dict.find(make_pair(i,j)) == dict.end()) {
+                    int sum = 0;
+                    df(grid, i, j, sum);
+                            if(sum > max) {
+                        max = sum;
+                    }
+                    
+                }
+            }
+        }
+        return max;
+    }
+};

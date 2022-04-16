@@ -1,0 +1,41 @@
+class RandomizedSet {
+public:
+    // 380. Insert Delete GetRandom O(1)
+    // Time taken: 19 minutes, carless error at the end that delayed submission
+//     Runtime: 335 ms, faster than 48.08% of C++ online submissions for Insert Delete GetRandom O(1).
+// Memory Usage: 97.4 MB, less than 6.50% of C++ online submissions for Insert Delete GetRandom O(1).
+    vector<int> ints;
+    map<int, int> dict;
+    RandomizedSet() {
+        
+    }
+    
+    bool insert(int val) {
+        auto it = dict.find(val);
+        if(it == dict.end()) {
+            ints.push_back(val);
+            dict.insert(pair<int, int> (val, ints.size()-1));
+            return true;
+        }
+        return false;
+    } 
+    
+    bool remove(int val) {
+        auto it = dict.find(val);
+        if(it == dict.end()) {
+            return false;
+        }
+        int pos = it->second;
+        it->second = ints.size()-1;
+        dict.erase(it);
+        it = dict.find(ints[ints.size()-1]);
+        it->second = pos;
+        swap(ints[pos], ints[ints.size()-1]);
+        ints.pop_back();
+        return true;
+    }
+    
+    int getRandom() {
+        return ints[rand()% ints.size()];
+    }
+};

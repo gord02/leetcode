@@ -1,0 +1,78 @@
+    // 491. Increasing Subsequences
+//     Time taken: 38 minutes, issue arose when I decided to return after encoutnering number larger than back, this means the path is cut off so ...
+    
+//     Runtime: 669 ms, faster than 5.06% of C++ online submissions for Increasing Subsequences.
+// Memory Usage: 152.6 MB, less than 5.06% of C++ online submissions for Increasing Subsequences.  
+    vector<vector<int>> res;
+    map<vector<int> , int> dict;
+    
+//     void bt(vector<int> nums, vector<int> vec, int i) {
+// //         two base cases
+//         if(i >= nums.size()) {
+// //            updates results with vec at end of path
+//             if(vec.size() >= 2) {
+//                 auto it = dict.find(vec);
+//                 if(it == dict.end()) {
+//                     res.push_back(vec);
+//                     dict.insert(pair<vector<int>, int> (vec, 1));
+//                 }
+//             }
+//             return;
+//         }
+//         // updates results with vec
+//         if(vec.size() >= 2) {
+//             auto it = dict.find(vec);
+//             if(it == dict.end()) {
+//                 res.push_back(vec);
+//                 dict.insert(pair<vector<int>, int> (vec, 1));
+//             }
+//         }
+       
+//         if(vec.size() != 0) {
+//             if(nums[i] >= vec.back()) {
+//                 vec.push_back(nums[i]);
+//                 i++;
+//                 bt(nums, vec, i);
+//                 vec.pop_back();
+//                 bt(nums, vec, i); //??? 
+//             }else{
+//                 i++;
+//                 bt(nums, vec, i); 
+//             }   
+//         }else{
+//              vec.push_back(nums[i]);
+//             i++;
+//             bt(nums, vec, i);
+//             vec.pop_back();
+//             bt(nums, vec, i); 
+//         }
+//     }
+//     tiome taken: 13 minutes using bt method
+//     euntime: 205 ms, faster than 24.29% of C++ online submissions for Increasing Subsequences.
+// Memory Usage: 43.5 MB, less than 28.41% of C++ online submissions for Increasing Subsequences.
+    void backTrack(vector<int> nums, vector<int> vec, int i){
+        if(i == nums.size()) {
+            return;
+        }
+        for(int j = i; j<nums.size(); j++) {
+            if(vec.size() == 0 || nums[j] >= vec.back()) {
+                vec.push_back(nums[j]);
+                if(vec.size() >= 2) {
+                    auto it = dict.find(vec);
+                    if(it == dict.end()) {
+                        res.push_back(vec);
+                        dict.insert(pair<vector<int>, int>(vec, 1));
+                    }
+                }
+                backTrack(nums, vec, j+1);
+                vec.pop_back();
+            }
+        } 
+    }
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        vector<int> vec;
+            backTrack(nums, vec, 0); 
+            // bt(nums, vec, 0); 
+
+        return res;
+    }

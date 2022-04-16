@@ -1,0 +1,33 @@
+ // 112. Path Sum
+    // TIme taken: 23 minutes, didnt understand the logistics of when to remove clearly
+    // Runtime: 8 ms, faster than 87.53% Memory Usage: 21.4 MB, less than 37.61% 
+    int last =0;
+    bool isPath = false;
+    void dfs(TreeNode* node, int sum, int target) {
+        if(node == nullptr) {
+            return;
+        }
+        sum = sum + node->val;
+        last = node->val;
+
+        if(node->left == nullptr && node->right == nullptr) {
+            if(sum == target) {
+                isPath = true;
+                return;
+            }   
+        }
+        dfs(node->left, sum, target);
+    
+        dfs(node->right, sum, target);
+        sum = sum - last;   
+    }
+
+    bool hasPathSum(TreeNode* root, int targetSum) {
+
+        if(root == nullptr) {
+            return false;
+        }
+            int sum = 0;
+      dfs(root, sum, targetSum);
+        return isPath;
+        }

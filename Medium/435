@@ -1,0 +1,31 @@
+class Solution {
+public:
+    // 435. Non-overlapping Intervals
+//     Runtime: 652 ms, faster than 41.73% of C++ online submissions for Non-overlapping Intervals.
+// Memory Usage: 89.8 MB, less than 82.75% of C++ online submissions for Non-overlapping Intervals.
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+
+        int count = 0;
+        int a1 = intervals[0][0];
+        int a2 = intervals[0][1];
+        for(int i=1; i<intervals.size(); i++) {
+            int b1 = intervals[i][0];
+            int b2 = intervals[i][1];
+            if(a1 < b2 && b1 < a2) {
+//                 we know there is an overlap, so now optimize which to take
+//                 take the one with the smaller end 
+                if(b2 < a2) {
+                    a1= b1;
+                    a2 = b2;
+                }
+                count++;
+            }else{
+//                 updating 
+                a1 = b1;
+                a2 = b2;
+            }
+        }
+        return count;
+    }
+};

@@ -1,0 +1,38 @@
+//     508. Most Frequent Subtree Sum
+//     Time taken: 20 minutes, had to fiugre out how to get the sum but once that was done it was a simple implmentation 
+//     Runtime: 32 ms, faster than 23.32% of C++, Memory Usage: 24.8 MB, less than 14.78%
+    
+    map<int, int> dict;
+    int rec(TreeNode* node) {
+        if(node == nullptr) {
+            return 0;
+        }
+        int sum = node->val + rec(node->left) + rec(node->right);
+        auto it = dict.find(sum);
+        if(it == dict.end()) {
+            dict.insert(pair<int, int> (sum, 1));
+        }else{
+            it->second++;
+        }
+        return sum;
+    }
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        rec(root);
+        int max = 0;
+        vector<int> res;
+        map<int, int>::iterator it = dict.begin();
+        while(it!= dict.end()) {
+            if(it->second > max) {
+                max = it->second;
+            }
+            it++;
+        }
+        it = dict.begin();
+         while(it!= dict.end()) {
+             if(it->second == max) {
+                 res.push_back(it->first);
+             }
+            it++;
+         }
+        return res;
+    }

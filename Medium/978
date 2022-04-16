@@ -1,0 +1,37 @@
+class Solution {
+public:
+    // 978. Longest Turbulent Subarray
+//     Time taken: 25 minutes, no errors other than adding 1 to r-1
+//     Runtime: 76 ms, faster than 88.49% of C++ online submissions for Longest Turbulent Subarray.
+// Memory Usage: 40.3 MB, less than 59.28% of C++ online submissions for Longest Turbulent Subarray.
+    int maxTurbulenceSize(vector<int>& arr) {
+        int l =0;
+        // int r = 0;
+        char prev = 'o';
+        int max = 1;
+        for(int r=1; r<arr.size(); r++) {
+            char sign = 'a';
+            if(arr[r-1] == arr[r]) {
+                sign = '=';
+            }
+            else if(arr[r-1] > arr[r]) { 
+                sign = 'l';
+            }else{
+                sign = 'r';
+            }
+            if(sign == '=') {
+                l = r;
+            }
+            else if(sign == prev) {
+                // cout << "reset: at: " << r << endl;
+                l = r-1;
+            }else{
+                prev = sign;
+            }
+            if(max < r-l+1) {
+                max = r-l+1;
+            }
+        }
+        return max;
+    }
+};

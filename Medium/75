@@ -1,0 +1,60 @@
+//     Runtime: 4 ms, faster than 44.83% of C++, Memory Usage: 8.3 MB, less than 20.28% 
+
+    int parition(vector<int> &nums, int left, int right) {
+        int x = nums[left];
+        int j = left;
+        for(int i=left +1; i<=right; i++) {
+            if(nums[i] <x) {
+                j++;
+                swap(nums[j], nums[i]);
+            } 
+        }
+        
+        swap(nums[j], nums[left]);
+        return j;
+    }
+    void quickSort(vector<int> &nums, int left, int right) {
+        if(left > right) {
+            return;
+        }
+        int m = parition(nums, left, right);
+        quickSort(nums, left, m-1);
+        quickSort(nums, m+1, right);
+    }
+    void sortColors(vector<int>& nums) {
+        int left = 0;
+        int right = nums.size()-1;
+        quickSort(nums, left, right);
+    }
+
+    class Solution {
+public:
+    // 75. Sort Colors
+//     time taken 7 minutes
+//     Runtime: 4 ms, faster than 46.31% of C++ online submissions for Sort Colors.
+// Memory Usage: 8.2 MB, less than 90.75% of C++ online submissions for Sort Colors.
+    void sortColors(vector<int>& nums) {
+       int p = 0;
+        for(int i=p; i<nums.size(); i++) {
+            if(nums[i] == 0){
+                swap(nums[p], nums[i]);
+                p++;
+            }
+        }
+        
+        for(int i=p; i<nums.size(); i++) {
+            if(nums[i] == 1){
+                swap(nums[p], nums[i]);
+                p++;
+            }
+        }
+        
+        for(int i=p; i<nums.size(); i++) {
+            if(nums[i] == 2){
+                swap(nums[p], nums[i]);
+                p++;
+            }
+        }
+        // return nums;
+    }
+};

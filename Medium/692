@@ -1,0 +1,46 @@
+    // 692. Top K Frequent Words
+//     Time taken: 17 minutes, GROSS misunderstaing of the question in what they meant by k most frequent strings k different elemenrts that occuring frequently not k elemnts that appear k times. thats on me tho
+//     Runtime: 24 ms, faster than 26.77% of C++, Memory Usage: 12.6 MB, less than 73.46% of C++ online submissions for Top K Frequent Words.
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        map<string, int> dict;
+        vector<string> res;
+        for(string s: words) {
+            auto it = dict.find(s);
+            if(it == dict.end()) {
+                dict.insert(pair<string, int> (s, 1));
+            }else{
+                it->second++;
+            }
+        }
+        int max = 0;
+        map<string, int>::iterator it= dict.begin();
+        while(it  != dict.end()) {
+            if(it->second > max) {
+                max = it->second;
+            }
+            it++;
+        }
+
+        while(max > 0) {
+            if(res.size() == k){
+                return res;
+            }
+            vector<string> vec;
+            map<string, int>::iterator it= dict.begin();
+            while(it != dict.end()) {
+                if(it->second == max) {
+                    vec.push_back(it->first);
+                }
+                it++;
+            }
+            sort(vec.begin(), vec.end());
+            for(string s: vec) {
+                if(res.size() == k){
+                    return res;
+                }
+                res.push_back(s); 
+            }
+            max--;
+        }
+        return res;
+    }

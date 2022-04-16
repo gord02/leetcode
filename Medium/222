@@ -1,0 +1,51 @@
+  // 222. Count Complete Tree Nodes
+//     Time taken: 33 minutes, had idea, messed up implementation with small errors, biggest of all using wrong formula at end
+//     Runtime: 35 ms, faster than 68.43% of C++ online submissions for Count Complete Tree Nodes.
+// Memory Usage: 31.7 MB, less than 6.02% of C++ online submissions for Count Complete Tree Nodes.
+	public:
+    int max_height = 0;
+    void df(TreeNode* node, int height) {
+        if(node==nullptr) {
+            if(height > max_height) {
+                max_height = height;
+            }
+            return;
+        }
+        height++;
+        df(node->left, height);
+        df(node->right, height);
+    }
+    
+    int countNodes(TreeNode* root) {
+        df(root, 0);
+        queue<TreeNode*> q;
+        max_height--;
+        q.push(root);
+        int count = 0;
+        int height = 0;
+        if(root == nullptr) {
+            return 0;
+        }
+        
+        while(q.empty() == false) {
+            int n = q.size();
+            if(height == max_height) {
+                count = n;
+                break;
+            }
+            while(n > 0) {
+                TreeNode* front = q.front();
+                q.pop();
+              
+                if(front->left != nullptr) {
+                    q.push(front->left);
+                }
+                 if(front->right != nullptr) {
+                    q.push(front->right);
+                }
+                n--;
+            }
+            height++;
+        }
+        return count + pow(2, max_height) -1;
+    }

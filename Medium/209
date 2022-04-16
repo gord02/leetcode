@@ -1,0 +1,34 @@
+//     209. Minimum Size Subarray Sum
+//     TIME taken: ridiculously long, LESSON: sliding window techinque, there was only one condtion to look out for which was shouold have been clear but was not
+//     Runtime: 8 ms, faster than 70.84% of C++, Memory Usage: 10.6 MB, less than 15.23% 
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+        int min = INT_MAX;
+        bool valid = false;
+        while(left < nums.size()) {
+            if(valid) {
+                sum = sum - nums[left];
+                left++;
+            }else{
+                if(right >= nums.size()) {
+                    break;
+                }
+                sum = sum + nums[right];
+                    right++;
+            }
+            if(sum < target) {
+                valid = false;
+            }else{
+                valid= true;
+            }
+            if(valid && right - left < min) {
+                min = right - left;
+            }
+        }
+        if(min == INT_MAX) {
+            return 0;
+        }
+        return min;
+    }

@@ -1,0 +1,47 @@
+class Solution {
+public:
+    // 788. Rotated Digits
+//     Time taken: 16 minutes
+//     Runtime: 32 ms, faster than 23.15% of C++ online submissions for Rotated Digits.
+// Memory Usage: 6 MB, less than 35.61% of C++ online submissions for Rotated Digits.
+    int rotatedDigits(int n) {
+        int count=0;
+        for(int i=1; i<=n; i++) {
+            // cout << "i: " << i << endl;
+            string s = to_string(i);
+            bool invalid = false;
+            for(char c: s) {
+                if(c == '3' || c== '4' || c == '7') {
+                    invalid = true;
+                    break;
+                }
+            }
+            if(invalid) {
+                continue;
+            }
+            for(char &c: s) {
+                switch(c) {
+                case '2':
+                        c = '5';
+                        break;
+                case '5':
+                        c = '2';
+                        break;
+                case '6':
+                        c = '9';
+                        break;
+                case '9':
+                        c = '6';
+                        break;
+                }
+            }
+            // cout << "s: " << s << endl;
+            if(stoi(s) == i) {
+                continue;
+            }else{
+                count++;
+            }
+        }
+        return count;
+    }
+};

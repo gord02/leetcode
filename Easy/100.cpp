@@ -1,3 +1,28 @@
+  // Time taken: 6 minutes
+//     Runtime: 3 ms, faster than 59.06% of C++ online submissions for Same Tree.
+// Memory Usage: 10.5 MB, less than 7.68% of C++ online submissions for Same Tree.
+    void df(TreeNode* node, vector<string> &num) {
+        if(node == nullptr) {
+            num.push_back("#");
+            return;
+        }
+        num.push_back(to_string(node->val));
+        df(node->left, num);
+        df(node->right, num);
+    }
+    
+     bool isSameTree(TreeNode* p, TreeNode* q) {
+         vector<string> nump;
+         df(p, nump);
+         vector<string> numq;
+         df(q, numq);
+         if(numq == nump) {
+             return true;
+         }
+         return false;
+     }
+    
+
 // 100. Same Tree
 // TIME TAKEN: 50 minutes due to different ideas failing 
 // Very fast but also very space inefficient, 7% better than most

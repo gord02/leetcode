@@ -1,0 +1,70 @@
+ class Solution {
+public:
+//     199. Binary Tree Right Side View
+    // TIme taken: 8 minutes,  BASE CASE!!!!!!!!!!
+//     Runtime: 11 ms, faster than 11.34% of C++ online submissions for Binary Tree Right Side View.
+// Memory Usage: 12.1 MB, less than 20.40% of C++ online submissions for Binary Tree Right Side View.
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> res;
+        
+        if(root == nullptr) {
+            return res;
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        while(q.empty() == false) {
+            int n = q.size();
+            while(n > 0) {
+                TreeNode* front = q.front();
+                q.pop();
+                
+                if(n == 1) {
+                    res.push_back(front->val);
+                }
+                
+                if(front->left != nullptr) {
+                    q.push(front->left);
+                }
+                 if(front->right != nullptr) {
+                    q.push(front->right);
+                }
+                
+                n--;
+            }
+        }
+        return res;
+    }
+};
+ 
+ 
+ // 199. Binary Tree Right Side View
+//     time taken: 10 mintues, LESSON: DO BASE CASE!!!!!!
+//     Runtime: 3 ms, faster than 77.58% of C++, Memory Usage: 12.1 MB, less than 46.61% of C++ online submissions for Binary Tree Right Side View.
+     vector<int> rightSideView(TreeNode* root) {
+         queue<TreeNode*> q;
+         q.push(root);
+         vector<int> res;
+         if(root == nullptr) {
+             return res;
+         }
+         
+         while(q.empty() == false) {
+             int n = q.size();
+             while(n > 0) {
+                 TreeNode* front = q.front();
+                 q.pop();
+//                  last node on current level, therefdore push to vector
+                 if(n == 1) {
+                     res.push_back(front->val);
+                 }
+                 if(front->left != nullptr) {
+                     q.push(front->left);
+                 }
+                  if(front->right != nullptr) {
+                     q.push(front->right);
+                 }
+                 n--;
+             }
+         }
+         return res;
+     }

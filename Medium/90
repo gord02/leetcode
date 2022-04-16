@@ -1,0 +1,27 @@
+class Solution {
+public:
+//    90. Subsets II 
+//     20 minutes, misinterpeted/DIND REWAD PROPERLY question, guessed implmentation wring twice 
+//     Runtime: 13 ms, faster than 17.35% of C++ online submissions for Subsets II.
+// Memory Usage: 7.9 MB, less than 47.46% of C++ online submissions for Subsets II.
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        map<vector<int>, int> dict;
+        vector<vector<int>> res;
+        vector<int> start;
+        res.push_back(start);
+        for(int i=0; i<nums.size(); i++) {
+                vector<vector<int>> copy = res;
+                // cout << "copy.size(): " << copy.size() << endl;
+                for(int j=0; j<copy.size(); j++) {
+                    copy[j].push_back(nums[i]);
+//                     occurences of numbers in char match, do this by sorting 
+                    sort(copy[j].begin(), copy[j].end());
+                    if(dict.find(copy[j]) == dict.end()) {
+                        res.push_back(copy[j]);
+                        dict.insert(pair<vector<int>, int> (copy[j], 1));     
+                    }
+                }
+            }
+        return res;
+    }
+};

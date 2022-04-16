@@ -1,0 +1,54 @@
+//     57. Insert Interval
+//     time taken: this second apporach too 15 minutes to develop idea and implement using the old apporach, first apporach took 35 minutes, was too slow becuase of insertion and deletion
+// 244ms faster than 5.02% of C++ online submissions for Insert Interval.
+// Memory Usage: 56 MB, less than 5.75% of C++ online submissions for Insert Interval.
+         vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+             intervals.push_back(newInterval);
+             sort(intervals.begin(), intervals.end(), func);
+             vector<vector<int>> ranges{intervals[0]};
+            
+             for(int i = 1; i<intervals.size(); i++) {
+//                  for readability
+                int a1 = ranges.back()[0];
+                int a2 = ranges.back()[1];
+
+                 int b1 = intervals[i][0];
+                 int b2 = intervals[i][1];
+                 
+//                  six conditions 
+//                  first two, no orverlapp at all
+                 if(a1 < b1 && a2 < b1) {
+                     ranges.push_back(intervals[i]);
+                 }
+                if(a1 > b1 && b2 < a1) {
+                    ranges.pop_back();
+                     ranges.push_back(intervals[i]);
+                     vector<int> newInt{a1, a2};
+                    ranges.push_back(newInt);
+                 }
+                 
+//                 2  parital overlaps 
+                 if(a2 >= b1 && a2 <= b2) {
+//                      erase both inrervals and merge them
+                    ranges.pop_back();
+                     vector<int> newInt{a1, b2};
+                     ranges.push_back(newInt);// all constant
+                 }
+                 else if(b1 <= a1 && a1 <= b2) {
+                    ranges.pop_back();
+                     vector<int> newInt{b1, a2};
+                     ranges.push_back(newInt);   // all constant
+                 }
+                 
+//                  total overlap 
+                 else if(a1 < b1 && b2 < a2) {
+                 }
+                 else if(b1 < a1 && a2 < b2) {
+                    ranges.pop_back();
+                     ranges.push_back(intervals[i]); // both constant
+                 }
+
+                 
+             }
+             return ranges;
+         }

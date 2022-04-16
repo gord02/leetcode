@@ -1,0 +1,29 @@
+  // 581. Shortest Unsorted Continuous Subarray
+//     Time taken: was working on it yesterday too, but today it took 12 minutes so maybe 30 minutes total
+//     Runtime: 32 ms, faster than 75.13% of C++, Memory Usage: 27.3 MB, less than 51.53% of C++ online submissions for Shortest Unsorted Continuous Subarray.
+    int findUnsortedSubarray(vector<int>& nums) {
+        vector<int> copy = nums;
+        sort(copy.begin(), copy.end());
+        int left = 0;
+        int right = nums.size()-1;
+        while(left <= right) {
+            if(nums[left] == copy[left]) {
+                left++;
+            }else{
+                break;
+            }
+        }
+         while(0 <= right) {
+             if(nums[right] == copy[right]) {
+                 right--;
+             }else{
+                 break;
+             }
+         }
+        
+        if(right - left + 1> 0) {
+            return right - left + 1;
+        }
+        
+        return 0;
+    }

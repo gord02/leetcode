@@ -1,0 +1,53 @@
+class Solution {
+public:
+    // 825. Friends Of Appropriate Ages
+//     Runtime: 179 ms, faster than 11.00% of C++ online submissions for Friends Of Appropriate Ages.
+// Memory Usage: 37.4 MB, less than 71.10% of C++ online submissions for Friends Of Appropriate Ages.
+//     returns r
+    int upper(int l, int r, int t, vector<int> &ages) {
+        // binary search
+            while(l <= r) {
+                int m = floor((r-l)/2) + l;
+//                 find last occurence of repeated values 
+              if(ages[m] <= t){
+                    l = m+1;
+                }else{
+                    r = m-1;
+                }
+            }
+        return r;
+    }
+//     returns l
+        int lower(int l, int r, int t, vector<int> &ages) {
+        // binary search
+            while(l <= r) {
+                int m = floor((r-l)/2) + l;
+                // if(ages[m] == t) {
+                    // l = m;
+                    // break;
+                if(ages[m] < t){
+                    l = m+1;
+                }else{
+                    r = m-1;
+                }
+            }
+            return l;
+    }
+    int numFriendRequests(vector<int>& ages) {
+        sort(ages.begin(), ages.end());
+        int count = 0;
+        for(int i=0; i<ages.size(); i++) {
+            if(ages[i] < 15) {
+                continue;
+            }
+            int l_bound = ages[i]/2 + 7 + 1;
+            // int l_bound = ages[i]/2 + 7 ;
+            int r = upper(i, ages.size()-1, ages[i], ages);
+            int l = lower(0, i, l_bound, ages); 
+            if(r >=l) {
+                count = count +  r-l ;
+            }
+        }
+        return count;
+    }
+};

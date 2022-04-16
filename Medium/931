@@ -1,0 +1,49 @@
+class Solution {
+public:
+//     931. Minimum Falling Path Sum
+//     time taken: 38 minutes 
+//     Runtime: 30 ms, faster than 16.72% of C++ online submissions for Minimum Falling Path Sum.
+// Memory Usage: 10.3 MB, less than 42.98% of C++ online submissions for Minimum Falling Path Sum.
+//     Why does adding in the matrix by refrence and not value make this soultion not TLE? 
+    // - > ANSWER passing by reference or pointer is typically faster than passing by value, if the amount of data passed by value is larger than the size of a pointer
+    int bt(vector<vector<int>> &matrix, int i, int j,  vector<vector<int>> &dp) {
+        if(i<0 || i>=matrix.size() || j<0 || j>=matrix[0].size()) {
+            return INT_MAX-1000;
+        }
+        if(i == matrix.size() -1) {
+            // cout << "here" << endl;
+            return matrix[i][j];
+        }
+        if(dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        int res = min( bt(matrix, i+1, j, dp)+matrix[i][j] , bt(matrix, i+1, j-1, dp)+matrix[i][j]);
+         res = min(res , bt(matrix, i+1, j+1, dp)+matrix[i][j]);
+        // cout << "res: " << res << endl;
+        dp[i][j] = res;
+        return res;
+    }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        vector<vector<int>> dp(matrix.size(), vector<int> (matrix[0].size(), -1));
+            int best = INT_MAX;
+        
+        // for(int j=0; i<matrix.size(); i++) {
+    if(matrix.size() <2) {
+        
+        for(int j=0; j<matrix[0].size(); j++) {
+                if(matrix[0][j] < best) {
+                    best = matrix[0][j];
+                }
+            }
+        }else{
+        for(int j=0; j<matrix[0].size(); j++) {
+                bt(matrix, 0, j, dp);
+                if(dp[0][j] < best) {
+                    best = dp[0][j];
+                }
+            }
+    }
+        return best;
+            
+    }
+};

@@ -1,0 +1,68 @@
+class Solution {
+public:
+    // 743. Network Delay Time
+//     very long time to implemnt Dijkstra's algorithm 
+// Runtime: 158 ms, faster than 58.05% of C++ online submissions for Network Delay Time.
+// Memory Usage: 36.4 MB, less than 99.62% of C++ online submissions for Network Delay Time.
+//     runtime is O(n^2) but can be optimized to O(N + ElogN) with prioirty queue
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+//         weights denotes time necessary to arrive there
+        vector<int> weight(n, INT_MAX);
+        vector<bool> seen(n, false);
+        
+//         indices of nodes are from 1 -n therfore subtract by 1
+//         no time needed to get to source
+        weight[k-1] = 0;
+        
+        for(int i =0; i<n; i++) {
+           
+            int ind = -1;
+            for(int i =0; i<n; i++) {
+//                 finding min to start from
+                if(ind == -1 && seen[i] == false) {
+                    ind = i;
+                }
+                if(ind != -1) {
+                    if(weight[i] < weight[ind] && seen[i] == false) {
+                        ind = i;
+                    }
+                }
+            }
+//           nothing left to check, all seen nodes
+            if(ind ==-1) { break;}
+            
+            seen[ind] = true;
+            
+//             the node that coressponds to ind is ind + 1 since nodes are from 1 -n
+            for(int i=0; i<times.size(); i++) {
+//                 edge from ind to the node at times[1]
+                if(times[i][0] == ind+1) { 
+//                     the desitnation node 
+                    int node_ind = times[i][1]-1; // subtracting due to 1-n
+//                     
+//                   special case where we are travleing from a node that is currently invlaid to start from 
+                    if(weight[ind] == INT_MAX) {
+                        // cout << "here"<< endl;
+                        continue;
+                    }
+//                     is the path using current node to desitnation node shorter than an exisiting path to the desitaintion onde? 
+                                         // there is a faster way to reach this node so update it
+                    if( weight[ind] + times[i][2] < weight[node_ind]) {
+                        weight[node_ind] = weight[ind] + times[i][2];
+                    }
+                }
+            }    
+        }
+//         need to find max time
+        int max_t = 0;
+        
+         for(int i =0; i<n; i++) {
+             // never reached this node
+             if(INT_MAX == weight[i]) {
+                 return -1; 
+             }
+             max_t = max(weight[i], max_t);
+         }
+        return max_t; 
+    }
+};

@@ -1,0 +1,21 @@
+//     392. Is Subsequence
+    // Time taken: 11 minutes, should have taken 3-4 minutes less but made a stupid erro in typing that messed it up
+//     Runtime: 0 ms, faster than 100.00% of C++, Memory Usage: 6.4 MB, less than 69.44% 
+       bool isSubsequence(string s, string t) {
+           int count = 0; 
+            int ind = 0;
+           for(char c: s) {
+               for(int i=ind; i<t.length(); i++) {
+                   if(t[i] == c) {
+                       ind = i;
+                       ind++;
+                       count++;
+                       break;
+                   }
+            }
+       }
+        if(count == s.length()) {
+            return true;
+        }
+           return false;
+       }

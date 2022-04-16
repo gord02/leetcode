@@ -1,0 +1,36 @@
+class Solution {
+public:
+    // 116. Populating Next Right Pointers in Each Node
+//     10 minutes 
+//     erorr in logic with decmrenting size 
+//     Runtime: 26 ms, faster than 54.44% of C++ online submissions for Populating Next Right Pointers in Each Node.
+// Memory Usage: 17.2 MB, less than 37.17% of C++ online submissions for Populating Next Right Pointers in Each Node.
+    Node* connect(Node* root) {
+        if(root == nullptr) {
+            return root;
+        }
+        queue<Node*> q;
+        q.push(root);
+        while(q.empty() == false) {
+            int n = q.size();
+            while(n > 0) {
+                
+                Node* front = q.front();
+                q.pop();
+                n--;            
+                if(n > 0) {
+                    front->next = q.front();
+                }
+                if(front->left != nullptr) {
+                    q.push(front->left);
+                }
+                if(front->right != nullptr) {
+                    q.push(front->right);
+                }
+                
+            }
+        }
+        
+        return root;
+    }
+};

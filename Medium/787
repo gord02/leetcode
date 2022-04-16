@@ -1,0 +1,342 @@
+  
+   
+class Solution {
+public:
+//     Runtime: 770 ms, faster than 5.02% of C++ online submissions for Cheapest Flights Within K Stops.
+// Memory Usage: 49.2 MB, less than 19.18% of C++ online submissions for Cheapest Flights Within K Stops.
+    // How to compare elements
+struct my_comparator{
+    // queue elements are vectors so we need to compare those
+    bool operator()(vector<int> const& a, vector<int> const& b) const{
+        return a[0] > b[0];// reverse sort puts the lowest value at the top 
+    }
+};
+    
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        map<int, vector<pair<int, int> >> adj;
+    
+     priority_queue<vector<int>, vector<vector<int>>, my_comparator> q; //min q
+    vector<int> cheapest(n, INT_MAX);
+    vector<int> stops(n, INT_MAX);
+    cheapest[src] = 0; 
+    stops[src] = 0; 
+    for(int i=0; i<flights.size(); i++) {
+        int a = flights[i][0];
+        int b = flights[i][1];
+        auto it = adj.find(a);
+        if(it == adj.end()) {
+            vector<pair<int, int>> negh{make_pair(b, flights[i][2])};
+            adj.insert(pair<int, vector<pair<int, int> >> (a, negh));
+        }else{
+            it->second.push_back(make_pair(b, flights[i][2]));
+        } 
+    }
+//         price, node, stops
+    q.push({0, src, 0});
+    while(q.empty() == false) {
+        auto flight = q.top();
+        
+        q.pop();
+        int curCost = flight[0];
+        int curNode = flight[1];
+        int stopped = flight[2];
+        
+        if(curNode == dst) {
+            return curCost;
+        }
+        if(stopped > k) {
+            continue;
+        }
+   
+        auto it = adj.find(curNode);
+        if(it == adj.end()) {continue;}
+        for(auto adjNode: it->second) {
+            int nextNode = adjNode.first;
+            int price = adjNode.second;
+            if(price +curCost < cheapest[nextNode]) {
+                cheapest[nextNode] = price +curCost;
+                q.push({cheapest[nextNode], nextNode, stopped+1});
+            }
+//             optimize stops
+            else if(stopped < stops[nextNode]) {
+                cheapest[nextNode] = price +curCost; // need to update cheapest as well since then wed be looking at another path when we are porcessing the nextNOde passed into queu 
+                q.push({price +curCost, nextNode, stopped+1});
+            }
+            stops[nextNode] = stopped;
+        }
+    }
+        return -1;
+}
+//         struct Compare {
+//         bool operator()(vector<int> const & i, vector<int> const & j){ 
+//             return i[0] > j[0]; 
+//         }
+//     };
+// int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+// // Build the adjacency matrix
+//         map<int, vector<pair<int, int>>> adj;
+//         for(int i=0; i<flights.size(); i++) {
+//             int a = flights[i][0];
+//             int b = flights[i][1];
+//             int price = flights[i][2];
+//             auto it = adj.find(a);
+//             if(it == adj.end()) {
+//                 vector<pair<int, int>> negh{make_pair(b, price)};
+//                 adj.insert(pair<int, vector<pair<int, int> > > (a, negh));
+//             }else{
+//                 it->second.push_back(make_pair(b, price));
+//             }
+//         }
+    
+//         vector<int> cheapest(n, INT_MAX);
+//         vector<int> stops(n, INT_MAX);
+//         cheapest[src] = 0;
+//         stops[src] = 0;
+        
+//         // The priority queue would contain (node, cost, stops)
+//         priority_queue<vector<int>, vector<vector<int>>, Compare> min_q; 
+//         min_q.push({0, src, 0});
+
+//         while(min_q.empty() == false) {
+//                 auto top = min_q.top(); 
+//                 int total = top[0];
+//                 int curNode = top[1];
+//                 int cur_stops = top[2];
+//                 min_q.pop();
+                             
+//             if (curNode == dst) {return total; } // If destination is reached, return the cost to get here
+//             if (cur_stops > k) { continue;}// If there are no more steps left
+       
+//                 auto it = adj.find(curNode);
+//                 if(it == adj.end()) {continue;}
+//                 for(auto pair: it->second) {
+//                     int nextNode = pair.first;
+//                     int new_flight_price = pair.second;
+//                     // int totals = cheapest[curNode]; // cant use cheeast node node apprently 
+    
+//                     if (total + new_flight_price < cheapest[nextNode]) {
+//                         cheapest[nextNode] = total + new_flight_price;
+//                         min_q.push({cheapest[nextNode], nextNode, cur_stops + 1});
+                        
+//                     }
+//                     else if (cur_stops < stops[nextNode]) {
+//                         cheapest[nextNode] = total+ new_flight_price;
+//                         min_q.push({cheapest[nextNode], nextNode, cur_stops + 1});          
+//                     }
+                    
+//                     stops[nextNode] = cur_stops;
+//                 }
+//              }  
+//         return -1;
+//     }
+};
+// class Solution {
+// public:
+    
+//     struct Compare {
+//         bool operator()(vector<int> const & i, vector<int> const & j){ 
+//             return i[0] > j[0]; 
+//         }
+//     };
+    
+//     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+//         map<int, vector<pair<int, int>>> adj;
+//         for(int i=0; i<flights.size(); i++) {
+//             int a = flights[i][0];
+//             int b = flights[i][1];
+//             int price = flights[i][2];
+//             auto it = adj.find(a);
+//             if(it == adj.end()) {
+//                 vector<pair<int, int>> negh{make_pair(b, price)};
+//                 adj.insert(pair<int, vector<pair<int, int> > > (a, negh));
+//             }else{
+//                 it->second.push_back(make_pair(b, price));
+//             }
+//         }
+        
+//         vector<int> cheapest(n, INT_MAX);
+//         vector<int> stops(n, INT_MAX);
+//         cheapest[src] = 0;
+//         stops[src] = 0;
+        
+//         // std::priority_queue<int, vector<int>, greater<int> > my_min_heap;
+//         priority_queue<vector<int>, vector<vector<int>>, Compare> min_q; 
+//         min_q.push({0, src, 0});
+//         while(min_q.empty() == false) {
+//             // int node = info[0], stops = info[2], cost = info[1]
+//             auto top = min_q.top();
+//             // int price = top[0];
+//             int curNode = top[1];
+//             int cur_stops = top[2];
+//             min_q.pop();
+//             // cout << "CUR: " << curNode << endl;/
+//             if(dst == curNode) {
+//                 return price;
+//                 // return cheapest[dst];
+//             }
+//             if(cur_stops >k) {
+//                 // cout << "TOO MANY" << " curNode: "<< curNode <<endl;
+//                 // cheapest[curNode] = INT_MAX;
+//                 continue;
+//             }
+//             auto it = adj.find(curNode);
+//             if(it == adj.end()) {continue;}
+//             for(auto pair: it->second) {
+//                 int nextNode = pair.first;
+//                 int price = pair.second;
+//                 cout << "edge, cur: " << curNode << " to " <<nextNode <<endl;
+//                cout <<  price << " "<< cheapest[curNode] << " "<< cheapest[nextNode]<< endl;
+//                 if(price + cheapest[curNode] < cheapest[nextNode]) {
+//                     cheapest[nextNode] = price + cheapest[curNode];
+//                     min_q.push({cheapest[nextNode], nextNode, cur_stops+1});
+//                 }
+//                 else if(cur_stops< stops[nextNode]) {
+//                      // minHeap.offer(new int[]{nei, dU + wUV, stops + 1});
+//                     // cheapest[nextNode] = price + cheapest[curNode];
+//                     min_q.push({cheapest[nextNode]+price, nextNode, cur_stops+1});
+//                 }
+//                 stops[nextNode] = cur_stops;
+//             }
+//             // cout << "size: " << min_q.size()<< endl;
+//         }
+//         return -1;                   
+//     }
+// };
+// =======================
+class Solution {
+public:
+        struct Compare {
+        bool operator()(vector<int> const & i, vector<int> const & j){ 
+            return i[0] > j[0]; 
+        }
+    };
+int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+// Build the adjacency matrix
+        map<int, vector<pair<int, int>>> adj;
+        for(int i=0; i<flights.size(); i++) {
+            int a = flights[i][0];
+            int b = flights[i][1];
+            int price = flights[i][2];
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                vector<pair<int, int>> negh{make_pair(b, price)};
+                adj.insert(pair<int, vector<pair<int, int> > > (a, negh));
+            }else{
+                it->second.push_back(make_pair(b, price));
+            }
+        }
+    
+        vector<int> cheapest(n, INT_MAX);
+        vector<int> stops(n, INT_MAX);
+        cheapest[src] = 0;
+        stops[src] = 0;
+        
+        // The priority queue would contain (node, cost, stops)
+        priority_queue<vector<int>, vector<vector<int>>, Compare> min_q; 
+        min_q.push({0, src, 0});
+
+        while(min_q.empty() == false) {
+                auto top = min_q.top(); 
+                int total = top[0];
+                int curNode = top[1];
+                int cur_stops = top[2];
+                min_q.pop();
+                             
+            if (curNode == dst) {return total; } // If destination is reached, return the cost to get here
+            if (cur_stops > k) { continue;}// If there are no more steps left
+       
+                auto it = adj.find(curNode);
+                if(it == adj.end()) {continue;}
+                for(auto pair: it->second) {
+                    int nextNode = pair.first;
+                    int new_flight_price = pair.second;
+                    // int totals = cheapest[curNode]; // cant use cheeast node node apprently 
+    
+                    if (total + new_flight_price < cheapest[nextNode]) {
+                        cheapest[nextNode] = total + new_flight_price;
+                        min_q.push({cheapest[nextNode], nextNode, cur_stops + 1});
+                        
+                    }
+                    else if (cur_stops < stops[nextNode]) {
+                        cheapest[nextNode] = total+ new_flight_price;
+                        min_q.push({cheapest[nextNode], nextNode, cur_stops + 1});          
+                    }
+                    
+                    stops[nextNode] = cur_stops;
+                }
+             }  
+        return -1;
+    }
+};
+// class Solution {
+// public:
+    
+//     struct Compare {
+//         bool operator()(vector<int> const & i, vector<int> const & j){ 
+//             return i[0] > j[0]; 
+//         }
+//     };
+    
+//     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+//         map<int, vector<pair<int, int>>> adj;
+//         for(int i=0; i<flights.size(); i++) {
+//             int a = flights[i][0];
+//             int b = flights[i][1];
+//             int price = flights[i][2];
+//             auto it = adj.find(a);
+//             if(it == adj.end()) {
+//                 vector<pair<int, int>> negh{make_pair(b, price)};
+//                 adj.insert(pair<int, vector<pair<int, int> > > (a, negh));
+//             }else{
+//                 it->second.push_back(make_pair(b, price));
+//             }
+//         }
+        
+//         vector<int> cheapest(n, INT_MAX);
+//         vector<int> stops(n, INT_MAX);
+//         cheapest[src] = 0;
+//         stops[src] = 0;
+        
+//         // std::priority_queue<int, vector<int>, greater<int> > my_min_heap;
+//         priority_queue<vector<int>, vector<vector<int>>, Compare> min_q; 
+//         min_q.push({0, src, 0});
+//         while(min_q.empty() == false) {
+//             // int node = info[0], stops = info[2], cost = info[1]
+//             auto top = min_q.top();
+//             // int price = top[0];
+//             int curNode = top[1];
+//             int cur_stops = top[2];
+//             min_q.pop();
+//             // cout << "CUR: " << curNode << endl;/
+//             if(dst == curNode) {
+//                 return price;
+//                 // return cheapest[dst];
+//             }
+//             if(cur_stops >k) {
+//                 // cout << "TOO MANY" << " curNode: "<< curNode <<endl;
+//                 // cheapest[curNode] = INT_MAX;
+//                 continue;
+//             }
+//             auto it = adj.find(curNode);
+//             if(it == adj.end()) {continue;}
+//             for(auto pair: it->second) {
+//                 int nextNode = pair.first;
+//                 int price = pair.second;
+//                 cout << "edge, cur: " << curNode << " to " <<nextNode <<endl;
+//                cout <<  price << " "<< cheapest[curNode] << " "<< cheapest[nextNode]<< endl;
+//                 if(price + cheapest[curNode] < cheapest[nextNode]) {
+//                     cheapest[nextNode] = price + cheapest[curNode];
+//                     min_q.push({cheapest[nextNode], nextNode, cur_stops+1});
+//                 }
+//                 else if(cur_stops< stops[nextNode]) {
+//                      // minHeap.offer(new int[]{nei, dU + wUV, stops + 1});
+//                     // cheapest[nextNode] = price + cheapest[curNode];
+//                     min_q.push({cheapest[nextNode]+price, nextNode, cur_stops+1});
+//                 }
+//                 stops[nextNode] = cur_stops;
+//             }
+//             // cout << "size: " << min_q.size()<< endl;
+//         }
+//         return -1;                   
+//     }
+// };

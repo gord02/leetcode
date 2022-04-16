@@ -1,0 +1,25 @@
+//     229. Majority Element II
+//     time taken: 5 minutes
+    // Runtime: 12 ms, faster than 75.56% of C++,  Memory Usage: 15.7 MB, less than 80.02% 
+    vector<int> majorityElement(vector<int>& nums) {
+        map<int, int> dict;
+        
+        for(int i=0; i<nums.size(); i++) {
+            auto it = dict.find(nums[i]);
+            if(it == dict.end()) {
+                dict.insert(pair<int, int>(nums[i], 1));
+            }else{
+                it->second = it->second + 1;
+            }
+        }
+        map<int, int>::iterator it = dict.begin();
+        int n = nums.size();
+        nums.clear();
+        while(it!= dict.end()) {
+            if(it->second > n/3){
+                nums.push_back(it->first);
+            }
+            it++;
+        }
+        return nums;
+    }

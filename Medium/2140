@@ -1,0 +1,60 @@
+ // 2140. Solving Questions With Brainpower
+//     Time taken: 40 minutes, orverall not too bad, just remebered dp pattern but ran into error with vector and adress values 
+//     untime: 413 ms, faster than 74.67%, Memory Usage: 123 MB, less than 25.54% of C++ online submissions for Solving Questions With Brainpower.
+    // long long max = 0;
+//     why is passing in the specifc questions vector necessary? Its not being modified right? so why does it matter if the exact thing is passed in? IF the apresand is not there I fail at test case 43
+        long long rec(vector<vector<int>> &questions, int r, vector<long long> &dp) {
+        if(r >= questions.size()) {
+            return 0;
+        }
+        
+        // take points and follow skipping procdure or just skip 
+        if(dp[r] > 0) {
+            return dp[r];
+        }
+        
+        long long res = max(rec(questions,r+questions[r][1]+1, dp) +questions[r][0] , rec(questions,r+1, dp));
+       dp[r] = res;
+        return res;
+    }
+//     working dp solution but still too slow for all test case, breaks at 42
+//     long long rec(vector<vector<int>> questions, int r, vector<vector< long long >> &dp) {
+//         if(r >= questions.size()) {
+//             return 0;
+//         }
+        
+//         // take points and follow skipping procdure or just skip 
+//         if(dp[r][0] > 0) {
+//             return dp[r][0];
+//         }
+        
+//         long long res = max(rec(questions,r+questions[r][1]+1, dp) +questions[r][0] , rec(questions,r+1, dp));
+//        dp[r][0] = res;
+//         return res;
+//     }
+//     breaks at 13
+//       void rec(vector<vector<int>> questions, int r, long long sum) {
+//         if(r >= questions.size()) {
+//             if(sum > max) {
+//                 max = sum;
+//             }
+//             return;
+//         }
+        
+//         // take points and follow skipping procdure or just skip 
+//         // if(dp[r][0] > 0) {
+//         //     return dp[r][0];
+//         // }
+        
+//         rec(questions,r+questions[r][1]+1, sum+questions[r][0]);
+//         rec(questions,r+1, sum);
+//        // dp[r][0] = res;
+//        //  return res;
+//     }
+    long long mostPoints(vector<vector<int>>& questions) {
+        // vector<vector<long long>> dp(questions.size()+1, vector<long long> (2, -1));
+        vector<long long> dp(questions.size()+1, -1);
+        return rec(questions,0, dp);
+         // rec(questions,0, 0);
+        // return max;
+    }

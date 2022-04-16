@@ -1,0 +1,34 @@
+class Solution {
+public:
+    // 853. Car Fleet
+//     Runtime: 508 ms, faster than 12.67% of C++ online submissions for Car Fleet.
+// Memory Usage: 96.7 MB, less than 12.46% of C++ online submissions for Car Fleet.
+// Next challenges:
+//     13 minutes to implemnt after being given the answer, fogrot to cast to double
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        map<int, int> dict; // key is position and value is speed
+        // map everything 
+        for(int i=0; i<position.size(); i++) {
+            dict.insert(pair<int, int> (position[i], speed[i]));
+        }
+//         sort since cars at later posotion mioght be traveling slow and cars cannot over take
+        sort(position.begin(), position.end());
+        
+//         must be at least one fleet 
+        int fleets = 1; 
+        auto car = dict.find(position[position.size()-1]);
+//         sets intial value of time to catch up to 
+        float time= (double)(target - car->first)/car->second;
+        
+//         loop from back to see if cars can overtake
+         for(int i=position.size()-2; i>=0; i--) {
+             car = dict.find(position[i]);
+//              if new time is found that is slower than previous this is new stopping points for any cars coming from eralier positon and are capable of catching and is also a new fleet
+             if((double)(target - car->first)/car->second > time) {
+                 fleets++;
+                 time = (double)(target - car->first)/car->second;
+             }
+         }
+        return fleets;
+    }
+};

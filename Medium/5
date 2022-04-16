@@ -1,0 +1,44 @@
+//     5. Longest Palindromic Substring
+//     TIme taken: 20 mintues
+//     Runtime: 88 ms, faster than 53.91% of C++, Memory Usage: 21.3 MB, less than 47.04% 
+    string longestPalindrome(string s) {
+        string max_s = "";
+//         check for substring with one charcters as its center 
+        for(int i=0; i<s.length(); i++) {
+            int l = i;
+            int r = i;
+            while(l>= 0 && r<s.length()) {
+                if(s[l] == s[r]) {
+                    if(r-l+1 > max_s.length()) {
+                            max_s = s.substr(l, r-l+1);
+                    }
+                    l--;
+                    r++;
+                }else{
+                    break;
+                }
+            }
+        }
+//         check for substring with two charcters as its center 
+        for(int i=0; i<s.length()-1; i++) {
+            if(s[i] != s[i+1]) {
+                continue;
+            }else{
+                int l = i;
+                int r = i+1;
+                while(l>= 0 && r<s.length()) {
+                    if(s[l] == s[r]) {
+                        if(r-l+1 > max_s.length()) {
+                              max_s = s.substr(l, r-l+1);
+                        }
+                        l--;
+                        r++;
+                    }else{
+                        break;
+                    }
+                }
+            }
+            
+        }
+        return max_s;
+    }

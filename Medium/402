@@ -1,0 +1,59 @@
+class Solution {
+public:
+    // 402. Remove K Digits
+//     time taken: 27 minutes
+//     Runtime: 431 ms, faster than 5.02% of C++ online submissions for Remove K Digits.
+// Memory Usage: 393.4 MB, less than 5.50% of C++ online submissions for Remove K Digits.
+    string removeKdigits(string num, int k) {
+//         use stack, if element at top of stack is larger than or ewual to current pop stack untill lower number is a top
+        stack<char> s;
+        for(int i=0; i<num.length(); i++) {
+            if(!s.empty()) {
+                if(num[i] < s.top()) {
+                    while(s.empty() == false) {
+                        if(k == 0) {
+                            break;
+                        }
+                        if(s.top() > num[i]){
+                            s.pop();
+                            k--;
+                        }else{
+                            break;
+                        }
+                    }
+                }
+            }
+            s.push(num[i]);
+        }
+        if(k != 0) {
+             while(s.empty() == false) {
+                if(k == 0) {
+                    break;
+                }
+                s.pop();
+                k--;
+            }
+        }
+        string str = "";
+       // for(char c: s){
+        while(s.empty() == false) {
+            char c = s.top();
+           str =  string(1, c) + str;
+            s.pop();
+       }
+        string nonLeadingZero = "";
+        int valid = false;
+        for(int i=0; i<str.length(); i++) {
+            if(str[i] != '0') {
+                valid = true;
+            }
+            if(valid) {
+                nonLeadingZero = nonLeadingZero + str[i];
+            }
+        }
+        if(nonLeadingZero == "") {
+            return "0";
+        }
+        return nonLeadingZero;
+    }
+};

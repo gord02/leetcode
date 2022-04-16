@@ -1,0 +1,146 @@
+class Solution {
+public:
+//     Runtime: 289 ms, faster than 43.90% of C++ online submissions for Path with Maximum Probability.
+// Memory Usage: 73.5 MB, less than 12.75% of C++ online submissions for Path with Maximum Probability.
+double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {
+        map<int, vector<pair<double, int> > > adj;
+        for(int i=0; i<edges.size(); i++) {
+            int a = edges[i][0];
+            int b = edges[i][1];
+            
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                // vector<int> negh{b};
+                vector<pair<double, int>> negh{make_pair(succProb[i], b)};
+                
+                adj.insert(pair<int, vector<pair<double, int>>> (a, negh));
+            }else{
+                it->second.push_back(make_pair(succProb[i], b));
+            }
+            it = adj.find(b);
+            if(it == adj.end()) {
+                vector<pair<double, int>> negh{make_pair(succProb[i], a)};
+                adj.insert(pair<int, vector<pair<double, int>>> (b, negh));
+            }else{
+                it->second.push_back(make_pair(succProb[i], a));
+            }
+        }
+        
+        vector<double> maxProb(n, 0.0);
+        maxProb[start] = 1.0;
+        priority_queue<pair<double, int>> q;
+        q.push({1, start});
+        while(q.empty() == false) {
+            auto top = q.top();
+            q.pop();
+            // double prob = top.first;
+            int curNode = top.second;
+            // double prob = succProb[curNode];
+            //        double prob = top[0];
+            // int curNode = top[1];
+            if(curNode == end) {
+                return maxProb[end];
+            }
+            auto it = adj.find(curNode);
+            if(it == adj.end()) {continue;}
+            for(auto edge: it->second) {
+                double prob = edge.first;
+                double nextNode = edge.second;
+                
+                if(prob*maxProb[curNode] > maxProb[nextNode]) {
+                    maxProb[nextNode] = prob*maxProb[curNode];
+                    q.push(make_pair(maxProb[nextNode], nextNode));
+                }
+            }
+        }
+        return 0;
+    }
+    
+    
+    
+//     bellman ford TLE
+//         double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {
+//             vector<double> maxProb(n, 0);
+//             maxProb[start] = 1;
+            
+//             for(int i=0; i<n; i++) {
+//                for(int j = 0; j<edges.size(); j++) {  
+//                     int a = edges[j][0];
+//                     int b = edges[j][1];
+//                     if(maxProb[a]*succProb[j] >maxProb[b]) {
+//                         maxProb[b] =maxProb[a]*succProb[j];
+//                     }
+//                     if(maxProb[b]*succProb[j] >maxProb[a]) {
+//                         maxProb[a] =maxProb[b]*succProb[j];
+//                     }
+//                 }
+//             }
+//             return maxProb[end]; 
+//         }
+};
+
+class Solution {
+public:
+    // 1514. Path with Maximum Probability
+// Runtime: 370 ms, faster than 19.00% of C++ online submissions for Path with Maximum Probability.
+// Memory Usage: 73.5 MB, less than 13.12% of C++ online submissions for Path with Maximum Probability.
+      double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {
+          map<int, vector<pair<int, double>> > adj_list;
+          for(int i=0; i<edges.size(); i++) {
+              int a = edges[i][0]; // start 
+              int b = edges[i][1]; // end
+              
+              auto it = adj_list.find(a);
+            auto edge = make_pair(b, succProb[i]);
+              
+              if(it == adj_list.end()) {
+                  vector<pair<int, double>> negh{edge};
+                  adj_list.insert(pair<int, vector<pair<int, double>> >(a, negh)); 
+              }else{
+                  it->second.push_back(edge);
+              }
+//                   bi directionaly so add each node to each others list
+            it = adj_list.find(b);
+            edge = make_pair(a, succProb[i]);
+              
+              if(it == adj_list.end()) {
+                  vector<pair<int, double>> negh{edge};
+                  adj_list.insert(pair<int, vector<pair<int, double>> >(b, negh));  
+              }else{
+                  it->second.push_back(edge);
+              }
+          }
+          vector<double> maxP(n, 0);
+          maxP[start] = 1;
+          
+          priority_queue<pair<double, int>> max_q; //pair of double probability and node index
+//           psuh soruce
+          max_q.push(make_pair(1.0, start));
+          
+          while(max_q.empty() == false) {
+              pair<double, int> top = max_q.top();
+              
+              max_q.pop();
+              
+              // double prop = top.first();
+              int curNode = top.second;
+              // cout << "curNode: " << curNode << endl;
+              
+              auto it = adj_list.find(curNode);
+              if(it == adj_list.end()) {
+                  continue;
+              }
+              for(pair<int, double> edge: it->second) {                  
+                  int nextNode = edge.first;
+                  double prob = edge.second;
+                  // cout << "next: " << nextNode << " prob: " << prob << endl;
+                  if(maxP[nextNode] < maxP[curNode]* prob) {
+                      maxP[nextNode] = maxP[curNode]* prob;
+                      max_q.push(make_pair(maxP[nextNode], nextNode));
+                  }
+                  
+              }      
+          }
+            return maxP[end];
+      }
+};

@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // 908. Smallest Range I
+//     time taken: 16 minutes 
+//     base case i didnt consider if all elements are equal
+//     Runtime: 30 ms, faster than 23.22% of C++ online submissions for Smallest Range I.
+// Memory Usage: 15.4 MB, less than 90.82% of C++ online submissions for Smallest Range I.
+    int smallestRangeI(vector<int>& nums, int k) {
+        int max = INT_MIN;
+        int min = INT_MAX;
+        for(int i = 0; i<nums.size(); i++) {
+            if(nums[i] > max) {
+                max = nums[i];
+            }
+            if(nums[i] < min) {
+                min = nums[i];
+            }
+        }
+//         a1 = min, a2 = min+k
+//         b1 = max - k, b2 = max;
+        if(max == min) {
+            return 0;
+        }
+        if(min < max && max - k <= min+k) {
+            return 0;
+        }
+        return abs(min+k - (max-k));
+    }
+};

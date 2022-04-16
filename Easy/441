@@ -1,0 +1,18 @@
+   // 441. Arranging Coins
+//     Runtime: 12 ms, faster than 18.10% of C++ online submissions for Arranging Coins.
+// Memory Usage: 6 MB, less than 17.64% of C++ online submissions for Arranging Coins.
+
+// //     math trick required? 
+     int arrangeCoins(int n) {
+         int c = 0;
+         int num = 1;
+         while(n>0) {
+             if(num > n) {
+                 break;
+             }
+             n = n - num;
+             num++;
+             c++;
+        }
+         return c;
+     }

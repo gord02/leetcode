@@ -1,0 +1,74 @@
+class Solution {
+public:
+    // 811. Subdomain Visit Count
+//     Time taken: 37 minutes many small errors in logic made, DIDnt have everything planned out to a tee like for the first part of the domain which is not a sub also sub string extending to end of string
+//     Runtime: 32 ms, faster than 16.10% of C++ online submissions for Subdomain Visit Count.
+// Memory Usage: 11.8 MB, less than 43.45% of C++ online submissions for Subdomain Visit Count.
+    vector<string> subdomainVisits(vector<string>& cpdomains) {
+        map<string, int> dict;
+        
+        for(string s: cpdomains) {
+            int val = 0;
+            int ind = 0;
+            
+            for(int i=0; i<s.length(); i++) {
+                if(s[i] == ' ') {
+                    string val_s = s.substr(0, i);
+                    val = stoi(val_s);
+                    ind = i+1;
+                }
+            }
+            
+            // cout << "current num: " << val << endl;
+            
+//               full string   
+            string sub= s.substr(ind, s.length()-1);
+            auto it = dict.find(sub);
+            if(it == dict.end()) {
+                dict.insert(pair<string, int> (sub, val));
+            }else{
+                it->second = it->second + val;
+            }
+//             getting starting position AFTER first point
+              for(int i=ind; i<s.length(); i++) {
+                  if(s[i] == '.') {
+                      ind = i+1;
+                      break;
+                  }
+              }
+            
+            for(int i=ind; i<s.length(); i++) {
+                if(s[i] == '.') {
+                    string sub = s.substr(ind, s.length()-ind+1); // to END of string
+                    // string sub = s.substr(ind, i-ind);
+                    // cout << "the subs: " << sub << endl;
+                    auto it = dict.find(sub);
+                    if(it == dict.end()) {
+                        dict.insert(pair<string, int> (sub, val));
+                    }else{
+                        it->second = it->second + val;
+                    }
+                    ind = i+1;
+                }
+                if(i == s.length()-1) {
+                    string sub= s.substr(ind, s.length()-ind+1); // changed
+                     // cout << "the final sub for s: " << sub << endl;
+                     auto it = dict.find(sub);
+                    if(it == dict.end()) {
+                        dict.insert(pair<string, int> (sub, val));
+                    }else{
+                        it->second = it->second + val;
+                    }
+                }
+            }
+        }
+        vector<string> res;
+        map<string, int>::iterator it = dict.begin();
+        while(it != dict.end()) {
+            string s = to_string(it->second) +" " + it->first;
+            res.push_back(s);
+            it++;
+        }
+        return res;
+    }
+};

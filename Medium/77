@@ -1,0 +1,22 @@
+   // 77. Combinations
+//     time taken: 14 minutes having been familar with the techinque 
+//     Runtime: 593 ms, faster than 13.76% of C++ online submissions for Combinations.
+// Memory Usage: 165.1 MB, less than 6.82% of C++ online submissions for Combinations.
+        vector<vector<int>> res;
+    // vector<int> nums;
+    void bt(int i, int n, int k, vector<int> nums) {
+        if(nums.size()==k) {
+            res.push_back(nums);
+            return;
+        }
+        for(int j = i; j<=n; j++) {
+            nums.push_back(j);
+            bt(j+1, n, k, nums);
+            nums.pop_back();
+        }
+    }
+     vector<vector<int>> combine(int n, int k) {
+            vector<int> nums;
+            bt(1, n, k, nums);
+        return res;
+     }

@@ -1,0 +1,39 @@
+class Solution {
+public:
+    // 845. Longest Mountain in Array
+//     Runtime: 35 ms, faster than 28.56% of C++ online submissions for Longest Mountain in Array.
+// Memory Usage: 18.5 MB, less than 83.13% of C++ online submissions for Longest Mountain in Array.
+
+//     17 minutes to implement having been given answer. linear scan since moutains cant overlapp
+    int longestMountain(vector<int>& arr) {
+        int max = 0;
+
+        for(int start = 0; start < arr.size()-1; start++) {
+            bool found_end = false;
+//                 found start of a mountain
+                if(arr[start] < arr[start+1]) {
+                    int end = start;
+//                     this traverse up the mountain's side and stops at peak
+                   for(; end<arr.size()-1; end++) {
+                       if(arr[end] >= arr[end+1]) {
+                           break;
+                       }
+                    }
+//                     traverse down the moutian's side
+                    for(; end<arr.size()-1; end++) {
+                       if(arr[end] <= arr[end+1]) {
+                          break;
+                       }
+                        found_end = true;
+                    }
+//                     at end of mountain, update max
+                    if(found_end && end -start +1> max) {
+                        max = end-start+1;
+                    }
+//                     mountains can't overlap so start searching from the end of the current moutain
+                    start = end-1;     
+                }
+        }
+        return max;
+    }
+};

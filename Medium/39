@@ -1,0 +1,32 @@
+class Solution {
+public:
+//     Runtime: 47 ms, faster than 29.17% of C++ online submissions for Combination Sum.
+// Memory Usage: 18.9 MB, less than 26.21% of C++ online submissions for Combination Sum.
+    // time taken: 12 minutes 
+    vector<vector<int>> res;
+    void bt(vector<int> &nums, int i, int sum, int t, vector<int> vec) {
+        if(sum == t) {
+            
+            res.push_back(vec);
+            return;
+        }
+        if(sum > t) {
+            return;
+        }
+        
+        for(int j=i; j<nums.size(); j++) {
+            sum = sum + nums[j];
+            vec.push_back(nums[j]);
+            bt(nums, j, sum, t, vec);
+//             backtrack since we are finshed with this value at nums[i]
+            sum = sum - nums[j];
+            vec.pop_back();
+            
+        }
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> vec{};
+        bt(candidates, 0, 0, target, vec);
+        return res;
+    }
+};

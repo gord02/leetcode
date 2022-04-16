@@ -1,0 +1,30 @@
+//     515. Find Largest Value in Each Tree Row
+//     time taken: 5 minutes having recently gone over how to implement algo to get nodes on specfic lvl in tree
+//     Runtime: 16 ms, faster than 47.06% of C++, Memory Usage: 22.3 MB, less than 39.47% of C++ online submissions for Find Largest Value in Each Tree Row.
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> maxs;
+        if(root == nullptr) {
+            return maxs;
+        }
+        queue<TreeNode*> nodes;
+        nodes.push(root);
+        while(nodes.empty() == false) {
+            int max = INT_MIN;
+            int currentSize = nodes.size();
+            for(int i=0; i< currentSize; i++) {
+                TreeNode* front = nodes.front();
+                nodes.pop();
+                if(front->left != nullptr) {
+                    nodes.push(front->left);
+                }
+                if(front->right != nullptr) {
+                    nodes.push(front->right);
+                }
+                if(front->val > max) {
+                    max = front->val;
+                }
+            }
+            maxs.push_back(max);
+        }
+        return maxs;
+    }

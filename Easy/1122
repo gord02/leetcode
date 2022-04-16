@@ -1,0 +1,39 @@
+//    1122. Relative Sort Array 
+//     Runtime: 0 ms, faster than 100.00%, Memory Usage: 7.9 MB, less than 38.18% of C++
+// Time taken: roughly 25 minutes, made the mistake of using char dictionary instead of number 
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+        map<int, int> dict;
+        for(int i = 0; i<arr1.size(); i++) {
+            auto it =dict.find(arr1[i]);
+            if(it == dict.end()) {
+                dict.insert(pair<int, int> (arr1[i], 1));
+            }else{
+                it->second++;
+            }
+        }
+        arr1.clear();
+        for(int i: arr2) {
+            auto it =dict.find(i);
+            if(it != dict.end()) {
+                while(it->second >0) {
+                    arr1.push_back(it->first);
+                    it->second--;
+                }
+            }
+        }
+        
+        if(dict.empty() != true) {
+            map<int, int>::iterator it = dict.begin();
+            while(it != dict.end()) {
+                if(it->second != 0) {
+                    while(it->second >0) {
+                        arr1.push_back(it->first);
+                        it->second--;
+                    }
+                }
+                it++;
+            }
+            
+        }
+        return arr1;
+    }

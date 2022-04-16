@@ -1,0 +1,20 @@
+    // 670. Maximum Swap
+//     Runtime: 4 ms, faster than 16.63% of C++ online submissions for Maximum Swap.
+// Memory Usage: 5.8 MB, less than 98.69% of C++ online submissions for Maximum Swap.
+//     Failed to consider many small test cases and scenrios that made orginal idea not work 
+    int maximumSwap(int num) {
+        string s = to_string(num);
+        for(int i =0; i<s.length(); i++) {
+            int max_ind = i;
+            for(int j=s.length()-1;j>= i+1; j--) {
+                if(s[j] > s[max_ind]) {
+                    max_ind = j;
+                }
+            }
+            if(max_ind != i) {
+                swap(s[max_ind], s[i]);
+                break;
+            }
+        }
+        return stoi(s);
+    }

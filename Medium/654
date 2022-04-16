@@ -1,0 +1,78 @@
+class Solution {
+public:
+//     654. Maximum Binary Tree
+//     time taken 13 minutes
+//     Runtime: 109 ms, faster than 60.02% of C++ online submissions for Maximum Binary Tree.
+// Memory Usage: 42.2 MB, less than 45.01% of C++ online submissions for Maximum Binary Tree.
+    TreeNode* rec(vector<int> &nums, int l, int r) {
+        if(r<l) { // l will not be ewual to r
+            return nullptr; // empty search space, therefore empty node as result
+        }
+        int max_ind = l;
+        for(int i=l; i<=r; i++) {
+            if(nums[i] > nums[max_ind]) {
+                max_ind = i;
+            }
+        }
+        TreeNode *node = new TreeNode(nums[max_ind]);
+       node->left = rec(nums, l, max_ind-1);
+        node->right =rec(nums, max_ind+1,r);
+        return node;
+    }
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        return rec(nums, 0, nums.size()-1);
+        
+    }
+};
+
+// 654. Maximum Binary Tree
+//     time taken: rouglhy an hour, mainly due to logisitcs of the questoin, idea came easily
+//       Runtime: 176 ms, faster than 18.31% of C++, Memory Usage: 379.8 MB, less than 6.65% of C++ online submissions for Maximum Binary Tree.
+      TreeNode* construct(vector<int> nums,int l, int r, TreeNode* node) {
+        if(r < l){
+            return nullptr;
+        }
+          
+        int max_ind = l;
+        for(int i = l; i<=r; i++) {
+            if(nums[i] > nums[max_ind]) {
+                max_ind = i;
+            }
+        }
+        node = new TreeNode(nums[max_ind]);
+        node->left = construct(nums, l,max_ind-1,node);
+        node->right = construct(nums,max_ind+1, r, node);
+        return node;
+    }
+//     TreeNode* construct(vector<int> nums,int l, int r, TreeNode* &node) {
+//         if(r < l){
+//             cout << "back" << endl;
+//             return nullptr;
+//         }
+//          cout << "l: " << l << " r: "<< r<< endl;
+//         int max_ind = l;
+//         for(int i = l; i<=r; i++) {
+//             if(nums[i] > nums[max_ind]) {
+//                 max_ind = i;
+//             }
+//         }
+//         cout << "max ind: " << max_ind << endl;
+//         node = new TreeNode(nums[max_ind]);
+//         int m = max_ind;
+//         TreeNode  *left = construct(nums, l,m-1,node);
+//         cout << "leaving left "<< endl;
+//         m = max_ind;
+//         // cout << "max_ind: " << max_ind << endl;
+//         TreeNode  *right = construct(nums,m+1, r, node);
+//         cout << "leaving right "<< endl;
+        
+        
+//         node->left = left;
+//         node->right = right;
+//         cout << "node:val : "<< node->val << endl;
+//         return node;
+//     }
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        TreeNode  *node =new TreeNode(nums[0]);
+        return construct(nums,0, nums.size()-1, node);
+    }

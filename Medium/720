@@ -1,0 +1,45 @@
+class Solution {
+public:
+    // TIme taken: 35 miuntes, took time to get comparision of strings right(didn consider cases), didnt consider base cases of no string in res 
+//     Runtime: 324 ms, faster than 8.07% of C++ online submissions for Longest Word in Dictionary.
+// Memory Usage: 59.5 MB, less than 5.30% of C++ online submissions for Longest Word in Dictionary.
+    static bool func(string i, string j) {
+        if(i.length() == j.length()) {
+            if( lexicographical_compare(i.begin(),i.end(), j.begin(), j.end()) ) {
+                // cout << i << " - " << j << endl;
+                return i > j;
+            }else{
+                return j < i;
+            }
+        }
+        return i.length() < j.length();
+    }
+    string longestWord(vector<string>& words) {
+        map<string, int> dict;
+        for(string s: words) {
+            dict.insert(pair<string, int> (s, 1));
+        }
+        vector<string> res;
+        
+        for(string s: words) {
+            for(int i =0; i<s.length(); i++) {
+               string subs = s.substr(0, i+1);
+                if(dict.find(subs) == dict.end()) {
+                    if(i != s.length() -1) {
+                        break;
+                    }
+                }
+                if(i == s.length() -1) {
+                    res.push_back(s);
+                }
+            }
+        }
+        if(res.size() == 0) {
+            return "";
+        }
+        sort(res.begin(), res.end(), func);
+
+        return res[res.size() -1];
+        
+    }
+};

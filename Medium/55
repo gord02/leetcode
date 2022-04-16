@@ -1,0 +1,40 @@
+class Solution {
+public:
+//     55. Jump Game
+//     timetaken: 27 miuntes, first apporach was tle, n^2, second apporach I only got from memory 
+//     Runtime: 128 ms, faster than 30.00% of C++ online submissions for Jump Game.
+// Memory Usage: 48.4 MB, less than 73.76% of C++ online submissions for Jump Game.
+    // map<int, int> de;
+//     bool bt(vector<int> & nums, int i) {
+//         if(i>=nums.size()-1) {
+//             return true;
+//         }
+//         if(de.find(i) != de.end()) {
+//             return false;
+//         }
+//         for(int n = nums[i]; n>0; n--) {
+//            if( bt(nums, i+n)) {
+//                return true;
+//            }
+//         }
+// //         moved as far as current index value can take you but did not arrvie at end of array so return false
+//         de.insert(pair<int, int> (i, 1));
+//         return false;
+//     }
+    bool canJump(vector<int>& nums) {
+        // vector<bool> dp{nums.size(), false};
+     int need = 0;
+    for(int i=nums.size()-1; i>=0; i--) {
+        if(need <=nums[i]) {
+            need = 0;
+        }
+//         base case, reached front 
+        if(i==0 && need == 0) {
+            return true;
+        }
+        need++;
+    }
+       // return bt(nums, 0);
+        return false;
+    }
+};

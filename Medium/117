@@ -1,0 +1,40 @@
+class Solution {
+public:
+    // 117. Populating Next Right Pointers in Each Node II
+//     time taken: 9 minutes 
+//     IMPROPERLY DETERMINED logic !!!!!!!
+//     Runtime: 22 ms, faster than 38.64% of C++ online submissions for Populating Next Right Pointers in Each Node II.
+// Memory Usage: 17.6 MB, less than 43.41% of C++ online submissions for Populating Next Right Pointers in Each Node II.
+    Node* connect(Node* root) {
+//         base case 
+        if(root == nullptr) {
+            return root;
+        }
+        
+        queue<Node*> q;
+        q.push(root);
+        
+        while(q.empty() == false) {
+            int n = q.size();
+            while(n > 0) {
+                Node* front = q.front();
+                q.pop();
+                
+                // if(q.empty() == false) {
+                if(n > 1) {
+                    front->next = q.front();
+                }
+                
+                if(front->left != nullptr) {
+                    q.push(front->left);
+                }
+                  if(front->right != nullptr) {
+                    q.push(front->right);
+                }
+                n--;
+            }
+        }
+        
+        return root;
+    }
+};

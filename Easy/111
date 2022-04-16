@@ -1,0 +1,30 @@
+// 111. Minimum Depth of Binary Tree
+// Time taken: 7 minutes, Lesson: CONSIDER BASE CASES
+// Runtime: 328 ms, faster than 61.03% of C++ online submissions for Minimum Depth of Binary Tree.
+// Memory Usage: 144.6 MB, less than 91.85% of C++ online submissions for Minimum Depth of Binary Tree.
+class Solution {
+    
+public:
+    int res = INT_MAX;
+    void depth(TreeNode* node,int sum) {
+      if(node == nullptr) {
+          return;
+      }  
+        if(node->left == nullptr && node->right == nullptr) {
+            if(sum < res) {
+                res = sum;
+            }
+        }
+        
+        depth(node->left, sum+1);
+        depth(node->right, sum+1);
+    }
+    int minDepth(TreeNode* root) {
+//         BASE CASE!!!!!
+        if(root == nullptr) {
+            return 0;
+        }
+        depth(root, 1);
+        return res;
+    }
+};

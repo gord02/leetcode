@@ -1,0 +1,23 @@
+// 797. All Paths From Source to Target
+    // Time taken: 49 minutes, jumped into problem before having plan, logistical errors, didnt consider base case correctly
+    // Runtime: 108 ms, faster than 7.34% Memory Usage: 48.2 MB, less than 5.06% of C++ online submissions for All Paths From 
+    
+    vector<vector<int>> res;
+    vector<int> path;
+    void rec(vector<vector<int>> graph, int current) {
+        // if(graph[current].empty()) { // doesn't work since end of grpah doesnt have to have empty
+        if(current == graph.size() -1) {
+            path.push_back(current);
+            res.push_back(path);
+            return;
+        }
+        path.push_back(current);
+        for(int i : graph[current]) {
+            rec(graph, i);
+            path.pop_back(); 
+        }
+    }
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        rec(graph, 0);
+        return res;
+    }

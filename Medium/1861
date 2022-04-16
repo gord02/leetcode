@@ -1,0 +1,41 @@
+//     1861. Rotating the Box
+    // time taken: a long time 
+    // Runtime: 232 ms, faster than 71.00% of C++, Memory Usage: 52.5 MB, less than 44.00% 
+
+    vector<vector<char>> rotateTheBox(vector<vector<char>>& box) {
+        
+        vector<vector<char>> grid(box[0].size(), vector<char> (box.size()));
+        
+        for(int row =0; row<box.size(); row++) {
+            for(int col =0; col<box[row].size(); col++) {
+                grid[col][box.size()-1 -row] = box[row][col]; 
+                
+            }
+        }
+        
+//         get count of how many stones are encountered while going down a column setting them to empty spaces, once a obstacle is reached, travel back up column by count many indicdes and start replacing them with stones until you reach the stone again and where count =0.
+        int count = 0;
+        for(int col =0; col<grid[0].size(); col++) {
+            for(int row =0; row<grid.size(); row++) {
+                if(grid[row][col] == '#') {
+                    count++;
+                    grid[row][col] = '.';
+                }
+                if(grid[row][col] == '*') {
+                    while(count > 0) {
+                        grid[row-count][col] = '#';
+                        count--;
+                    }
+                }
+                if(row == grid.size()-1) {
+                    while(count > 0) {
+                        grid[row-count+1][col] = '#';
+                        count--;
+                    }
+                }
+            }
+        }
+        
+        return grid;
+        
+    }

@@ -1,0 +1,50 @@
+    // 676. Implement Magic Dictionary
+//     Time taken : 40 minutes ? implemneted slow version first mistakenly 
+//     Runtime: 129 ms, faster than 68.59% of C++ online submissions for Implement Magic Dictionary.
+// Memory Usage: 41.4 MB, less than 66.21% of C++ online submissions for Implement Magic Dictionary.
+    vector<string> dict;
+    MagicDictionary() {
+        
+    }
+    
+    void buildDict(vector<string> d) {
+        this->dict = d;
+    }
+    
+    // bool search(string searchWord) {
+    //     // map<char, int>
+    //     vector<char> alpha{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t', 'u','w','v','x','y','z'}; 
+    //     // if(this->dict.find(searchWord) != dict.end()) {
+    //     //     return true;
+    //     // }
+    //     for(int i =0; i<searchWord.length();i++) {
+    //         for(char c: alpha) {
+    //             if(searchWord[i] == c){continue;}
+    //             char temp = searchWord[i];
+    //             searchWord[i] = c;
+    //             if(this->dict.find(searchWord) != dict.end()) {
+    //                 return true;
+    //             }
+    //             searchWord[i] = temp;
+    //         }
+    //     }
+    //     return false;
+    // }
+    bool search(string searchWord) {
+        for(string s: this->dict) {
+            int diff =0;
+            if(searchWord.length() != s.length()){continue;}
+            for(int i=0; i<searchWord.length(); i++) {
+                if(diff > 1) {
+                    break;
+                }
+                if(searchWord[i] != s[i]) {
+                    diff++;
+                }
+            }
+            if(diff == 1) {
+                return true;
+            }
+        }
+        return false;
+    }

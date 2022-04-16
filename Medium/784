@@ -1,0 +1,32 @@
+   // 784. Letter Case Permutation
+//     Forgot to implement that part where the current charcter isnt a letter
+//     10 minutes to implement 
+//     Runtime: 19 ms, faster than 15.93% of C++ online submissions for Letter Case Permutation.
+// Memory Usage: 12 MB, less than 23.84% of C++ online submissions for Letter Case Permutation.
+    vector<string> res;
+    
+    void bt(string s, int i) {
+        if(i>= s.length()) {
+            res.push_back(s);
+            return;
+        }
+        if(isalpha(s[i]) != 0) {
+
+            string original = s;
+            s[i] = toupper(s[i]);
+
+            bt(s, i+1);
+
+            s = original;
+            
+            s[i] = tolower(s[i]);
+            bt(s, i+1);
+            
+        }else{
+            bt(s, i+1);
+        }
+    }
+    vector<string> letterCasePermutation(string s) {
+        bt(s, 0);
+        return res;
+    }

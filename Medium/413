@@ -1,0 +1,64 @@
+   // 413. Arithmetic Slices
+//     O(n) on average? worst case O(n^2)? 
+// Runtime: 0 ms, faster than 100.00%, Usage: 7.4 MB, less than 52.20% of C++ online submissions for Arithmetic Slices.
+        int numberOfArithmeticSlices(vector<int>& nums) {
+        if(nums.size() < 3) {
+            return 0;
+        }
+
+        int count=0;
+        int r = 2;
+        
+        while(r < nums.size()) {
+            int l = r-2;
+            
+            if(nums[l] - nums[l+1] == nums[l+1] -nums[r]) {
+                r++;
+                int n = 1;
+                while(r < nums.size()) {
+                    if(nums[l] - nums[l+1] != nums[r-1] -nums[r]) {
+                        break;
+                    }else{
+                        n++;
+                        r++;
+                    }
+                }
+                while(n>0) {
+                    count = count + n;
+                    n--;
+                }
+            }
+            r++;
+        }
+        return count;
+    }
+//     20 minutes : used abloste when I shouldnt have 
+//     runtime: 7 ms, faster than 11.85% of C++ online submissions for Arithmetic Slices.
+// Memory Usage: 7.2 MB, less than 85.85% of C++ online submissions for Arithmetic Slices.
+//     O(n^2)
+//     int numberOfArithmeticSlices(vector<int>& nums) {
+//         if(nums.size() < 3) {
+//             return 0;
+//         }
+//         int l = 0;
+//         int count=0;
+//         int r = 2;
+        
+//         while(l <= nums.size() - 3) {
+//             int r = l+2;
+//             if(nums[l] - nums[l+1] == nums[r-1] -nums[r]) {
+//                 count++;
+//                 r++;
+//                 while(r < nums.size()) {
+//                     if(nums[l] - nums[l+1] != nums[r-1] -nums[r]) {
+//                         break;
+//                     }else{
+//                         count++;
+//                         r++;
+//                     }
+//                 }
+//             }
+//             l++;
+//         }
+//         return count;
+//     }

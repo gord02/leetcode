@@ -1,0 +1,63 @@
+class Solution {
+public:
+    // 958. Check Completeness of a Binary Tree
+    // time taken: 45 minutes, MANY small errors in logic and erorr in code logic 
+//     Runtime: 3 ms, faster than 91.78% of C++ online submissions for Check Completeness of a Binary Tree.
+// Memory Usage: 10.7 MB, less than 7.96% of C++ online submissions for Check Completeness of a Binary Tree.
+    int max =0;
+    void df(TreeNode* node, int lvl) {
+        if(node == nullptr) {
+            return;
+        }
+        if(lvl > max) {
+            max = lvl;
+        }
+        df(node->left, lvl+1);
+        df(node->right, lvl+1);
+    }
+    bool isCompleteTree(TreeNode* root) {
+        df(root, 0);
+        vector<TreeNode*> nodes;
+        queue<TreeNode*> q;
+        q.push(root);
+        int lvl  = 0;
+        
+        while(q.empty() == false) {
+            int size = q.size();
+            while(size > 0) {
+             
+                TreeNode* front = q.front();
+                q.pop();
+                if(lvl == max-1) {
+                    nodes.push_back(front->left);
+                    nodes.push_back(front->right);
+                }
+                if((front->left == nullptr || front->right == nullptr) && lvl < max-1) {
+                    return false;
+                }
+  
+                if(front->left != nullptr) {
+                    q.push(front->left);
+                }
+                if(front->right != nullptr) {
+                    q.push(front->right);
+                }
+
+                size--;
+            }
+            lvl++;
+        }
+        bool found_nL = false;
+        for(TreeNode* node : nodes) {
+            if(node != nullptr && found_nL) {
+                return false;
+            }
+            if(node == nullptr) {
+                found_nL = true;
+            }
+        }
+        
+        return true;
+        
+    }
+};

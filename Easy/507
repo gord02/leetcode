@@ -1,0 +1,20 @@
+class Solution {
+public:
+    // 507. Perfect Number
+    // Time taken: 5 minutes
+//     Runtime: 1507 ms, faster than 18.65% of C++ online submissions for Perfect Number.
+// Memory Usage: 5.8 MB, less than 90.79% of C++ online submissions for Perfect Number.
+    bool checkPerfectNumber(int num) {
+        vector<int> nums;
+        int sum = 0;
+        for(int i=1; i<=num/2; i++) {
+            if(num % i == 0) {
+                sum= sum + i;
+            }
+        }
+        if(sum == num) {
+            return true;
+        }
+        return false;
+    }
+};

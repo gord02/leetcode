@@ -1,0 +1,37 @@
+class Solution {
+public:
+    // 61. Rotate List
+//     Runtime: 21 ms, faster than 6.41% of C++ online submissions for Rotate List.
+// Memory Usage: 12.2 MB, less than 7.33% of C++ online submissions for Rotate List.
+//     27 minutes, tircky to figure out mod part and there was an error genreated by missing brackets
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(head == nullptr) {
+            return head;
+        }
+        vector<ListNode*> vec;
+        while(head!= nullptr) {
+            ListNode* temp = head->next;
+            head->next = nullptr; // null pointers for later
+            vec.push_back(head);
+            head=temp;
+        }
+        
+        vector<ListNode*> res(vec.size(), nullptr);
+        
+        for(int i=0; i<vec.size(); i++) {
+            if(i + k <vec.size()) {
+                res[i+k] = vec[i];
+            }else{
+                
+                res[(i+k) %vec.size()] = vec[i];
+            }
+        }
+        for(int i=0; i<res.size()-1; i++) {
+            
+            res[i]->next = res[i+1];
+        }
+        
+        return res[0];
+        
+    }
+};

@@ -1,0 +1,50 @@
+ // 623. Add One Row to Tree
+//     TIMe tken: 25 minutes give or take 5 minuites, many small problems to fix mainly pertaining to the creating of a node to add and when to return 
+//     Runtime: 30 ms, faster than 34.30% of C++ online submissions for Add One Row to Tree.
+// Memory Usage: 25.2 MB, less than 15.08% of C++ online submissions for Add One Row to Tree.
+    TreeNode* addOneRow(TreeNode* root, int val, int depth) {
+        queue<TreeNode*> nodes;
+        nodes.push(root);
+        int lvl = 1;
+        bool found = false;
+        while(nodes.empty() == false) {
+            int current_n = nodes.size();
+            while(current_n > 0) {
+                    TreeNode* front = nodes.front();
+                    nodes.pop();
+                    if(depth == 1) {
+                            TreeNode *new_node = new TreeNode(val, root, nullptr);
+                            return new_node;
+                    }
+                    if(lvl == depth-1) {    
+                        found = true;
+        //                 save right and left branch
+                        TreeNode* lbranch = front->left;
+                        TreeNode* rbranch = front->right;
+                        
+                        // TreeNode* new_node = root; // is this creating a new node I can manipulate or just a reference to the acutal root? If so how do i create my own treenODE POINTER ?
+                        TreeNode *new_node = new TreeNode(val, lbranch, nullptr);
+                        front->left = new_node;
+                        
+                        TreeNode *new_node_r = new TreeNode(val, nullptr, rbranch);
+                        front->right = new_node_r;
+                    }
+
+                if(front->left != nullptr) {
+                    nodes.push(front->left);
+                }
+                 if(front->right != nullptr) {
+                    nodes.push(front->right);
+                }
+                   current_n--; 
+                } 
+                if(found){
+                     return root;
+                }
+            
+                lvl++;
+            
+               }
+        return root;
+        
+        }

@@ -1,0 +1,56 @@
+// 36. Valid Sudoku
+   // Time Taken: 32 minutes
+    // Runtime: 24 ms, faster than 62.26% of C++, Memory Usage: 19.4 MB, less than 47.33% of C++
+    bool validSub(vector<vector<char>>& board, int row, int maxRow, int col, int maxCol) {
+        map<char, int> dict;
+        
+       for(int i=row; i<maxRow; i++) {
+           for(int j=col; j<=maxCol; j++) {
+               if(board[i][j] == '.') {continue;}
+               auto it = dict.find(board[i][j]);
+                if(it != dict.end()) {
+                    return true;
+               }else{
+                    dict.insert(pair<char, int> (board[i][j], 1));
+                }
+           }
+       }
+        return false; 
+    }
+    bool isValidSudoku(vector<vector<char>>& board) {
+//         columns
+        for(int row=0; row<board.size(); row++) {
+            map<char, int> dict;
+            for(int col=0; col<board[row].size(); col++) {
+                if(board[row][col] == '.') {continue;}
+                auto it = dict.find(board[row][col]);
+                if(it != dict.end()) {
+                    return false;
+               }else{
+                    dict.insert(pair<char, int> (board[row][col], 1));
+                }
+            }
+        }
+        
+//         rows
+          for(int col=0; col<board[0].size(); col++) {
+                 map<char, int> dict;
+                for(int row=0; row<board.size(); row++) {
+                    if(board[row][col] == '.') {continue;}
+                    auto it = dict.find(board[row][col]);
+                    if(it != dict.end()) {
+                        return false;
+                   }else{
+                        dict.insert(pair<char, int> (board[row][col], 1));
+                    }
+                }
+          }
+        
+//         checking sub grids
+        for(int row=0; row<board.size(); row = row + 3) {
+            if ( validSub(board, row, row+3, 0, 2) || validSub(board, row, row+3, 3, 5) || validSub(board, row, row+3, 6, 8)) {
+                return false;
+        }
+    }
+        return true;
+    }

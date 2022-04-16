@@ -1,0 +1,47 @@
+  // 513. Find Bottom Left Tree Value
+//     Time taken: 21 minutes, issue arose in that you have to get left from lowest level but even if the node does not appear on left side of another you need to get, therefore traverse tree from right to left to get desired node val
+//     Runtime: 16 ms, faster than 48.33% of C++, Memory Usage: 21.7 MB, less than 57.58% of C++
+    int max = 0;
+     void dF(TreeNode* node, int lvl, int &leftest) {
+        if(node == nullptr) {
+            return;
+        }
+        if(lvl >= max) {
+            max = lvl;
+            leftest = node->val;
+        }
+        lvl++;
+        dF(node->right, lvl, leftest); 
+        dF(node->left, lvl, leftest);
+        lvl--;  
+    }
+//     void dF(TreeNode* node, int lvl, int &leftest) {
+//         if(node == nullptr) {
+//             return;
+//         }
+        
+//         if(node->left != nullptr) {
+//             // cout << "node->val: "<< node->val <<  " lvl: " << lvl <<endl;
+//             lvl++;
+            
+//             if(lvl >= max) {
+//                 max = lvl;
+//                 leftest = node->left->val;
+//             }
+//             dF(node->left, lvl, leftest);
+//             lvl--;  
+//         }
+//         lvl++;
+//         dF(node->right, lvl, leftest); // how come lvl++ doesnt work?
+//         lvl--;
+
+        
+        
+        
+//     }
+    int findBottomLeftValue(TreeNode* root) {
+        int leftest = root->val;
+        
+        dF(root, 0, leftest);
+        return leftest;
+    }

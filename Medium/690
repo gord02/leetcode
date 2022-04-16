@@ -1,0 +1,28 @@
+//     690. Employee Importance
+//     Time taken: 30 miuntes exactly, the DS have me very conusefed even though I knew an implemntation that would work LESSON: DONT MAKE ASSUMPTIONS!!!!!
+//     Runtime: 58 ms, faster than 29.62% of C++, Memory Usage: 13.2 MB, less than 95.74% of C++ online submissions for Employee Importance.
+//     void depthFirst(vector<Employee*> employees, int id, vector<int> &sum) {
+//         if(employee->id == id) {
+//             sum.push_back(employ->importance);
+//             return;
+//         }
+//         depthFirst(employees)
+    
+//     }
+        int getImportance(vector<Employee*> employees, int id) {
+        int sum = 0;
+                queue<int> q;
+                q.push(id);
+                while(q.empty() == false) {
+                      for(int i = 0; i<employees.size(); i++) {
+                          if(q.front() == employees[i]->id) {
+                            sum = sum + employees[i]->importance;
+                            q.pop();
+                            for(int e: employees[i]->subordinates) {
+                                q.push(e);
+                            }  
+                          }
+                    }
+                }
+        return sum;
+    }

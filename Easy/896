@@ -1,0 +1,33 @@
+  // 896. Monotonic Array
+//     Time taken: 9 minutes
+    // Runtime: 152 ms, faster than 74.48% of C++, Memory Usage: 96.5 MB, less than 15.93% 
+    bool isMonotonic(vector<int>& nums) {
+        if(nums.size() == 1){
+            return true;
+        }
+        // bool montone = false;
+//         check incr
+        int num = nums[0];
+        for(int i=1;i<nums.size(); i++) {
+            if(nums[i] < num) {
+                break;
+            }else{
+                num = nums[i];
+            }
+            if(i == nums.size()-1) {
+                return true;
+            }
+        }
+        num = nums[0];
+         for(int i=1;i<nums.size(); i++) {
+            if(nums[i] > num) {
+                break;
+            }else{
+                num = nums[i];
+            }
+            if(i == nums.size()-1) {
+                return true;
+            }
+        }
+        return false;
+    }

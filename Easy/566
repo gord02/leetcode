@@ -1,0 +1,29 @@
+   // 566. Reshape the Matrix
+//     time taken: 14 minutes
+    // Runtime: 9 ms, faster than 57.07% of C++, Memory Usage: 11.5 MB, less than 5.66% 
+
+    vector<vector<int>> matrixReshape(vector<vector<int>>& mat, int r, int c) {
+        vector<vector<int>> grid(r, vector<int> (c, 0));
+        queue<int> q;
+        for(int i=0; i<mat.size(); i++) {
+            for(int j=0; j<mat[i].size(); j++) {
+                q.push(mat[i][j]);
+            }
+        }
+
+         for(int i=0; i<grid.size(); i++) {
+            for(int j=0; j<grid[i].size(); j++) {
+                if(q.empty() != true) {
+                    grid[i][j] = q.front();
+                    q.pop();
+                }else{
+                    return mat;
+                }
+            }
+            if( i == grid.size()-1 && q.empty() != true) {
+                return mat;
+            }
+             
+         }
+        return grid;
+    }
