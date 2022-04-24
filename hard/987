@@ -1,0 +1,43 @@
+class Solution {
+public:
+    // 987. Vertical Order Traversal of a Binary Tree
+//     Runtime: 25 ms, faster than 6.91% of C++ online submissions for Vertical Order Traversal of a Binary Tree.
+// Memory Usage: 16.7 MB, less than 5.75% of C++ online submissions for Vertical Order Traversal of a Binary Tree.
+    map<int, vector<vector<int>> > dict; // key is column, value is vector of vector of node val, row and col
+    static bool compare(vector<int> i, vector<int> j) {
+        if(i[1] == j[1]) {
+            return i[0] < j[0];
+        }
+        return i[1] < j[1];
+    }
+    void rec(TreeNode * node, int row , int col) {
+        if(node == nullptr) {
+            return;
+        }
+        auto it = dict.find(col);
+        // cout <<node->val << " " << row << " " << col << endl;
+        
+        if(it == dict.end()) {
+            dict.insert(pair<int, vector<vector<int>> > (col, {{node->val, row, col}}));
+        }else{
+            it->second.push_back({node->val, row, col});
+        }
+        rec(node->left,row+1, col-1);
+        rec(node->right,row+1, col+1);
+    }
+      vector<vector<int>> verticalTraversal(TreeNode* root) {
+          rec(root, 0, 0);
+          vector<vector<int>> res;
+          for(auto dict_pair: dict) {
+//               the map will sort the columns automitcally
+              vector<int> col_nums;
+//               sort vector of vectors 
+              sort(dict_pair.second.begin(), dict_pair.second.end(), compare);
+              for(vector<int> colNodes: dict_pair.second) {
+                    col_nums.push_back(colNodes[0]);
+              }
+              res.push_back(col_nums);
+          }
+          return res;
+      }
+};

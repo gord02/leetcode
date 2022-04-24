@@ -1,0 +1,33 @@
+class Solution {
+public:
+    // 658. Find K Closest Elements
+//     time taken: 12 minutes 
+//     Runtime: 106 ms, faster than 29.87% of C++ online submissions for Find K Closest Elements.
+// Memory Usage: 34.1 MB, less than 26.12% of C++ online submissions for Find K Closest Elements.
+    // struct compare {
+    //     bool operator()(pair<int, int> i, pair<int, int> j) {
+    //         return i.first < j.first;
+    //     }
+    // };
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        // priority_queue< pair<int, int>, vector<pair<int, int> >, compare> q;
+        priority_queue< pair<int, int>, vector<pair<int, int> >> q;
+        for(int i =0; i<arr.size(); i++) {
+            if(q.size() < k) {
+                q.push(make_pair(abs(arr[i] - x), arr[i]));
+            }else{
+                if(q.top().first >abs(arr[i] - x)) {
+                    q.pop();
+                    q.push(make_pair(abs(arr[i] - x), arr[i]));
+                }
+            }
+        }
+        vector<int> res;
+        while(q.empty() == false) {
+            res.push_back(q.top().second);
+            q.pop();
+        }
+        sort(res.begin(), res.end()); // only k elements
+        return res;
+    }
+};

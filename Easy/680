@@ -1,0 +1,90 @@
+class Solution {
+public:
+//     Runtime: 116 ms, faster than 5.23% of C++ online submissions for Valid Palindrome II.
+// Memory Usage: 19.7 MB, less than 69.78% of C++ online submissions for Valid Palindrome II.
+     bool rec(string& s, int l, int r, int del) {
+         // cout << s[l] << " " << s[r] << " del: " << del << endl;
+          if(del < 0) {
+             return false;
+         }
+         if(l >= r) {
+             return true;
+         } 
+         if(s[l] == s[r]) {
+             return rec(s, l+1, r-1, del);
+         }else{
+             return  (rec(s, l+1, r, del-1) ||  rec(s, l, r-1, del-1));
+         }
+     }
+    // bool rec(string s, int del) {
+    //     cout << s << " del: "<< del<<endl;
+    //     if(del < 0) {
+    //         cout << "back" << endl;
+    //         return false;
+    //     }
+    //     if(s.length() <= 1) {
+    //         return true;
+    //     }
+    //     if(s[0] == s[s.length()-1]) {
+    //         string sub = s.substr(1, s.length()-2);
+    //         return rec(sub, del);
+    //     }else{
+    //         // string sub = s.substr(1, s.length()-1);
+    //         return (rec( s.substr(0, s.length()-1), del-1) ||  rec(s.substr(1, s.length()-2), del-1));
+    //     }
+    // }
+    
+        bool validPalindrome(string s) {
+            // return rec(s, 1);
+            return rec(s,0, s.length()-1, 1);
+        }
+//     time taken: 30 miuntes, failed OVERCOMPLCISTED recusive soultion then switched to iterative 
+//     MODUlARIZE plaiddrom check,simlifes A LOT!!!!!
+// DONT USE SUBSRTRING JUST indices!!!!!
+//     Runtime: 51 ms, faster than 96.52% of C++ online submissions for Valid Palindrome II.
+// Memory Usage: 23.8 MB, less than 48.88% of C++ online submissions for Valid Palindrome II.
+
+//     bool validPalindrome(string s) {
+//         // return rec(s, 1);
+//         string left = "";
+//         string right = "";
+//         int l =0;
+//         int r = s.length()-1;
+        
+//         while(l <=r) {
+//             if(s[l] == s[r]) {
+//                 l++;
+//                 r--;
+//             }else{
+//                 left = s.substr(l, r-l);
+//                 right = s.substr(l+1, r-l);
+//                 break;
+//             }
+//         }
+//         if(left == "" && right == "") {
+//             return true;
+//         }
+//         bool leftCheck = true;
+//          l=0;  r= left.length()-1;
+//          while(l <=r) {
+//             if(left[l] != left[r]) {
+//                 leftCheck = false;
+//                 break;
+//             }
+//                   l++;
+//                 r--;
+//          }
+//         bool rightCheck = true;
+//          l=0;  r= right.length()-1;
+//          while(l <=r) {
+//             if(right[l] != right[r]) {
+//                 rightCheck = false;
+//                 break;
+//             }
+//                  l++;
+//                 r--;
+//          }
+        
+//         return leftCheck||rightCheck;
+//     }
+};

@@ -1,0 +1,35 @@
+class Solution {
+public:
+    // 929. Unique Email Addresses
+//     26 minutes
+//     Runtime: 43 ms, faster than 24.30% of C++ online submissions for Unique Email Addresses.
+// Memory Usage: 16 MB, less than 12.94% of C++ online submissions for Unique Email Addresses.
+    int numUniqueEmails(vector<string>& emails) {
+        map<string, int> dict;
+        for(string s: emails) {
+            string new_s = "";
+            int at = 0;
+            
+            for(int i=0; i<s.length(); i++) {
+                if(s[i] == '@') {
+                    at = i;
+                    break;
+                }
+                if(s[i] == '+') {
+                    break;
+                }
+                if(s[i] != '.') {
+                    new_s += s[i];
+                }
+           
+            }
+            while(s[at] != '@') {
+                at++;
+            }
+            new_s = new_s + s.substr(at, s.length()-at);
+            cout << "new_s: " << new_s << endl;
+             dict.insert(pair<string, int> (new_s, 1));
+        }
+        return dict.size();
+    }
+};

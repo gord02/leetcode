@@ -1,0 +1,46 @@
+class Solution {
+public:
+    // 953. Verifying an Alien Dictionary
+    // time tkaen: 26 minutes, didnt fully think through the logic, also took many tries to guess at working logic 
+//     Runtime: 3 ms, faster than 93.36% of C++ online submissions for Verifying an Alien Dictionary.
+// Memory Usage: 9.9 MB, less than 7.24% of C++ online submissions for Verifying an Alien Dictionary.
+    bool isAlienSorted(vector<string>& words, string order) {
+        map<char, int>dict;
+        for(int i=0; i<order.size(); i++) {
+            dict.insert(pair<char, int> (order[i], i));
+        }
+        for(int i=1; i<words.size(); i++) {
+            string w1 = words[i-1];
+            string w2 = words[i];
+            int p1 = 0;
+            int p2 = 0;
+            bool valid = false;
+            while(p2 != w2.length()) {
+                if(p1 >=w1.length()) {
+                    valid = true;
+                    
+                    break;
+                }
+                // cout << w1[p1] << " - " << w2[p2] << endl;
+                if(dict.find(w1[p1])->second > dict.find(w2[p2])->second) {
+                    return false;
+                }
+                else if (dict.find(w1[p1])->second < dict.find(w2[p2])->second) {
+                    // cout << "breaking" << endl;
+                    valid = true;
+                    break;
+                }
+                // cout << "here" << endl; /
+                p2++;
+                
+                p1++;
+            }
+// //             w2 finished before w1 did
+            if(p1 != w1.length() && !valid) {
+                return false;
+            }
+            
+        }
+        return true;
+    }
+};

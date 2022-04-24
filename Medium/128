@@ -1,0 +1,40 @@
+class Solution {
+public:
+    // 128. Longest Consecutive Sequence
+//     time tkane: 17 minutes, didnt consider base cases, logic wasnt as good as it should have been 
+//     Runtime: 97 ms, faster than 65.33% of C++ online submissions for Longest Consecutive Sequence.
+// Memory Usage: 32.8 MB, less than 9.08% of C++ online submissions for Longest Consecutive Sequence.
+    int longestConsecutive(vector<int>& nums) {
+        if(nums.size() == 0) {
+            return 0;
+        }
+        map<int, int> dict;
+        int max = 1;
+        for(int i=0; i<nums.size(); i++) {
+            dict.insert(pair<int, int> (nums[i], 1));
+        }
+        map<int, int>::iterator it = dict.begin();
+        while(it != dict.end()) {
+            int num = it->first;
+            int left = 0;
+            int right = 0;
+            while(dict.find(num-1)!= dict.end()) {
+                left++;
+                dict.erase(num-1);
+                num = num - 1;
+            }
+            num = it->first;
+            while(dict.find(num+1)!= dict.end()) {
+                right++;
+                dict.erase(num+1);
+                num = num + 1;
+            }
+            if(max < right+left + 1) {
+                max = right+left + 1;
+            }
+            dict.erase(num);
+            it++;
+        }
+        return max;
+    }
+};

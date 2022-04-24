@@ -1,0 +1,23 @@
+class Solution {
+public:
+    // 921. Minimum Add to Make Parentheses Valid
+//     Runtime: 3 ms, faster than 40.03% of C++ online submissions for Minimum Add to Make Parentheses Valid.
+// Memory Usage: 6.2 MB, less than 51.71% of C++ online submissions for Minimum Add to Make Parentheses Valid.
+    int minAddToMakeValid(string s) {
+        stack<char> st;
+        int count = 0;
+        for(char c: s) {
+            if(c == '(') {
+                st.push(c);
+            }else{
+                if(st.size() == 0) {
+                    count++;
+                }else{
+                    st.pop();
+                }
+            }
+        }
+        count = count + st.size();
+        return count;
+    }
+};

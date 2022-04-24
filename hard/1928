@@ -1,0 +1,81 @@
+class Solution {
+public:
+// very long time, a lot of failures in logic 
+    // 1928. Minimum Cost to Reach Destination in Time
+    // Runtime: 337 ms, faster than 65.43% of C++ online submissions for Minimum Cost to Reach Destination in Time.
+// Memory Usage: 42 MB, less than 42.74% of C++ online submissions for Minimum Cost to Reach Destination in Time.
+    struct compare  {  
+   bool operator()(const vector<int>& l, const vector<int>& r)  {  
+       return l[0] > r[0];  
+   }  
+ };  
+    int minCost(int maxTime, vector<vector<int>>& edges, vector<int>& passingFees) {
+        map<int, vector<pair<int, int> > > adj;
+        
+        for(int i=0; i<edges.size();i++) {
+            int a = edges[i][0];
+            int b = edges[i][1];
+            
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                vector<pair<int, int>> negh{make_pair(b, edges[i][2])};
+                adj.insert(pair<int, vector<pair<int, int> > >(a, negh));
+            }else{
+                it->second.push_back(make_pair(b, edges[i][2]));
+            }
+            
+            it = adj.find(b);
+            if(it == adj.end()) {
+                vector<pair<int, int>> negh{make_pair(a, edges[i][2])};
+                adj.insert(pair<int, vector<pair<int, int> > >(b, negh));
+            }else{
+                it->second.push_back(make_pair(a, edges[i][2]));
+            }
+        }
+        int n = passingFees.size();
+        vector<int> times(n, INT_MAX);
+        vector<int> cheapest(n, INT_MAX);
+        times[0] = 0;
+        cheapest[0] = passingFees[0];
+        
+        priority_queue<vector<int>,vector<vector<int>>, compare > q;
+        q.push({cheapest[0], 0, 0});
+        while(q.empty() == false) {
+            vector<int> travel = q.top();
+            q.pop();
+            int curCost = travel[0];
+            int curNode = travel[1];
+            int curTime = travel[2];
+            if(curTime >maxTime) {
+                continue;
+            }
+            if(curNode == n-1) {
+//                 cout << "curTime: " << curTime << endl;
+//                 cout << "in arr: " << cheapest[curNode] << endl;
+                return curCost;
+            }
+       
+            auto it = adj.find(curNode);
+            if(it == adj.end()) {continue;}
+            for(auto edge: it->second) {
+                int nextNode = edge.first;
+                int time = edge.second;
+                int fee = passingFees[nextNode];              
+                
+                if(fee + curCost < cheapest[nextNode]) {
+                    cheapest[nextNode] = fee + curCost;
+                     times[nextNode] = curTime +time;
+                    q.push({ cheapest[nextNode], nextNode, curTime+time});
+                }
+//                 optmitze for time
+                else if(curTime+ time < times[nextNode] ) {
+                     // cheapest[nextNode] = fee + curCost;
+                        times[nextNode] = curTime +time;
+                    q.push({  fee + curCost, nextNode, curTime+time});
+                }
+                // times[nextNode] = curTime;
+            }
+        }
+        return -1;
+    }
+};

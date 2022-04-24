@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // 560. Subarray Sum Equals K
+//     time taken: 21 miuntes 
+//     Runtime: 151 ms, faster than 16.85% of C++ online submissions for Subarray Sum Equals K.
+// Memory Usage: 38.2 MB, less than 33.17% of C++ online submissions for Subarray Sum Equals K.
+    int subarraySum(vector<int>& nums, int k) {
+        map<int, int> dict;
+        int curSum = 0;
+        int count = 0;
+        for(int i=0; i<nums.size(); i++) {
+            curSum = curSum+ nums[i];
+            if(curSum == k) {
+                count++;
+            }
+            auto it = dict.find(curSum - k);
+            if(it != dict.end()) {
+                count += it->second;
+            }
+            it = dict.find(curSum);
+            if(it == dict.end()) {
+                dict.insert(pair<int, int> (curSum, 1));// value is count!
+            }else{
+                it->second++;
+            }
+        }
+        return count;
+    }
+};

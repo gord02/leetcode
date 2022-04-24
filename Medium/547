@@ -1,0 +1,109 @@
+class Solution {
+public:
+    // 547. Number of Provinces
+//     Runtime: 28 ms, faster than 66.35% of C++ online submissions for Number of Provinces.
+// Memory Usage: 13.9 MB, less than 43.45% of C++ online submissions for Number of Provinces.
+    // map<int, int> set
+    set<int> s;
+        map<int, vector<int>>adj;
+    
+//     vector<int> roots;
+//     vector<int> height;
+//     int count;
+    
+//     void unit(int x, int y) {
+//         int rootX = find(x);
+//         int rootY = find(y);
+//         if(rootX != rootY) {
+//             if(height[rootX] < height[rootY]) {
+//                 roots[rootX] = rootY;
+//             }
+//             else if(height[rootX] > height[rootY]) {
+//                 roots[rootY] = rootX;
+                
+//             }else{                
+//                 roots[rootY] = rootX;
+//                 height[rootX] =  height[rootX]+1;
+//             }
+//             count--;
+//         }
+//     }
+//     int find(int x) {
+//         while(roots[x] != x) {
+//             x = roots[x];
+//         }
+//         return x; // index
+//     }
+//     bool connected(int x, int y) {
+//         if(find(x) == find(y)) {
+//             return true;
+//         }
+//         return false;
+//     }
+    void dfs(int i) {
+        if(s.find(i) != s.end()) {
+            return;
+        }
+        s.insert(i);
+        auto it = adj.find(i);
+        if(it != adj.end()) {
+            for(int next: it->second) {
+                dfs(next);
+            }
+        }
+    }
+//     int findCircleNum(vector<vector<int>>& isConnected) {
+//       vector<int> r(isConnected.size());
+//       vector<int> h(isConnected.size());
+//         roots = r;
+//         height = h;
+//         count = isConnected.size();
+//         for(int i=0; i<roots.size(); i++) {
+//             roots[i] = i;
+//             height[i] = 1;
+//         }
+        
+//         for(int i=0; i<isConnected.size(); i++) {
+//             for(int j=0; j<isConnected.size(); j++) {
+//                 if(isConnected[i][j] == 1 && i!=j) {
+//                     unit(i, j);
+//                 }
+//             }
+//         }
+  
+//         return count;
+//     }
+    
+//     Runtime: 47 ms, faster than 19.95% of C++ online submissions for Number of Provinces.
+// Memory Usage: 16.1 MB, less than 5.06% of C++ online submissions for Number of Provinces.
+     int findCircleNum(vector<vector<int>>& isConnected) {
+        for(int i=0; i<isConnected.size(); i++) {
+             for(int j=0; j<isConnected[i].size(); j++) {
+                 if(isConnected[i][j] == 1) {
+                    auto it = adj.find(i);
+                     if(it == adj.end()) {
+                         adj.insert(pair<int, vector<int>>(i, {j}));
+                     }else{
+                         it->second.push_back(j);
+                     }
+                     
+                     it = adj.find(j);
+                     if(it == adj.end()) {
+                         adj.insert(pair<int, vector<int>>(j, {i}));
+                     }else{
+                         it->second.push_back(i);
+                     }
+                 }
+             }
+        }
+         int n = isConnected.size();
+         int count =0;
+        for(int i=0; i<n; i++) {
+            if(s.find(i) == s.end()) {
+                count++;
+                dfs(i);
+            }
+        }
+         return count;
+     }
+};
