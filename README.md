@@ -22,4 +22,13 @@ Min queue Comparator:
  ```
  priority_queue<map<string, int>::iterator, vector<map<string, int>::iterator>, compare> q;
  ```
-        
+ 
+ 
+ Ex 2:
+```
+struct compare {
+    bool operator()(pair<int, int> i, pair<int, int> j) {
+        return i.first > j.first;
+    }
+};
+```
