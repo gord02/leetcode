@@ -1,0 +1,49 @@
+class Solution {
+public:
+    // 207. Course Schedule
+//     Time taken: 16 minutes, just learned topoligcal ordering, INCREDIBLE amount of typos and errors, work on that 
+//     Runtime: 39 ms, faster than 27.25% of C++ online submissions for Course Schedule.
+// Memory Usage: 15.2 MB, less than 21.08% of C++ online submissions for Course Schedule.
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        map<int, vector<int>> adj;
+        vector<int> inDeg(numCourses, 0);
+        for(vector<int> preReq: prerequisites) {
+            int preCourse = preReq[1];
+            int course = preReq[0];
+            
+            auto it = adj.find(preCourse);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<int>> (preCourse, {course}));
+            }else{
+                it->second.push_back(course);
+            }
+            inDeg[course]++; // incrememting in degrees for this course since it has pre req
+        }
+        
+        int count = 0;
+        queue<int> q;
+        for(int i=0; i<numCourses; i++) {
+           if(inDeg[i] == 0) {
+                q.push(i);
+            }
+        }
+        while(q.empty() == false) {
+            int course = q.front();
+            q.pop();
+            count++;
+            
+            auto it = adj.find(course);
+            if(it == adj.end()) {continue;}
+            for(int nextCourse: it->second) {
+                inDeg[nextCourse]--;
+                if(inDeg[nextCourse] == 0) {
+                    q.push(nextCourse);
+                }
+            }
+        }
+        if(count == numCourses) {
+            return true;
+        }
+        return false;
+    }
+};

@@ -1,5 +1,100 @@
 class Solution {
 public:
+//      int topDown(vector<int>& coins, int amount, vector<int> &dp) {
+//         if(dp[amount] != -1) {
+//             return dp[amount];
+//         }
+
+//         int res = INT_MAX-1;
+//         for(int i=0; i<coins.size(); i++) {
+//             if(coins[i] <= amount) {
+// //                 the plus one represntes the addtion of the current coin we are subtracing from here
+//             res = min(res, topDown(coins, amount-coins[i], dp) + 1);
+//             }
+//         }
+//         dp[amount] = res;
+//         return res;
+//     }
+    
+    // int coinChange(vector<int>& coins, int amount) {
+    //     vector<int> dp(amount+1, -1);
+    //     dp[0] = 0;
+    //     int res = topDown(coins, amount, dp);
+    //     if(res == INT_MAX-1 || res == INT_MAX) {
+    //        return -1;
+    //     }
+    //    return res;
+    // }
+    
+    // int td(vector<int>& coins, int n, vector<int>& dp) {
+    //     if(n == 0) {
+    //         return 0;
+    //     }
+    //     if(dp[n] != -1) {
+    //         return dp[n];
+    //     }
+    //     int res = INT_MAX;
+    //     for(int i=0; i<coins.size(); i++) {
+    //         if(coins[i] <= n) {
+    //             int rec =  td(coins, n-coins[i], dp);
+    //             if(rec != INT_MAX) {
+    //                 res = min(res, 1 +rec);
+    //             }
+    //         }
+    //     }
+    //     dp[n] = res;
+    //     return res;
+    // }
+//     Runtime: 106 ms
+// Memory Usage: 14.7 MB
+    // int coinChange(vector<int>& coins, int amount) {
+    //     vector<int> dp(amount+1, -1);
+    //     int rec = td(coins, amount, dp);
+    //     if(rec == INT_MAX) {
+    //         return -1;
+    //     }else{
+    //         return rec;
+    //     }        
+    // }
+//     Runtime: 280 ms, faster than 9.61% of C++ online submissions for Coin Change.
+// Memory Usage: 49.2 MB, less than 10.82% of C++ online submissions for Coin Change.
+     int coinChange(vector<int>& coins, int amount) {
+         vector<vector<int>> dp(coins.size()+1, vector<int> (amount+1, INT_MAX));
+//          we can always acheive 0, 0 coins
+         for(int i=0; i<dp.size(); i++) {
+             dp[i][0] = 0;
+         }
+           for(int i=1; i<dp.size(); i++) {
+             for(int n=0; n<dp[i].size(); n++) {
+//                  if coin is not being conisidered, take from above, best answer for curretn target amount, else comapre it with coin being created at the coin value minus current col number value
+//                      we can consider current coin i,
+                     int without = dp[i-1][n];
+//                         can take coin
+                 if(n >= coins[i-1]) {
+                     int take = dp[i][n-coins[i-1]];
+                     if(take == INT_MAX) {
+                         dp[i][n] = without;
+                     }else{
+                        dp[i][n] =  min(dp[i][n-coins[i-1]] + 1, without);
+                     } 
+                 }else{
+                       dp[i][n] = without;
+                 }
+                 
+             }
+         }
+
+//          coinsidering all coins, what is best way to get amount amount
+         int res =  dp[coins.size()][amount];
+         if(res != INT_MAX) {
+             return res;
+        }
+         return -1;
+     }
+};
+
+class Solution {
+public:
      int topDown(vector<int>& coins, int amount, vector<int> &dp) {
         if(dp[amount] != -1) {
             return dp[amount];

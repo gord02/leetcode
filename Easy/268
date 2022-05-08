@@ -1,0 +1,21 @@
+class Solution {
+public:
+    // 268. Missing Number
+//     time taken for all idea formualtion and implemnt of apporach 3, 8 miuntes 
+//     Runtime: 30 ms, faster than 39.50% of C++ online submissions for Missing Number.
+// Memory Usage: 17.9 MB, less than 65.65% of C++ online submissions for Missing Number.
+    int missingNumber(vector<int>& nums) {
+//         approch 1: int i = 0; while(i < nums.size()) {
+    //     if i != nums[i], return i,
+    //     // return i;
+    //     // i++;
+    // }
+        int n = nums.size();
+        int guass = (n*(n+1))/2;
+        int sum = 0;
+        for(int i=0; i<nums.size(); i++) {
+            sum = sum + nums[i];
+        }
+        return guass - sum; // guass should be larger
+    }
+};

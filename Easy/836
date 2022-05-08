@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // 836. Rectangle Overlap
+//     time taken: 18 minutes, simple problem but putting it together in a way that would be error free took some time, WATCH OUT FOR INTERGER OVERFLOW!!!!! 10^9 REQUIRES LONG!!!!!
+    bool isRectangleOverlap(vector<int>& rec1, vector<int>& rec2) {
+//         6 conditions for overlap, 2 ways to not ovelrap, return false, 2 ways to fully ovelrap, reutnr true, 2 ways to paritally ovelrap return true
+        // check overlap in x and y plan and get dimensions
+        long x = 0;
+        long y= 0;
+          if (rec1[0] < rec2[2] && rec2[0] < rec1[2] ) {
+              x = rec1[2] - rec2[0];
+          }
+              
+        if (rec1[1] < rec2[3] && rec2[1] < rec1[3] ) {
+              y = rec1[3] - rec2[1];
+          }
+        if(x*y > 0) {
+            return true;
+        }
+        
+        return false;
+        
+    }
+};

@@ -1,0 +1,44 @@
+class Solution {
+public:
+// 778. Swim in Rising Water
+//     time taken: 36 minutes, flawless execution 
+        // Runtime: 225 ms, faster than 5.20% of C++ online submissions for Swim in Rising Water.
+// Memory Usage: 32.6 MB, less than 5.00% of C++ online submissions for Swim in Rising Water.
+    struct compare{
+        bool operator()(vector<int> i, vector<int> j) {
+            return i[0] > j[0];
+        }
+    };
+    vector<vector<int>> dirs{{0,1}, {1,0}, {-1, 0}, {0, -1}};
+    int swimInWater(vector<vector<int>>& grid) {
+        priority_queue<vector<int>, vector<vector<int>>, compare> q;
+        vector<vector<int>> minTime(grid.size(), vector<int> (grid[0].size(), INT_MAX));
+        minTime[0][0]= grid[0][0]; // not necesaryily zero dtart time
+        
+        q.push({minTime[0][0], 0, 0});
+        while(q.empty() == false) {
+            int curTime = q.top()[0];
+            int curRow = q.top()[1];
+            int curCol = q.top()[2];
+            q.pop();
+            if(curRow == grid.size()-1 && curCol == grid[0].size() -1) {
+                return max(curTime, grid[curRow][curCol]);
+            }
+            for(vector<int> way: dirs) {
+                int newR = curRow + way[0];
+                int newC = curCol + way[1];
+//                 if valid momevemnt(not off borad)
+                if(newR >=0 && newR <grid.size() && newC >=0 && newC <grid[0].size()) {
+//                     valid movment, check if getting her can be optimizted 
+                    // if(curTime + grid[newR][newC] < minTime[newR][newC]) {
+                    int time = max(curTime, grid[newR][newC]);
+                    if( time < minTime[newR][newC]) {
+                      minTime[newR][newC] = time;
+                        q.push({minTime[newR][newC], newR, newC});
+                    }
+                }
+            }
+        }
+        return 0; // should not be reached
+    }
+};

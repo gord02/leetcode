@@ -1,0 +1,84 @@
+class Solution {
+    public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        ArrayList<Integer> windowSums = new ArrayList<>();
+        
+        int left = 0;
+        int right = k - 1;
+        
+        int windowSum = 0;
+        for (int i = left; i <= right; i++) {
+            windowSum += nums[i];
+        }
+        windowSums.add(windowSum);
+        left++;
+        right++;
+        for (; right < nums.length; right++) {
+            windowSum = windowSum - nums[left - 1];
+            windowSum = windowSum + nums[right];
+            windowSums.add(windowSum);
+            left++;
+        }
+        
+        // This will have exact same length as window sum array
+        ArrayList<Integer> rollingMaxFromLeftSide = new ArrayList<>();
+        int maxIndex = 0;
+        for (int i = 0; i < windowSums.size(); i++) {
+            if (windowSums.get(i) > windowSums.get(maxIndex)) {
+                maxIndex = i;
+            }
+            rollingMaxFromLeftSide.add(maxIndex);
+        }
+        
+        ArrayList<Integer> rollingMaxFromRightSide = new ArrayList<>();
+        maxIndex = windowSums.size() - 1;
+        for (int i = windowSums.size() - 1; i >= 0; i--) {
+            // Here it is greater than equals to because we want indexes closer to 0
+            // because question asked to give lexicographically lesser value
+            if (windowSums.get(i) >= windowSums.get(maxIndex)) {
+                maxIndex = i;
+            }
+            rollingMaxFromRightSide.add(maxIndex);
+        }
+        
+        // This need to be done as using an array list
+        // We are populating right side max from the start of the list
+        Collections.reverse(rollingMaxFromRightSide);
+        
+        // Now we have 3 arrays
+        // For input [1,2,1,2,6,7,5,1] and k = 2
+        // Rolling window sum                [ 3,  3,  3,  8, 13, 12,  6] 
+        // Rolling Max (Index) from Left --->[ 0,  0,  0,  3,  4,  4,  4]
+        // Rolling Max (Index) from Right    [ 4,  4,  4,  4,  4,  5,  6] <---
+        // The rolling window sum inherently points to the start index of the corresponding sum window
+        // Index 0 -> Elements (1,2) -> 3 (Start Index is also 0)
+        // Index 1 -> Elements (2,1) -> 3 (Start Index is Also 1)
+        // Thus we start at k of the rolling window sum and try to check max sum seen from left before k indexes 
+        // and max sum seen from right after k indexes
+        // Rolling Sum [ 3,  3,  3,  8, 13, 12,  6] 
+        //                       ^ (i = k = 2)
+        // Left        [ 0,  0,  0,  3,  4,  4,  4]
+        //               ^ (i - k = 0)
+        // Right       [ 4,  4,  4,  4,  4,  5,  6] 
+        //                               ^ ( i + k = 4)
+        // We add up RollingSum[0] (for left) + 3 + RollingSum[4] (for right) = (3 + 3 + 13) = 19
+        // We keep on doing above till and keep track of these index for output till we have seen the max
+        int[] result = new int[] {-1, -1, -1};
+        int currentResultMax = Integer.MIN_VALUE;
+        for (int i = k; i < windowSums.size() - k; i++) {
+            int leftMaxBeforeK = windowSums.get(rollingMaxFromLeftSide.get(i - k));
+            int rightMaxAfterK = windowSums.get(rollingMaxFromRightSide.get(i + k));
+            
+            int candidateMax = leftMaxBeforeK + windowSums.get(i) + rightMaxAfterK;
+            if (result[0] != -1) {
+                currentResultMax = windowSums.get(result[0]) + windowSums.get(result[1]) + windowSums.get(result[2]);
+            }
+            if (candidateMax > currentResultMax) {
+                result[0] = rollingMaxFromLeftSide.get(i - k);
+                result[1] = i;
+                result[2] = rollingMaxFromRightSide.get(i + k);
+            }
+        }
+        
+        return result;
+    }
+}

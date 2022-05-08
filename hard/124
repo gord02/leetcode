@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // 124. Binary Tree Maximum Path Sum
+//     time taken: 26 minutes, didnt think through the problem properly, returned both paths instead of just one 
+//     Runtime: 41 ms, faster than 31.25% of C++ online submissions for Binary Tree Maximum Path Sum.
+// Memory Usage: 28.2 MB, less than 33.91% of C++ online submissions for Binary Tree Maximum Path Sum.
+    int best = INT_MIN;
+    int rec(TreeNode* node) {
+        if(node == nullptr) {
+            return 0;
+        }
+
+        int left = rec(node->left);
+        int right = rec(node->right);
+        
+        int oneSide = max(left + node->val, right + node->val); // check if one child is better than the other
+        int ans = max(oneSide, left+right+node->val); // check if one or both children are better
+        ans= max(ans, node->val); // don't take children, // node alone, in case left and right are negatives
+        best = max(best, ans); 
+        
+//         have to return max of left or right
+        return max(node->val, oneSide);
+        
+    }
+    int maxPathSum(TreeNode* root) {
+        rec(root);
+        return best;
+    }
+};

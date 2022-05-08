@@ -1,6 +1,29 @@
 class Solution {
 public:
     // 169. Majority Element
+    // time taken: 9 minutes
+//     Runtime: 9 ms, faster than 99.03% of C++ online submissions for Majority Element.
+// Memory Usage: 19.5 MB, less than 59.76% of C++ online submissions for Majority Element.
+        int majorityElement(vector<int>& nums) {
+          int chosen = nums[0];
+          int count = 1;
+        for(int i=1; i<nums.size(); i++) {
+            if(nums[i] != chosen) {
+                count--;
+            }else{
+                count++;
+            }
+            if(count == 0) {
+                chosen = nums[i+1];
+            }
+        }
+          return chosen;
+      }
+};
+
+class Solution {
+public:
+    // 169. Majority Element
 //     Runtime: 23 ms, faster than 66.09% of C++ online submissions for Majority Element.
 // Memory Usage: 19.7 MB, less than 43.51% of C++ online submissions for Majority Element.
 

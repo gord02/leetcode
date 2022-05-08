@@ -1,0 +1,43 @@
+class Solution {
+public:
+    // 329. Longest Increasing Path in a Matrix
+//     Runtime: 49 ms, faster than 79.28% of C++ online submissions for Longest Increasing Path in a Matrix.
+// Memory Usage: 16 MB, less than 73.49% of C++ online submissions for Longest Increasing Path in a Matrix.
+    vector<vector<int>> dp;
+        int dfs(vector<vector<int>>& matrix, int row,  int col, int last) {
+        if(row < 0 || row >= matrix.size() || col < 0 || col>=matrix[row].size()) {
+            return 0;
+        }
+        
+        if(matrix[row][col] <= last) {
+            return 0;
+        }
+        if(dp[row][col] != -1) {
+            return dp[row][col];
+        }
+        int res = 0;
+        
+//             we do not need to worry about going back to an already viisted cell since you can only travel to cells that are larger, and being larger can only go in one way 
+        int down = dfs(matrix, row+1, col, matrix[row][col]);
+        int right = dfs(matrix, row, col+1, matrix[row][col]);
+        int up = dfs(matrix, row-1, col, matrix[row][col]);
+        int left = dfs(matrix, row, col-1, matrix[row][col]);
+        
+        res = max(up, down);
+        res = max(res, right);
+        res = max(res, left);
+        res++; // adding 1 for current cell
+        dp[row][col] = res;
+        return res;
+    }
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int longest = 0;
+        dp = vector<vector<int>> (matrix.size(), vector<int> (matrix[0].size(), -1));
+        for(int i=0; i<matrix.size(); i++) {
+            for(int j=0; j<matrix[i].size(); j++) {
+                longest = max(longest, dfs(matrix, i, j, INT_MIN));
+            }
+        }
+        return longest;
+    }
+};

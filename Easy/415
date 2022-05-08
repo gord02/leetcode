@@ -1,0 +1,39 @@
+class Solution {
+public:
+    // 415. Add Strings
+//     FAILED ton cinsder a lot of base cases, 
+//     Runtime: 8 ms, faster than 51.58% of C++ online submissions for Add Strings.
+// Memory Usage: 23.6 MB, less than 28.45% of C++ online submissions for Add Strings.
+    string addStrings(string num1, string num2) {
+        while(num1.length() < num2.length()) {
+            num1 = "0" + num1;
+        }
+        while(num1.length() > num2.length()) {
+            num2 = "0" + num2;
+        }
+        int carry = 0;
+        for(int i=num1.length()-1; i>=0; i--) {
+            int sum = (num1[i] - '0') + (num2[i] - '0') + carry;
+            if( sum > 9) {
+                carry = 1;
+                num1[i] = (sum%10 + '0');
+            }else{
+                num1[i] = (sum + '0');
+                carry = 0;
+            }
+        }
+        if(carry != 0) {
+            num1 = "1" + num1;
+        }
+        int ind = 0;
+        while(num1[ind] == '0') {
+            ind++;
+        }
+//         only zeroes
+        if(ind >= num1.length()) {
+            return "0";
+        }
+        num2 = num1.substr(ind, num1.size()+1-ind);
+        return num2;
+    }
+};

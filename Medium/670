@@ -18,3 +18,34 @@
         }
         return stoi(s);
     }
+
+
+/*
+
+Concept to remember, if a number is continously decreasing, we dont have anything to swap , as the number is already the largest possible.
+For eg, 76321
+
+Now, lets consider a number - 98368
+
+If a digit finds another digit towards the right of it, which is greater than it, then
+swapping them can give a bigger number. 
+
+In the above number, if we look at digit 6, it has the digit 8 towards the right of it and greater than it. 
+So, if we swap , we get the number - 9 8 3 8 6, which is the not right answer, but a potential swap which creates a number greater than the given number - 98368.
+
+But this can give us some intuition on how we can arrive at the correct algorithm.
+
+We will have an array - maxIdx => which will store the indexes of the digits which are greater 
+than the current digit that we are looking at.
+
+For the above example , the maxIdx array shall look like  [0 4 4 4 4]
+All the digits except for 9, shall have the index of 8 which is the right most digit, and at index 4.
+
+In case a digit doesn't have a digit on its right which is greater than itself, it will store its own index in the maxIdx array, which actually is the case with digit 9 which stores 0.
+
+Now, we again traverse the array from left to right, we just need to find the first mismatch, and we 
+get the indexes which needs to be swapped. Mismatch here is, a digit which has stored an index other than its own index in the maxIdx array, for example, the digit 3 which stored the index of digit 8 in the maxIdx array.
+
+Swap between the digit at an index stored by 3 and 3 , shall result in 98863, the answer
+
+*/

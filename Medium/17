@@ -1,0 +1,40 @@
+class Solution {
+public:
+    // 17. Letter Combinations of a Phone Number
+//     time taken: 21 minutes, FORGOT BASE CASE!!!!!!!, TINY ERROES HERe are there, passed in letters in stead of chars to dictionary, and digits convert char of number into number, also didnt execute adding and removal of char to string properly
+//     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Letter Combinations of a Phone Number.
+// Memory Usage: 6.7 MB, less than 36.23% of C++ online submissions for Letter Combinations of a Phone Number.
+    vector<string> res;
+    map<int, vector<char>> mapping;
+    void bt(string digits, string s, int i) {
+        if(i>=digits.size() && s.length() == digits.length()) {
+            res.push_back(s);
+            return;
+        }
+        for(int j =i; j<digits.size(); j++) {
+            auto it = mapping.find(digits[j] - '0');
+            for(char c: it->second) {
+                // s += c;
+                s.push_back(c);
+                bt(digits,s,j+1);
+                s.pop_back(); // backtracking step
+            }
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        mapping.insert(pair<int, vector<char>> (2, {'a','b','c'}));
+        mapping.insert(pair<int, vector<char>> (3, {'d','e','f'}));
+        mapping.insert(pair<int, vector<char>> (4, {'g','h','i'}));
+        mapping.insert(pair<int, vector<char>> (5, {'j','k','l'}));
+        mapping.insert(pair<int, vector<char>> (6, {'m','n','o'}));
+        mapping.insert(pair<int, vector<char>> (7, {'p','q','r','s'}));
+        mapping.insert(pair<int, vector<char>> (8, {'t','u','v'}));
+        mapping.insert(pair<int, vector<char>> (9, {'w','x','y','z'}));
+//         BASE CASE!!!!
+        if(digits.length() == 0) {
+            return res;
+        }
+        bt(digits, "", 0);
+        return res;
+    }
+};

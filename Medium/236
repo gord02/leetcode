@@ -1,0 +1,30 @@
+class Solution {
+public:
+    // 236. Lowest Common Ancestor of a Binary Tree
+//     Runtime: 32 ms, faster than 17.01% of C++ online submissions for Lowest Common Ancestor of a Binary Tree.
+// Memory Usage: 14.3 MB, less than 28.40% of C++ online submissions for Lowest Common Ancestor of a Binary Tree.
+     TreeNode* res;
+    bool rec(TreeNode* node, TreeNode* p, TreeNode* q) {
+        if(node == nullptr) {
+            return false;
+        }
+      
+        bool left = rec(node->left, p,q);
+        bool right = rec(node->right, p,q);
+        if(left && right) {
+            res = node;
+        }
+        bool cur = false; 
+        if(node == p || node == q) {
+            cur = true;
+        }
+        if(cur && left || cur && right) {
+            res = node;
+        }
+        return left || right || cur;
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        rec(root, p, q);
+        return res;
+    }
+};

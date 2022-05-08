@@ -1,0 +1,48 @@
+class Solution {
+public:
+    // 1451. Rearrange Words in a Sentence
+//     time tkane: 23 minutes 
+//     Runtime: 90 ms, faster than 10.42% of C++ online submissions for Rearrange Words in a Sentence.
+// Memory Usage: 17.8 MB, less than 58.03% of C++ online submissions for Rearrange Words in a Sentence.
+
+    static bool func(pair<string, int>i, pair<string,int> j) {
+        if(i.first.length() == j.first.length()) {
+            return i.second < j.second;
+        }else{
+            return i.first.length() < j.first.length();
+        }
+    }
+    string arrangeWords(string text) {
+        vector<pair<string, int>> words; 
+        int start = 0;
+        for(int i=0; i<text.length(); i++) {
+            if(text[i] == ' ') {
+                string word = text.substr(start, i-start);
+                word[0] = tolower(word[0]);
+                words.push_back(make_pair(word, start));
+                start = i+1;
+            }
+            if(i == text.length()-1) {
+//                 push last word since setence doesnt end in space
+                words.push_back(make_pair(text.substr(start, text.length()-start), start));
+            }
+        }
+        sort(words.begin(), words.end(), func);
+        string s = "";
+        for(int i =0; i<words.size(); i++) {
+            if(i == 0) {
+                string word = words[i].first;
+                word[0] = toupper(word[0]);
+                // s = s  + word;
+                s += word; 
+
+            }else{
+                string word = words[i].first;
+                // s = s +" " + word;// causes MLE
+                s +=" " + word;
+            }
+        }
+        
+        return s;
+    }
+};

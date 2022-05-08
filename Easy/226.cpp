@@ -1,3 +1,21 @@
+class Solution {
+public:
+    // 226. Invert Binary Tree
+//     3 minutes 
+//     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Invert Binary Tree.
+// Memory Usage: 9.6 MB, less than 80.54% of C++ online submissions for Invert Binary Tree.
+    TreeNode* invertTree(TreeNode* root) {
+        if(root == nullptr) {
+            return nullptr;
+        }
+        TreeNode* left = invertTree(root->left);
+        TreeNode* right = invertTree(root->right);
+        root->left = right;
+        root->right = left;
+        return root;
+    }
+};
+
 //     226. Invert Binary Tree
 //     Time Taken: 10 minutes, fingers were cold and I was out of it kind of leading to typos everywwhere
 //     Runtime: 4 ms, faster than 49.52%, Memory Usage: 9.8 MB, less than 37.30%

@@ -1,0 +1,46 @@
+class Solution {
+public:
+    // 669. Trim a Binary Search Tree
+//     tmie taken: 24 minutes, was thorughly working out the details
+//     Runtime: 23 ms, faster than 23.86% of C++ online submissions for Trim a Binary Search Tree.
+// Memory Usage: 23.9 MB, less than 52.13% of C++ online submissions for Trim a Binary Search Tree.
+
+    TreeNode* trimBST(TreeNode* root, int low, int high) {
+//         valid check
+        if(root == nullptr) {
+            return root;
+        }
+        TreeNode * node;
+        if(low <= root->val && root->val <= high) {
+            root->left = trimBST(root->left, low, high);
+            root->right = trimBST(root->right, low, high);
+            node = root;
+        }else{
+            if(root->val < low) {
+                node = trimBST(root->right, low, high);  
+            }
+            if(root->val > high) {
+                node = trimBST(root->left, low, high);  
+            }
+        }
+        return node;
+    }
+};
+// class Solution {
+// public:
+//     TreeNode* trimBST(TreeNode* root, int low, int high) {
+// //         valid check
+//         if(low <= root->val && root->val <= high) {
+//             root->left = trimBST(root->left, low, high);
+//             root->right = trimBST(root->right, low, high);
+//             return root;
+//         }else{
+//             if(root->val < low) {
+//                 return trimBST(root->right, low, high);  
+//             }
+//             if(root->val > high) {
+//                 return trimBST(root->left, low, high);  
+//             }
+//         }
+//     }
+// };

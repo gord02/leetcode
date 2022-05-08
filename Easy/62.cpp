@@ -1,4 +1,4 @@
-   // 62. Unique Paths
+// 62. Unique Paths
 //     Time taken: 15 minutes,
     // Runtime: 0 ms, faster than 100.00% of C++, Memory Usage: 6.5 MB, less than 38.84% 
     int uniquePaths(int m, int n) {

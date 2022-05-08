@@ -1,3 +1,32 @@
+
+class Solution {
+public:
+    // 946. Validate Stack Sequences
+//     time taken: 16 minutes 
+//     Runtime: 15 ms, faster than 39.59% of C++ online submissions for Validate Stack Sequences.
+// Memory Usage: 15.5 MB, less than 15.70% of C++ online submissions for Validate Stack Sequences.
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        stack<int> s;
+        int c = 0;
+        for(int i=0; i<pushed.size(); i++) {
+            while(s.empty() == false && s.top() == popped[c]) {
+                c++;
+                s.pop();
+            }
+            s.push(pushed[i]);
+        }
+        while(s.empty() == false && s.top() == popped[c]) {
+                c++;
+                s.pop();
+        }
+//         couldnt pop anymore but there are still elements left means order wasnt correct
+        if(s.empty() == false) {
+            return false;
+        }
+        return true;
+    }
+};
+
 class Solution {
 public:
 //     946. Validate Stack Sequences
