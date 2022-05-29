@@ -1,0 +1,102 @@
+// regluar toplogical ordering, creat adjency mapping, get in degree. 
+// Since there are some specail ordering, use prioirty queue instead of regular queue which is minqueue in terms of chars. 
+// finally check if word j is prefix of word i and return false if true and at end of word j
+
+class Solution {
+public:
+    struct compare{
+        bool operator()(char i, char j) {
+            return i>j;// top(end) is smallest 
+        }
+    };
+    /**
+     * @param words: a list of words
+     * @return: a string which is correct order
+     */
+    string alienOrder(vector<string> &words) {
+        // Write your code here
+        vector<int> charsIN(26, -1);
+
+        // determine avaible charcaters 
+        int count = 0;
+        for(string word: words) {
+            for(char c: word) {
+                if(charsIN[(int)c%26] == -1) {
+                    charsIN[(int)c%26] = 0;
+                    count++;
+                }  
+            }
+        }
+        map<char, set<char>> adj;
+        // adjency mapping, char to set of chars
+        for(int i=0; i<words.size()-1; i++) {
+            for(int j =i+1; j<words.size(); j++) {
+                int l = 0;
+                while(l < words[j].length() && l< words[i].length()) {
+                    if(words[j][l] == words[i][l]) {
+                        l++;
+                    }else{
+                        char a;
+                        char b;
+                        a = words[i][l];
+                        b = words[j][l];
+                        // cout << a << " " << b << endl;
+                        auto it = adj.find(a);
+                        if(it == adj.end()) {
+                            set<char> s{b};
+                            adj.insert(pair<char, set<char>> (a, s));
+                            charsIN[(int)b%26]++;
+                        }else{
+                            if(it->second.find(b) == it->second.end()) {
+                                charsIN[(int)b%26]++;
+                                it->second.insert(b);
+                            }
+                        }
+                        break;
+                    }
+                    if(words[j].substr(0, l) == words[i].substr(0, l) && (l == words[j].length())) {
+                        return "";
+                    }
+                }
+            }
+        }
+        // queue<char> q;
+        priority_queue<char, vector<char>, compare> q;
+        // string back = "";
+        string alpha = "abcdefghijklmnopqrstuvwxyz";
+        for(int i=0; i<alpha.length(); i++) {
+            if(charsIN[alpha[i]%26] == 0) {
+                // if( adj.find(alpha[i]) != adj.end()) {
+                    q.push(alpha[i]);
+                // }else{
+                //     // back+= alpha[i];
+                // }
+            }
+        }
+
+        string res = "";
+        while(q.empty() == false) {
+            char curChar = q.top();
+            // cout <<"curC: "<< curChar << endl;
+            q.pop();
+            res+= curChar;
+            auto it = adj.find(curChar);
+            if(it == adj.end()) {continue;}
+            for(char c: it->second) {
+                // cout << "in set " << c << endl;
+                charsIN[(int)c%26]--;
+                // cout << "indeg of c: " << charsIN[(int)c%26] << endl;
+                if( charsIN[(int)c%26] == 0) {
+                    q.push(c);
+                }
+            }
+        }
+        // sort(back.begin(), back.end());
+        // res+= back;
+        if(res.length() != count) {
+            return "";
+        }
+        return res;
+    }
+};
+

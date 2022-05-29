@@ -1,14 +1,55 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+class Solution{
+    public:
+    // 437. Path Sum III
+//     Time taken: 26 minutes, should have been much faster, didnt do logic correclty, erased completely instead of decrmemnting, sums arent unique, and didnt check constraints properly, 10^9 values so use long !!!!!
+    Runtime: 44 ms, faster than 28.30% of C++ online submissions for Path Sum III.
+Memory Usage: 20.4 MB, less than 26.72% of C++ online submissions for Path Sum III.
+    
+    int count = 0;
+    map<int, int> pastSums;// maps sum to number of occurences 
+    void dfs(TreeNode* node, long curSum, int t) {
+        if(node == nullptr) {   
+            return;
+        }
+        
+        curSum += node->val;
+        if(curSum == t) {
+            count++;
+        }
+        
+        auto it = pastSums.find(curSum-t);
+     
+        if(it != pastSums.end()) {
+            count+= it->second;
+        }
+        
+        it = pastSums.find(curSum);
+        if(it == pastSums.end()) {
+            pastSums.insert(pair<int, int> (curSum, 1));
+        }else{
+            it->second++;
+        }
+        dfs(node->left, curSum, t);
+        dfs(node->right, curSum, t);
+
+         it = pastSums.find(curSum);
+        it->second--;
+        if(it->second == 0) {
+            pastSums.erase(it);
+        }
+        // if(pastSums.find(curSum))
+        // cout << "breaking above" << endl;
+        // pastSums.erase(it);
+    }
+    
+    int pathSum(TreeNode* root, int targetSum) {
+        dfs(root, 0, targetSum);
+
+        return count;
+    }
+    
+};
+
 class Solution {
 public:    
     // 437. Path Sum III

@@ -1,3 +1,38 @@
+class Solution {
+public:
+//     14. Longest Common Prefix
+// time taken: 14 minutes 
+//     didnt consider BASE CASE!!!!!, if there is only one string 
+        // Runtime: 53 ms, faster than 5.33% of C++ online submissions for Longest Common Prefix.
+// Memory Usage: 16.3 MB, less than 5.67% of C++ online submissions for Longest Common Prefix.
+    string longestCommonPrefix(vector<string>& strs) {
+        map<string, int> dict;
+        priority_queue<string> q;
+        for(int i=0; i<strs.size(); i++) {
+            for(int j=1; j<=strs[i].length(); j++) {
+                string prefix = strs[i].substr(0, j);
+                auto it = dict.find(prefix);
+                if(it == dict.end()) {
+                    dict.insert(pair<string, int> (prefix, 1));
+                    if(1 == strs.size()) {
+                        q.push(prefix);
+                    }
+                }else{
+                    it->second++;
+                    if(it->second == strs.size()) {
+                        q.push(it->first);
+                    }
+                }
+            }
+        }
+        if(q.empty() == true) {
+            return "";
+        } 
+        return q.top();
+    }
+};
+
+
 // ======== TIME TAKEN: 1 HOUR 30 MIN APPROXIMATELY ========
 string longestCommonPrefix(vector<string>& strs) {
         string new_string = string("");

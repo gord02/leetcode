@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // Given an array of length n, there are n+1 ways/intervals to partition it into two parts. Each interval has two choices - split or not. In the worse case, we will have to check all possibilities, which becomes O(2^(n+1)) -> O(2^n). This analysis is similar to palindrome partitioning
+    map<string, int>dict;
+    bool backTrack(string &s, int i){
+        if(i >= s.length()) {
+            return true;
+        }
+        int j =1;
+        while(i+j <= s.length()) {
+            string sub = s.substr(i, j);
+            if(dict.find(sub) != dict.end()) {
+                // string leftOverS = s.substr()
+                if(backTrack(s, i+j)) {
+                    return true;
+                }
+            }
+            j++;
+        }
+        return false;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        for(string word: wordDict) {
+            dict.insert(pair<string, int>(word, 1));
+        }
+        vector<int> dp(s.length(), 0);
+        return backTrack(s, 0);
+    }
+};

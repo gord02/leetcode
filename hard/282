@@ -1,0 +1,81 @@
+class Solution {
+    public:
+        vector<string> expressions;
+        int target = 0;
+        // int count = 0;
+        bool eval(string exp) {
+            long lastNum = 0;
+            long curNum = 0;
+            long res = 0;
+            char sign = '+';
+            for(int i=0; i<exp.length(); i++) {
+                if(isdigit(exp[i])) {
+                    curNum = curNum*10+ (exp[i]-'0');
+                }
+                if(!isdigit(exp[i]) || i==exp.length()-1) {
+                    if(sign == '+') {
+                        res += lastNum;
+                        lastNum = curNum;
+                    }else if(sign == '-') {
+                        res+= lastNum;
+                        lastNum = -curNum;
+                    }else if(sign == '*') {
+                        lastNum = lastNum*curNum;
+                    }
+                    
+                    sign = exp[i];
+                    curNum = 0;
+                }
+            }
+            res+= lastNum;
+            // cout << res << endl;
+            if(res == target) {
+                // cout << "found" << endl;
+                return true;
+            }
+            return false;
+        }
+        
+        void rec(string num, string exp, int i) {
+            if(i >= num.length()) {
+                if(i==num.length()) {
+                // cout << exp <<endl;
+                // count++;
+                }
+                if(eval(exp)) {
+                    
+                    expressions.push_back(exp);
+                }
+                return;
+            }
+                exp+= num[i];
+    //         prevents unecassary recursion 
+                if(i == num.length() - 1 || num[i] == 0) {
+                    rec(num, exp, i+1);
+                    return;
+                }
+                exp+="+";
+                rec(num, exp, i+1);
+                exp.pop_back();
+                
+                exp+="-";
+                rec(num, exp, i+1);
+                exp.pop_back();
+                
+                exp+="*";
+                rec(num, exp, i+1);
+                exp.pop_back();
+                if(num[i] != '0') { // cant have zero as starting number since this recusion appends another number to current number which shouldnt be zero
+                    rec(num, exp, i+1);
+                }
+                
+                exp.pop_back();
+        }
+    
+        vector<string> addOperators(string num, int target) {
+            this->target = target;
+            rec(num, "", 0);
+            // cout << "hits: " << count << endl;
+            return expressions;
+        }
+    };

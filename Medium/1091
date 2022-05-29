@@ -1,0 +1,91 @@
+// impovred runtime: dont use set, use n^n boolean visited grid and bfs
+
+class Solution {
+public:
+    vector<vector<int>> dirs{{0, 1}, {1,0}, {0, -1}, {-1, 0}, {1,1}, {-1,-1}, {-1, 1}, {1,-1}};
+    // struct compare{
+    //     bool operator()(vector<int> i, vector<int> j) {
+    //         return i[2] > j[2]; // min queue, smallest towrads pack of sturcture or top
+    //     }
+    // };
+//     Runtime: 1274 ms, faster than 5.01% of C++ online submissions for Shortest Path in Binary Matrix.
+// Memory Usage: 213.5 MB, less than 5.04% of C++ online submissions for Shortest Path in Binary Matrix.
+     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+         if(grid[0][0] == 1) {
+             return -1;
+         }
+         queue<vector<int>> q;
+         q.push({0,0});
+         int lvl = 1;
+        // set<vector<int>> seen;
+         while(q.empty() == false) {
+             int n = q.size();
+             while(n > 0) {
+                 int r = q.front()[0];
+                 int c = q.front()[1];
+                 q.pop();
+                 n--;
+                 // if(seen.find({r,c}) != seen.end()) {
+                 //     continue;
+                 // }
+                 // seen.insert({r, c});
+                 grid[r][c]= 1;
+                 if(r == grid.size() -1 && c== grid[0].size()-1) {
+                     return lvl;
+                 }
+                 for(vector<int> way: dirs) {
+                     int new_r = r + way[0];
+                     int new_c = c + way[1];
+                     
+                     if(new_r >=0 && new_r< grid.size() && new_c>=0 && new_c < grid[0].size()) {
+//                          we know position is valid, now check fi it is a zero, if so push to q
+                         if(grid[new_r][new_c] == 0) {
+                             q.push({new_r, new_c});
+                         }
+                         
+                     }
+                 }
+             }
+             lvl++;
+         }
+         return -1;
+     }
+//     time taken: 19 minutes
+//     Runtime: 1131 ms, faster than 5.01% of C++ online submissions for Shortest Path in Binary Matrix.
+// Memory Usage: 186.8 MB, less than 5.04% of C++ online submissions for Shortest Path in Binary Matrix.
+//     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+// //         special case
+//         if(grid[0][0] == 1) {
+//             return -1;
+//         }
+//         vector<vector<int>> minPath(grid.size(), vector<int> (grid[0].size(), INT_MAX));
+//         minPath[0][0] = 1;
+//         priority_queue<vector<int>, vector<vector<int>>, compare> q;
+//         q.push({0, 0, minPath[0][0]});
+//         while(q.empty() == false) {
+//             int r = q.top()[0];
+//             int c = q.top()[1];
+//             int len = q.top()[2];
+//             q.pop();
+//             if(r == grid.size()-1 && c == grid[0].size()-1) {
+//                 return len;
+//             }
+            
+// //             travel 8 directions
+//             for(vector<int> way: dirs) {
+//                 int new_r = r+way[0];
+//                 int new_c = c+way[1];
+//                 if(new_r>=0 && new_r<grid.size()&& new_c>=0 && new_c < grid[0].size()) {
+// //                     position is valid, now we just need to check if is a zero cell
+//                     if(grid[new_r][new_c] == 0) {
+//                         if(len + 1 < minPath[new_r][new_c]) {
+//                             minPath[new_r][new_c] = len + 1;
+//                             q.push({new_r, new_c, minPath[new_r][new_c]});
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//         return -1;
+//     }
+};

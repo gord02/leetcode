@@ -1,0 +1,7 @@
+// More precisely actually, it's that we will look at each number at most 
+twice(calculate the conditions), but swap once. Consider, you swap 
+cur_index with some index behind, in that case, you will need to look at 
+again, but never swap it again.
+    
+// We visit each number once, and each number will be put in its right
+    place at most once, so it is O(n) + O(n).

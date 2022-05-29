@@ -1,0 +1,27 @@
+class Solution {
+public:
+    // 125. Valid Palindrome
+//     Runtime: 13 ms, faster than 16.32% of C++ online submissions for Valid Palindrome.
+// Memory Usage: 7.3 MB, less than 89.34% of C++ online submissions for Valid Palindrome.
+// Next challenges:
+    bool isPalindrome(string s) {
+        int l = 0;
+        int r= s.length()-1;
+        while(l < r) {
+             if(!isalnum(s[l])) {
+                 l++;
+                 continue;
+             }
+                if(!isalnum(s[r])) {
+                 r--;
+                 continue;
+             }  
+            if(tolower(s[l]) != tolower(s[r])) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+};

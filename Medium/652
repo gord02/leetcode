@@ -1,0 +1,32 @@
+//     652. Find Duplicate Subtrees
+//     Runtime: 87 ms, faster than 17.16% of C++ online submissions for Find Duplicate Subtrees.
+// Memory Usage: 49.9 MB, less than 37.32% of C++ online submissions for Find Duplicate Subtrees.
+    vector<TreeNode*> res;
+    map<string, pair<int, TreeNode*>> dict;
+    string subTree(TreeNode* node) {
+        if(node == nullptr) {
+            return "N";
+        }
+        string left = subTree(node->left);
+        string right = subTree(node->right);
+        
+        string root= to_string(node->val)+","+left+","+right;
+        // cout << root << endl;
+        auto it = dict.find(root);
+        if(it == dict.end()) {
+            dict.insert(pair<string, pair<int, TreeNode*>> (root, make_pair(1, node)));
+        }else{
+            it->second.first++;
+            if( it->second.first == 2) {
+                res.push_back(it->second.second);
+            }
+        }
+        return root;
+        
+    }
+    
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        subTree(root);
+        return res;
+    }
+};

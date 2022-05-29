@@ -1,3 +1,32 @@
+class Solution {
+public:
+    // 21. Merge Two Sorted Lists
+//     time taken: 13 minutes 
+//     Runtime: 13 ms, faster than 35.31% of C++ online submissions for Merge Two Sorted Lists.
+// Memory Usage: 14.9 MB, less than 44.26% of C++ online submissions for Merge Two Sorted Lists.
+
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* dummyHead = new ListNode(0);
+        ListNode* head = dummyHead;
+        while(list1!= nullptr && list2!= nullptr) {
+            if(list1->val <= list2->val) {
+                head->next = list1;
+                list1 = list1->next;
+            }else{
+                head->next = list2;
+                list2 = list2->next;
+            }
+            head = head->next;
+        }
+        if(list1!= nullptr) {
+            head->next = list1;
+        }else{
+            head->next = list2;
+        }
+        return dummyHead->next;
+    }
+};
+
 // runtime error for some reason even tho I can print out everything
 ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
                // ListNode* next_l2 = nullptr;

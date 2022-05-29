@@ -1,3 +1,19 @@
+ //     100. Same Tree
+//     time taken: 10 minutes 
+//     Runtime: 3 ms, faster than 63.34% of C++ online submissions for Same Tree.
+// Memory Usage: 10.1 MB, less than 45.45% of C++ online submissions for Same Tree.
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p == nullptr && q == nullptr) {
+            return true;
+        }
+        if( p == nullptr || q == nullptr) {
+            return false; // one is null but the other isnt
+        }
+//         reached down here, nodes are valid so compare all componets of stucture of nodes and return boolean reults of all as a whole
+        return p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+};
+ 
   // Time taken: 6 minutes
 //     Runtime: 3 ms, faster than 59.06% of C++ online submissions for Same Tree.
 // Memory Usage: 10.5 MB, less than 7.68% of C++ online submissions for Same Tree.

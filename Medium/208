@@ -1,0 +1,69 @@
+class Trie {
+public:
+    // 208. Implement Trie (Prefix Tree)
+    // time taken: 18 minutes, many small errors
+//     Runtime: 153 ms, faster than 14.36% of C++ online submissions for Implement Trie (Prefix Tree).
+// Memory Usage: 71.1 MB, less than 9.09% of C++ online submissions for Implement Trie (Prefix Tree).
+    class TrieNode{
+        public:
+        // vector<TrieNode*> chlidren(26, nullptr);// why doesnt this work??
+        vector<TrieNode*> children;
+        
+        bool endsWord = false;
+        
+        TrieNode() {
+            // this->children =  vector<TrieNode*> chlidren(26, nullptr);// why doesnt this work?
+            vector<TrieNode*> c(26, nullptr);
+            children = c;
+        }
+    };
+    Trie() {
+    }
+    TrieNode* root = new TrieNode();
+    
+    
+    
+    void insert(string word) {
+        TrieNode* node = root;
+        for(char c: word) {
+//             if the char doesnt exist add it,
+            if(node->children[c-'a'] == nullptr) {
+                node->children[c-'a'] = new TrieNode();
+            }
+//             traverse to he char trieNode
+            node = node->children[c-'a'];
+        }
+//         we are at the last added char of word, which means we have the end of a word
+        node->endsWord = true;
+    }
+    
+    bool search(string word) {
+        TrieNode* node = root;
+        for(char c: word) {
+            if(node->children[c-'a'] == nullptr) {
+                return false;
+            }
+            node = node->children[c-'a'];
+        }
+        return node->endsWord;
+    }
+    
+    bool startsWith(string prefix) {
+        TrieNode* node = root;
+        for(char c: prefix) {
+            if(node->children[c-'a'] == nullptr) {
+                return false;
+            }
+            node = node->children[c-'a'];
+        }
+        return true;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */

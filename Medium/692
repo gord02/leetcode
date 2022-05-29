@@ -1,3 +1,66 @@
+ 
+class Solution{
+    public:
+    // 692. Top K Frequent Words
+//     Time tkaen: 28 minutes: smaller error in logci with lexi ordering 
+//     Runtime: 30 ms, faster than 9.78% of C++ online submissions for Top K Frequent Words.
+// Memory Usage: 12.5 MB, less than 89.37% of C++ online submissions for Top K Frequent Words.
+    struct compare{
+        bool operator() (pair<string, int> i, pair<string, int> j) {
+            if(i.second == j.second) {
+//                 lixorgrapic ordeing, lesser goes further from top
+                // if(i.first < j.first) {
+                    return i.first <j.first;// min queue, the first to get rid of is j since it is lexio larger
+                // }else{
+                //     return j>i;
+                // }
+            }
+            return i.second > j.second;
+            //     return i
+            // }
+        }
+    };
+    
+     vector<string> topKFrequent(vector<string>& words, int k) {
+         map<string, int> dict;
+         for(string word: words) {
+             auto it = dict.find(word);
+             if(it == dict.end()) {
+                 dict.insert(pair<string, int> (word, 1));
+             }else{
+                 it->second++;
+             }
+         }
+         
+         priority_queue<pair<string, int>, vector<pair<string, int>>, compare>q;
+         map<string, int>::iterator it = dict.begin();
+         while(it != dict.end()) {
+             if(q.size() < k) {
+                 q.push(make_pair(it->first, it->second));
+            }else{
+                 if(q.top().second < it->second) {
+                     q.pop();
+                     q.push(make_pair(it->first, it->second));
+                 }else if(q.top().second == it->second) {
+                     if(q.top().first > it->first) {
+                         q.pop();
+                        q.push(make_pair(it->first, it->second));
+                    }
+                }
+             }
+             it++;
+        }
+         vector<string> res;
+         while(q.empty() == false) {
+             res.push_back(q.top().first);
+             q.pop();
+         }
+         reverse(res.begin(), res.end());
+         return res;
+     }
+};
+
+ 
  class Solution {
         // 692. Top K Frequent Words
 //     Runtime: 19 ms, faster than 43.69% of C++ online submissions for Top K Frequent Words.

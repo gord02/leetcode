@@ -1,0 +1,104 @@
+class Solution{
+    // 65. Valid Number
+    // time taken: 30 minutes, didnt cnosider all cases 
+//     Runtime: 4 ms, faster than 52.71% of C++ online submissions for Valid Number.
+// Memory Usage: 6 MB, less than 42.36% of C++ online submissions for Valid Number.
+
+    public:
+        bool isNumber(string s) {
+            bool digit = false;
+            bool period = false;
+            bool foundE = false;
+            bool sign = false;
+            
+            for(int i=0; i<s.length(); i++) {
+                if(isdigit(s[i])) {
+                    digit = true;
+                }
+                else if(s[i] == '-' || s[i] == '+') {
+                    if(i != 0 && s[i-1] != 'e' && s[i-1] != 'E') {
+                        return false;
+                    }
+                    if( i+1>=s.length()) {
+                        return false;
+                    }
+                    if(!isdigit(s[i+1]) && s[i+1] != '.') {
+                        return false;
+                    }
+                    if(sign){
+                        return false;
+                    }
+                    sign = true;
+                }
+                else if(s[i] == '.') {
+                    if(period || foundE) {
+                        return false;
+                    }
+                    period = true;
+                }
+                else if(s[i] == 'e' || s[i] == 'E') {
+                    if(!digit) {
+                        return false;
+                    }
+                    if(foundE) {
+                        return false;
+                    }
+                    foundE = true;
+                    period = false;
+                    digit = false;
+                    sign = false; 
+                }else{
+                    return false;
+                }
+            }
+            return digit;
+        }
+};
+
+class Solution {
+public:
+    // 65. Valid Number
+//     time tkane: 30 minutes, a lot of base cases and scenrarios I did not consider 
+//     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Valid Number.
+// Memory Usage: 6 MB, less than 42.85% of C++ online submissions for Valid Number.
+    bool isNumber(string s) {
+        bool period = false;
+        bool sign = false;
+        bool digit = false;
+        bool e = false;
+        
+        for(int i=0; i<s.length(); i++) {
+            if(isdigit(s[i])) {
+                digit = true;
+            }
+            else if(s[i] == '-' || s[i] == '+') {
+                if(sign) { // was already found
+                    return false;
+                }
+
+                if(i != 0 && (s[i-1] != 'e' && s[i-1] != 'E')) {
+                    // cout << s[i-1]  << " "  << endl;
+                    return false;
+                }
+                sign = true;
+            }
+            else if(s[i] == 'e' || s[i] == 'E') {
+                if(e || !digit) {
+                    return false;// can only be one in number
+                }
+                sign = false;
+                e = true;
+                digit = false;
+            }
+            else if(s[i] == '.') {
+                if(period || e) {
+                    return false;
+                }
+                period = true;
+            }else{
+                return false;
+            }
+        }
+        return digit;
+    }
+};

@@ -1,0 +1,43 @@
+class Solution {
+public:
+//     horribly executed 
+//     Runtime: 120 ms, faster than 56.61% of C++ online submissions for 3Sum.
+// Memory Usage: 20 MB, less than 67.93% of C++ online submissions for 3Sum.
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+        for(int i=0; i<nums.size(); i++) {
+            if(i > 0 && nums[i] == nums[i-1]) {
+                continue; // prevents duplicate triplet numbers
+            }
+            int target = -nums[i];
+            int l = i+1;
+            int r = nums.size()-1;
+            while(l < r) {// need to have at least two different numbers 
+                if(nums[l] + nums[r] == target) {
+                    if(r<nums.size()-1 && l>i+1) {
+                        if(nums[r+1] == nums[r] && nums[l] == nums[l-1]) {
+                                 l++;
+                                r--;
+                            continue;
+                        }
+                    }
+                    res.push_back({nums[i], nums[l], nums[r]});
+                    // break;
+                    l++;
+                    r--;
+                    
+                    // while (lo < hi && num[lo] == num[lo+1]) lo++;
+                    // while (lo < hi && num[hi] == num[hi-1]) hi--;
+                    // lo++; hi--;
+                }
+                else if(nums[l] + nums[r] < target) {
+                    l++;
+                }else{
+                    r--;
+                }
+            }
+        }
+        return res;
+    }
+};

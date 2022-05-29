@@ -1,0 +1,45 @@
+class Solution {
+public:
+    // 540. Single Element in a Sorted Array
+//     time taken: 30 minutes, made error in increment or decemrntin l or r and chosing which to just set to m, didnt plot out example correctly
+//     Runtime: 54 ms, faster than 10.40% of C++ online submissions for Single Element in a Sorted Array.
+// Memory Usage: 22.4 MB, less than 10.25% of C++ online submissions for Single Element in a Sorted Array.
+    int singleNonDuplicate(vector<int>& nums) {
+        int l = 0;
+        int r = nums.size()-1;
+        while(l < r) {
+            int m = (r-l)/2 + l;
+            if(m %2 == 0) {
+                // current number is at even position, its duplicate should be to its left.
+                if(nums[m] != nums[m+1]) {
+//                     not equal therfore pattern was broken ealier, decrment right side to find first occurence
+                    // r = m-1;
+                    r = m;
+                    // cout << "even r=m-1" << endl;
+                    
+                }else{
+                    // valid up to index m and m + 1, move left up
+                    // cout << "even l = m" << endl;
+//                     
+                    // l= m;
+                    l= m+1;
+                }
+            }else{
+//                 at odd index, duplciate should be to the left
+                if(nums[m] != nums[m-1]) {
+//                     not equal therfore pattern was broken ealier, decrment right side
+                    // r = m-1;
+                    r = m;
+                    // cout << "odd r=m-1" << endl;
+                    
+                }else{
+                    // valid up to index m and m + 1, move left up
+                    // cout << "odd l = m" << endl;
+                    // l= m;
+                    l= m+1;
+                }
+            }
+        }
+        return nums[l];
+    }
+};

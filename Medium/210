@@ -1,0 +1,50 @@
+class Solution{
+    // 210. Course Schedule II
+//     time taken: 21 minutes, roughly
+//     Runtime: 49 ms, faster than 14.27% of C++ online submissions for Course Schedule II.
+// Memory Usage: 14.4 MB, less than 35.48% of C++ online submissions for Course Schedule II.
+    public:
+        vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+            vector<int> res;
+            vector<int> inDeg(numCourses, 0);
+            map<int, vector<int>> adj;
+            
+            for(int i=0; i<prerequisites.size(); i++) {
+                int a = prerequisites[i][1];
+                int b = prerequisites[i][0];
+                
+                auto it = adj.find(a);
+                if(it == adj.end()) {
+                    adj.insert(pair<int, vector<int>> (a, {b}));
+                }else{
+                    it->second.push_back(b);
+                }
+                inDeg[b]++;
+            }
+            queue<int> q;
+            for(int i=0; i<numCourses; i++) {
+                if(inDeg[i] == 0) {
+                    q.push(i);
+                }
+            }
+            while(q.empty() == false) {
+                int curCourse = q.front();
+                // cout << "curCourse: " << curCourse << endl;
+                q.pop();
+                res.push_back(curCourse);// we do not need to worry about revsiitng courses due to nature of question, since we push only zero indegreee courses to node and do not consider them again but if we were to see it again that would mean it had an in dgree edge which is a contradtiction
+                auto it = adj.find(curCourse);
+                if(it == adj.end()) {continue;}
+                for(int nextCourse: it->second) {
+                    inDeg[nextCourse]--;// decmrenitng since we are processing current node meaning this nextnode has one less direct edge going toward it
+                    if(inDeg[nextCourse] == 0) {
+                        q.push(nextCourse);
+                    }
+                }
+            }
+            if(res.size() == numCourses){
+                return res;
+            }
+            // cout << res.size() << endl;
+            return {};
+        }
+};

@@ -1,0 +1,57 @@
+class Solution {
+public:
+// Lintcode 849 · Basic Calculator III
+//  time takne, 39 minutes, minor errors in ecustion and logic
+// 41 ms time cost
+// 5.53 MB memory cost
+// Your submission beats 80.20 % Submissions
+     int i = 0;
+ int rec(string &s) {
+        // inside here is regular baisc caluclator processing
+        int lastNum = 0;
+        int curNum = 0;
+        int res = 0;
+        char opp = '+';
+        while(i < s.length()) {
+            if(isdigit(s[i])) {
+                curNum = curNum*10 + (s[i]-'0');
+            }
+            if(s[i] == '(') {
+                i++;
+               curNum = rec(s);
+            }
+
+            if( (!isdigit(s[i]) && s[i] != ' ') || i >= s.length()-1) {
+                // process past opperation
+                if(opp == '+') {
+                    res+= lastNum;
+                    lastNum = curNum;
+                }
+                if(opp == '-') {
+                    res+= lastNum;
+                    lastNum = -curNum;
+                }
+                if(opp == '/') {
+                    lastNum = lastNum/curNum;
+                }
+                if(opp == '*') {
+                    lastNum = lastNum*curNum;
+                }
+                if(s[i] == ')') {
+                    res+=lastNum;
+                    i++;
+                    return res;
+                }
+                curNum = 0;
+                opp = s[i];
+            }
+            i++;
+        }
+        res+= lastNum;
+        return res;
+    }
+   
+    int calculate(string &s) {
+        return rec(s);
+    }
+};

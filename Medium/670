@@ -1,3 +1,32 @@
+class Solution {
+public:
+    
+    // 670. Maximum Swap
+    // time taken: 24 minutes, minor error at the end with check
+//     Runtime: 3 ms, faster than 31.43% of C++ online submissions for Maximum Swap.
+// Memory Usage: 6 MB, less than 59.77% of C++ online submissions for Maximum Swap.
+     int maximumSwap(int num) {
+         string n = to_string(num);
+         int ind_of_max = n.length()-1;
+         
+         vector<int> maxs(n.length(), ind_of_max);
+         for(int i=n.length()-1; i>=0; i--) {
+             if(n[i] > n[ind_of_max]) {
+                 ind_of_max = i;
+             }
+             maxs[i] = ind_of_max;
+         }
+     
+         for(int i=0; i<maxs.size(); i++) {
+             if(maxs[i] != i && n[maxs[i]] != n[i]) {
+//                  need to swap
+                 swap(n[i], n[maxs[i]]);
+                 break;
+             }
+         }
+         return stoi(n);
+     }
+
     // 670. Maximum Swap
 //     Runtime: 4 ms, faster than 16.63% of C++ online submissions for Maximum Swap.
 // Memory Usage: 5.8 MB, less than 98.69% of C++ online submissions for Maximum Swap.

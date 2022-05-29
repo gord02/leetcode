@@ -1,3 +1,28 @@
+class Solution {
+public:
+    // 121. Best Time to Buy and Sell Stock
+//     Runtime: 158 ms, faster than 63.25% of C++ online submissions for Best Time to Buy and Sell Stock.
+// Memory Usage: 93.3 MB, less than 89.99% of C++ online submissions for Best Time to Buy and Sell Stock.
+    int maxProfit(vector<int>& prices) {
+        int start_ind = 0;
+        int end_ind = 0;
+        int bestProfit = 0;
+        for(int i=1; i<prices.size(); i++) {
+            if(prices[i] < prices[start_ind]) {
+                start_ind = i;
+                end_ind = i; // have to reset it 
+            }
+            else if(prices[i] > prices[end_ind]) {
+                end_ind = i;
+            }
+            if(start_ind < end_ind && bestProfit < prices[end_ind] - prices[start_ind]) {
+                bestProfit = prices[end_ind] - prices[start_ind];
+            }
+        }
+        return bestProfit;
+    }
+};
+
 //     121. Best Time to Buy and Sell Stock
 // Time taken: A ridiculous long time, serveral apporaches for this seemingly easily problem
 //     Runtime: 132 ms, faster than 50.60% of C++ Memory Usage: 93.2 MB, less than 99.62%

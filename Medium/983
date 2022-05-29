@@ -1,0 +1,48 @@
+class Solution {
+public:
+    // 983. Minimum Cost For Tickets
+//     time taken: 38 minutes
+//     Runtime: 11 ms, faster than 22.17% of C++ online submissions for Minimum Cost For Tickets.
+// Memory Usage: 10 MB, less than 21.98% of C++ online submissions for Minimum Cost For Tickets.
+    map<int, int> dict;
+    // mapping to know which days we must travel
+    int minCost(int day, vector<int> &dp, vector<int> &costs) {
+        if(day >= 366) {
+            return 0;
+        }
+        if(dp[day] != -1) {
+            return dp[day];
+        }
+
+        int res = INT_MAX;
+        
+        if(dict.find(day) == dict.end()) {
+//             we do not need to travel this day
+           dp[day] = minCost(day+1, dp, costs);
+            res = min(dp[day], res);
+        }else{
+            for(int i=0; i<costs.size(); i++) {
+                if(i == 0) {
+                   res = min(res, costs[i] + minCost(day+1, dp, costs));
+                }
+                else if(i == 1) {
+                      res = min(res, costs[i] + minCost(day+7, dp, costs));
+                }
+                else{
+                      res = min(res, costs[i] + minCost(day+30, dp, costs));
+                }
+            }
+            // cout << "day: " << day << " res: " << res << endl;
+            dp[day] = res;  
+        }
+        return res;
+    }
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        vector<int> dp(366, -1);
+        for(int d: days){
+            dict.insert(pair<int, int> (d, 1));
+        }
+//         starting day, dp table, costs
+        return minCost(0, dp, costs);
+    }
+};

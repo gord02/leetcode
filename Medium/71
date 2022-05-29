@@ -1,0 +1,38 @@
+// 71. Simplify Path
+// time taken: 34 minutes, many small erorrs in logic, didnt think through thorugly enough
+// Runtime: 7 ms, faster than 70.68% of C++ online submissions for Simplify Path.
+// Memory Usage: 8.9 MB, less than 70.71% of C++ online submissions for Simplify Path.
+// Next challenges:
+class Solution{
+    
+    public:
+      string simplifyPath(string path) {
+          stack<string> s;
+          string res = "";
+          for(int i=0; i<path.length(); i++) {
+              if(path[i]=='/') {
+                  int end = i+1;
+                  while(end < path.length() && path[end] != '/') {
+                      end++;
+                  }
+                  string dir = path.substr(i, end-i);
+                  if(dir == "/..") {
+                      if(s.empty() == false) {
+                          s.pop();
+                      }
+                  }else if(dir != "/." && dir != "/") {
+                      s.push(dir);
+                  }
+                    i = end-1;
+              }
+          }
+        while(s.empty() == false) {
+            res = s.top() + res;// append to front
+            s.pop();
+        }
+          if(res == "") {
+              return "/";
+          }
+          return res;
+      }
+};

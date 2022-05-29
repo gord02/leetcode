@@ -1,0 +1,50 @@
+class Solution {
+public:
+    // 785. Is Graph Bipartite?
+//     time taken: 22 minutes 
+//     Runtime: 43 ms, faster than 22.08% of C++ online submissions for Is Graph Bipartite?.
+// Memory Usage: 15 MB, less than 11.07% of C++ online submissions for Is Graph Bipartite?.
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        map<int, vector<int>> adj;
+        for(int i=0; i<graph.size(); i++) {
+            // auto it = adj.find(i);
+            // if(it == adj.end()) {
+            adj.insert(pair<int, vector<int>> (i, graph[i]));
+            // }
+        }
+        queue<int> q;
+        set<int> seen;
+        vector<int> colour(n, 0);
+        for(int i=0; i<n; i++) {
+            if(colour[i] == 0) {
+                q.push(i);
+                while(q.empty() == false) {
+                    int front = q.front();
+                    q.pop();
+                    if(seen.find(front) != seen.end()) {
+                        continue;
+                    }
+                    seen.insert(front);
+                    if(colour[front] == 0) {
+                        colour[front] = 1;
+                    }
+                    auto it = adj.find(front);
+                    if(it->second.size() == 0){
+                        continue;
+                    }
+                    for(int nextNode: it->second) {
+                        if(colour[nextNode] == 0) {
+                            colour[nextNode] = colour[front]*-1;
+                            q.push(nextNode);
+                        }
+                        if(colour[nextNode] == colour[front]) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};

@@ -1,0 +1,67 @@
+
+class Solution {
+public:
+    // 863. All Nodes Distance K in Binary Tree
+//     time tajen: 30 minutes, could have been slightly but was not in the most productive envorinment and throuhglt ran through code to make sure it would run without delay 
+//     Runtime: 26 ms, faster than 5.14% of C++ online submissions for All Nodes Distance K in Binary Tree.
+// Memory Usage: 18.4 MB, less than 5.08% of C++ online submissions for All Nodes Distance K in Binary Tree.
+
+    map<TreeNode*, vector<TreeNode*>> adj;
+    void dfs(TreeNode* node, TreeNode* parent) {
+        if(node == nullptr) {
+            return;
+        }
+        if(parent != nullptr) {
+            auto it = adj.find(node);
+            if(it == adj.end()) {
+                adj.insert(pair<TreeNode*, vector<TreeNode*>> (node,{parent}));
+            }else{
+                it->second.push_back(parent);
+            }
+            
+            it = adj.find(parent);
+            if(it == adj.end()) {
+                adj.insert(pair<TreeNode*, vector<TreeNode*>> (parent,{node}));
+            }else{
+                it->second.push_back(node);
+            }
+        }
+        dfs(node->left, node);
+        dfs(node->right, node);
+    }
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        dfs(root, nullptr);
+        vector<int> res;
+        set<TreeNode*> seen;
+        queue<TreeNode*> q;
+        q.push(target);
+        int lvl = 0;
+        while(q.empty() == false) {
+            int n = q.size();
+            while(n > 0) {
+                n--;
+                TreeNode* front = q.front();
+                q.pop();
+                
+                if(seen.find(front) != seen.end()) {
+                    continue;
+                }
+                
+                seen.insert(front);
+                if(lvl == k) {
+                    res.push_back(front->val);
+                }
+                auto it = adj.find(front);
+                if(it == adj.end()) {continue;}
+                for(TreeNode* nextNode: it->second) {
+                    if(seen.find(nextNode) == seen.end()) {
+                        q.push(nextNode);
+                    }
+                
+                }
+            }
+            lvl++;
+        }
+        return res;
+    }
+};

@@ -1,0 +1,26 @@
+class Solution {
+public:
+// 523. Continuous Subarray Sum
+//     time taken: 30 minutes, small errors, FORGOT to use fact of subarray of size 2!!!!!!!!!!
+//         Runtime: 224 ms, faster than 59.76% of C++ online submissions for Continuous Subarray Sum.
+// Memory Usage: 97.2 MB, less than 21.81% of C++ online submissions for Continuous Subarray Sum.
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        map<int, int> pastSums;
+        int curSum = 0;
+        for(int i=0; i<nums.size(); i++) {
+            curSum = nums[i]+curSum;
+            if(curSum%k == 0 && i> 0) {
+                return true;
+            }
+            auto it = pastSums.find(curSum%k); 
+            if(it != pastSums.end() && (i-it->second) >=2 ) {
+                return true;
+            }
+            // it = pastSums.find(curSum%k); 
+            if(it == pastSums.end()) {
+                pastSums.insert(pair<int, int> (curSum%k, i));// index!!
+            }
+        }
+        return false;
+    }
+};

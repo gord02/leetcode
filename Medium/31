@@ -1,0 +1,38 @@
+// 31. Next Permutation
+// Runtime: 0 ms, faster than 100.00% of C++ online submissions for Next Permutation.
+// Memory Usage: 12 MB, less than 75.46% of C++ online submissions for Next Permutation.
+
+class Solution {
+public:
+     void nextPermutation(vector<int>& nums) {
+        bool didSwap = false;
+        for(int i = nums.size()-1; i>=0; i--) {
+            if(didSwap) {
+                return;
+            }
+            int min_greater_ind = -1;
+            
+            for(int j = i+1; j<nums.size(); j++) {
+                if(nums[j] > nums[i]) {
+                    if(min_greater_ind == -1) {
+                        min_greater_ind = j;
+                    }else{
+//                         minimize the greater element of i
+                        if(nums[min_greater_ind] > nums[j] && nums[j] > nums[i]) {
+                            min_greater_ind = j;
+                        }
+                    }
+                }
+            }
+            if(min_greater_ind != -1) {
+//                 we need to do swap from this index with found index
+                swap(nums[i], nums[min_greater_ind]);
+                didSwap = true;
+                sort(nums.begin()+i+1, nums.end());
+            }
+        }
+        if(!didSwap) {
+            sort(nums.begin(), nums.end());
+        }
+    }
+};

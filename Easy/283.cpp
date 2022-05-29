@@ -1,4 +1,23 @@
 class Solution {
+    //     283. Move Zeroes
+    // time taken: 15 minutes, got lucky with optimized approach 
+//     Runtime: 26 ms, faster than 74.06% of C++ online submissions for Move Zeroes.
+// Memory Usage: 19.1 MB, less than 83.64% of C++ online submissions for Move Zeroes.
+        void moveZeroes(vector<int>& nums) {
+            int s = -1;
+            for(int i=0; i<nums.size(); i++) {
+                if(s <0 && nums[i] == 0) {
+                    s = i;
+                    continue;
+                }
+                if(s!= -1 && nums[s] == 0 && nums[i]!= 0) {
+                    swap(nums[i], nums[s]);
+                    s++;
+                }
+            }
+        }
+// };
+
 public:
 //     void moveZeroes(vector<int>& nums) {
 // //         Runtime: 333 ms, faster than 5.02% of C++ online submissions for Move Zeroes.

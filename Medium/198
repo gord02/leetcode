@@ -1,0 +1,27 @@
+// 198. House Robber
+// time tkaen: 17 minutes
+// Runtime: 4 ms, faster than 32.94% of C++ online submissions for House Robber.
+// Memory Usage: 7.8 MB, less than 26.18% of C++ online submissions for House Robber.
+
+class Solution {
+public:
+    vector<int> dp;
+    int rec(int i, vector<int>& nums) {
+//         going beyond houses
+        if(i >= nums.size()) {
+            return 0;
+        } 
+        if(dp[i] != -1) {
+            return dp[i];
+        }
+        int res = 0;
+        res = max( rec(i+1, nums) , rec(i+2, nums) + nums[i]);
+        dp[i] = res;
+        return res;
+    }
+    int rob(vector<int>& nums) {
+        vector<int> dp_init(nums.size(), -1);
+        dp = dp_init;
+        return rec(0, nums);
+    }
+};

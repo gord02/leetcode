@@ -1,0 +1,40 @@
+// 140. Word Break II
+// time taken: 36 minutes, serveral error tho
+// error with not correctly using everything in question, forgot to add spaces!! error with concatention, didnt reallize s+= sub when passed into a function modfifed s everywhere. didnt realize there was no stop for substr, just continues taking how ever much is valid of the string, doesnt matter if there are serverl charcters after are beyond string length(not too much my fault)
+// Runtime: 2 ms, faster than 49.00% of C++ online submissions for Word Break II.
+// Memory Usage: 7.3 MB, less than 64.37% of C++ online submissions for Word Break II.
+class Solution{
+    public:
+    map<string, int> dict;
+    vector<string> sentences;
+    void backTrack(string sentence, int i, string &word) {
+        if(i >= word.length()) {
+            // sentence.pop_front(); // removing starting space
+            sentences.push_back(sentence.substr(1, sentence.length()-1));
+            return;
+        }
+        // for(int j =1; j<=word.length(); j++) {
+        int j = 1;
+        while(i+j <=word.length()) {
+            string sub = word.substr(i, j);
+            if(dict.find(sub) != dict.end()) {
+            // cout << "i: " << i << " J: "<< j <<" sending to rec"<< endl;
+                // cout << "the sub: " << sub<< endl;
+                
+                sub = " " + sub;
+               string new_s = sentence+sub;
+                backTrack(new_s, i+j, word);
+                // cout << i << endl;
+                // cout << "sentence after: " << sentence << endl;
+            }
+            j++;
+        }
+    }
+        vector<string> wordBreak(string s, vector<string>& wordDict) {
+            for(int i=0; i<wordDict.size(); i++) {
+                dict.insert(pair<string, int> (wordDict[i], 1));
+            }
+            backTrack( "", 0, s);
+            return sentences;
+        }
+};

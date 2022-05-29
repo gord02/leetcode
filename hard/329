@@ -1,3 +1,52 @@
+class Solution{
+    public:
+//     329. Longest Increasing Path in a Matrix
+//     time taken: 36 minutes tiny error in sign when traversing 
+//     Runtime: 71 ms, faster than 44.22% of C++ online submissions for Longest Increasing Path in a Matrix.
+// Memory Usage: 17.4 MB, less than 30.54% of C++ online submissions for Longest Increasing Path in a Matrix.
+    int longest = 0;
+     vector<vector<int>> dp;
+    // vector<vector<int>> dirs{{0,1}, {1,0}, {-1,0}, {0, -1}};
+    int dfs(int row, int col, int last, vector<vector<int>>& matrix) {
+//         can't extend cases
+        if(row < 0|| row >= matrix.size() || col<0|| col>=matrix[0].size()) {
+            return 0;
+        }
+        if(matrix[row][col] <= last) {
+            return 0;
+        }
+        
+        if(dp[row][col] != -1) {
+            return dp[row][col];
+        }
+        int res = 0;// best of all four directions 
+        int left = dfs(row, col-1, matrix[row][col], matrix);
+        int right = dfs(row, col+1, matrix[row][col], matrix);
+        int up = dfs(row+1, col, matrix[row][col], matrix);
+        int down = dfs(row-1, col, matrix[row][col], matrix);
+        
+        res= max(res, left);
+        res= max(res, right);
+        res= max(res, down);
+        res= max(res, up);
+        res++;// starting form path of size 1
+
+        longest = max(longest, res);
+        dp[row][col] = res;
+        return res;
+    }
+   int longestIncreasingPath(vector<vector<int>>& matrix) {
+       vector<vector<int>> dp_init(matrix.size(), vector<int> (matrix[0].size(), -1));
+       dp = dp_init;
+       for(int i=0; i<matrix.size(); i++) {
+           for(int j=0; j<matrix[i].size(); j++) {
+               dfs(i, j, INT_MIN, matrix);
+           }
+        }
+       return longest;
+   }
+};
+
 class Solution {
 public:
     // 329. Longest Increasing Path in a Matrix

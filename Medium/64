@@ -1,0 +1,77 @@
+class Solution {
+    public:
+    struct compare{
+        bool operator() (vector<int> i, vector<int> j) {
+            return i[0]> j[0];// min queue
+        }
+    };
+//     dijstakras algo 
+    // time taken: 29 minutes
+//     Runtime: 374 ms, faster than 5.11% of C++ online submissions for Minimum Path Sum.
+// Memory Usage: 51.2 MB, less than 6.88% of C++ online submissions for Minimum Path Sum.
+    int minPathSum(vector<vector<int>>& grid) {
+        priority_queue<vector<int>, vector<vector<int>>, compare> q;
+        q.push({grid[0][0], 0, 0});
+        vector<vector<int>> bestSum (grid.size(), vector<int> (grid[0].size(), INT_MAX));
+        bestSum[0][0] = 0;
+        
+        // set<vector<vector<int>> seen;
+        while(q.empty() == false) {
+            int r = q.top()[1];
+            int c = q.top()[2];
+            int sum = q.top()[0];
+            q.pop();
+            if(r == grid.size()-1 && c == grid[0].size()-1) {
+                return sum;
+            }
+//             two directions from current
+            if(c + 1 <grid[0].size()) {
+                if(sum + grid[r][c+1] < bestSum[r][c+1]) {
+                    // cout << sum << " " << grid[r][c+1]<<endl;
+                    bestSum[r][c+1] = sum + grid[r][c+1];
+                    // cout <<  bestSum[r][c+1] << " " << r << " " << c+1 << endl;
+                    q.push({ bestSum[r][c+1], r, c+1});
+                }
+            }
+            if(r+1 < grid.size()) {
+                if(sum + grid[r+1][c] < bestSum[r+1][c]) {
+                    bestSum[r+1][c] = sum + grid[r+1][c];
+                    // cout <<  bestSum[r+1][c] << " " << r+1 << " " << c << endl;
+                    q.push({bestSum[r+1][c], r+1, c});
+                }
+            }
+            // if(seen.find({cur_r, cur_c}) == seen.end()) {
+            //     continue;
+            // }
+        }
+        return 0;
+    }
+    
+//     12 minutes: many small errors in im,plementation 
+//     Runtime: 18 ms, faster than 22.43% of C++ online submissions for Minimum Path Sum.
+// Memory Usage: 10.5 MB, less than 6.88% of C++ online submissions for Minimum Path Sum.
+    // vector<vector<int>> dp;
+    // int rec(int r, int c, vector<vector<int>>& grid) {
+    //     // if(r == 0 && c== 0) {
+    //     //     return 
+    //     // } 
+    //     if(r < 0 || r >=grid.size() || c<0 || c>=grid[0].size()) {
+    //         return 200;
+    //     }
+    //     if(dp[r][c] != -1) {
+    //         return dp[r][c];
+    //     }
+    //     int res = grid[r][c];
+    //     int up = rec(r-1, c, grid);
+    //     int left = rec(r, c-1, grid);
+    //     res = res + min(up, left);
+    //     dp[r][c] = res;
+    //     return res;
+    // }
+    //     int minPathSum(vector<vector<int>>& grid) {
+    //         vector<vector<int>> dp_init(grid.size(), vector<int> (grid[0].size(), -1));
+    //         dp = dp_init;
+    //         dp[0][0] = grid[0][0];
+    //         return rec(grid.size()-1, grid[0].size()-1, grid);
+    //     }
+};

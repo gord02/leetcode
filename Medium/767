@@ -1,0 +1,53 @@
+Runtime: 3 ms, faster than 60.28% of C++ online submissions for Reorganize String.
+// Memory Usage: 6.4 MB, less than 35.78% of C++ online submissions for Reorganize String.
+// class Solution{
+//     public:
+        
+//         string reorganizeString(string s) {
+//             map<char, int> dict;
+//             for(char c: s) {
+//                 auto it = dict.find(c);
+//                 if(it == dict.end()) {
+//                     dict.insert(pair<char, int>(c, 1));
+//                 }else{
+//                     it->second++;
+//                 }
+//             }
+//             map<char, int>::iterator it = dict.begin();
+//             auto max_it = it;
+//             while(it != dict.end()) {
+//                 if(it->second > max_it->second) {
+//                     max_it = it;
+//                 }
+//                 it++;
+//             }
+//             // cout << max_it->second<< " " <<  ceil((double)s.length()/2) << endl;
+//             // cout << "max: " << max_it->first << endl;
+//             if(max_it->second > ceil((double)s.length()/2)) {
+//                 return "";
+//             }
+//             int i=0;
+               
+//             while(max_it->second > 0) {
+//                s[i] = max_it->first;
+//                 i= i+2;
+//                 max_it->second--;
+//             }
+//             dict.erase(max_it);
+            
+//             it = dict.begin();
+//             while(it != dict.end()) {
+//                 while(it->second > 0) {
+//                     if(i>=s.length()) {
+//                       i = 1;  
+//                     }
+//                     s[i] = it->first;
+//                     it->second--;  
+//                     i = i+2;
+//                 }
+//                 // cout << "end" << endl;
+//                 it++;
+//             }
+//             return s;
+//         }
+// };

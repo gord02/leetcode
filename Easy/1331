@@ -1,0 +1,27 @@
+class Solution {
+public:
+//     1331. Rank Transform of an Array
+    // time taken: 13 minutes 
+//     Runtime: 167 ms, faster than 45.71% of C++ online submissions for Rank Transform of an Array.
+// Memory Usage: 39.8 MB, less than 56.31% of C++ online submissions for Rank Transform of an Array.
+    vector<int> arrayRankTransform(vector<int>& arr) {
+        int rank = 1;
+        vector<int> copy = arr;
+        sort(copy.begin(), copy.end());
+        map<int, int> mapping;
+        
+        for(int i=0; i<copy.size(); i++) {
+            if(mapping.find(copy[i]) != mapping.end()) {// avoids duplicate
+                continue;
+            }else{
+                mapping.insert(pair<int, int> (copy[i], rank));
+                rank++;
+            }
+        }
+         for(int i=0; i<arr.size(); i++) {
+             auto it = mapping.find(arr[i]);
+             arr[i] = it->second;
+         }
+        return arr;  
+    }
+};

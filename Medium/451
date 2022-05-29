@@ -1,0 +1,35 @@
+class Solution {
+public:
+    // 451. Sort Characters By Frequency
+//     time taken: 12 minutes 
+//     Runtime: 12 ms, faster than 79.42% of C++ online submissions for Sort Characters By Frequency.
+// Memory Usage: 8.3 MB, less than 76.27% of C++ online submissions for Sort Characters By Frequency.
+    string frequencySort(string s) {
+        map<char, int> dict;
+        for(char c: s) {
+            auto it = dict.find(c);
+            if(it == dict.end()) {
+                dict.insert(pair<char, int> (c, 1));
+            }else{
+                it->second++;
+            }
+        }
+        string new_s = "";
+        while(dict.empty() == false) {
+            map<char, int>::iterator it = dict.begin();
+            auto it_max = it;
+            while(it != dict.end()) {
+                if(it->second > it_max->second) {
+                    it_max = it;
+                }
+                it++;
+            }
+            while(it_max->second > 0) {
+                new_s += it_max->first; // saves on memory oppose to 'create' new string
+                it_max->second--;
+            }
+            dict.erase(it_max);
+        }
+        return new_s;
+    }
+};
