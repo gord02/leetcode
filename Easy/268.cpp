@@ -1,3 +1,17 @@
+ //     Runtime: 21 ms, faster than 78.63% of C++ online submissions for Missing Number.
+// Memory Usage: 18.1 MB, less than 7.98% of C++ online submissions for Missing Number.
+        int missingNumber(vector<int>& nums) {
+            int shouldBe = 0;
+            int is = 0;
+            for(int i =0; i<=nums.size(); i++) {
+                shouldBe = shouldBe^i;
+            }
+            for(int i =0; i<nums.size(); i++) {
+                is=is^nums[i];
+            }
+            return shouldBe^is;
+        }
+ 
  // 268. Missing Number
 //    TIME TAKEN:  13 minutes
 //     faster than 5.73% , space time less than 93.20% 

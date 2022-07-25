@@ -1,3 +1,33 @@
+class Solution {
+public:
+//      fill the list nums 1 from the back since at the back there is only 0s so we are not overwriting a numbers we might nned to move later on. We will from the back by comapring the largest elements of the n and m numbers of each list respectvely 
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        n--;
+        m--;
+        int p = nums1.size()-1;
+        while(n >= 0 && m>=0) {
+            if(nums2[n] >= nums1[m]) {
+                nums1[p] = nums2[n];
+                n--;
+            }else{
+                nums1[p] = nums1[m];
+                m--;
+            }
+            p--;
+        }
+        while(n>=0) {
+            nums1[p] = nums2[n];
+            n--;
+            p--;
+        }
+         while(m>=0) {
+            nums1[p] = nums1[m];
+            m--;
+            p--;
+        }
+    }
+};
+
 // Merge Sorted Array
 // Tike taken : 40 mintues
 int partition(vector<int> &nums1, int left, int right) {

@@ -1,0 +1,38 @@
+ class Solution {
+public:
+    // 665. Non-decreasing Array
+//     time taken: 25 minutes
+    // Runtime: 16 ms, faster than 99.81% of C++ online submissions for Non-decreasing Array.
+// Memory Usage: 27.6 MB, less than 8.22% of C++ online submissions for Non-decreasing Array.
+    bool checkPossibility(vector<int>& nums) {
+        stack<int> s;
+        bool modified = false;
+        for(int i=0; i<nums.size(); i++) {
+            if(s.empty() == false && s.top() > nums[i]) {
+                if(modified) {
+//                     arelady modified
+                    return false;
+                }
+                int old_top = s.top();
+                s.pop();
+                
+                if(s.empty() == true) {
+                    old_top = nums[i];
+                }else{
+                    int new_top = s.top(); 
+                    if(new_top <= nums[i]) {
+//                         old_top value was the issue
+                        old_top = nums[i];
+                    }else{
+                        nums[i] = old_top;
+                    }
+                }
+                    modified = true;
+                    s.push(old_top);
+            }
+                
+            s.push(nums[i]);
+        }
+        return true;
+    }
+};

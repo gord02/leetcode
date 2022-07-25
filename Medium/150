@@ -1,0 +1,37 @@
+class Solution {
+public:
+    // 150. Evaluate Reverse Polish Notation
+//     time: 16 minutes, made the misatke of checking for char opperators not string opperators
+//     Runtime: 9 ms, faster than 89.66% of C++ online submissions for Evaluate Reverse Polish Notation.
+// Memory Usage: 12 MB, less than 20.14% of C++ online submissions for Evaluate Reverse Polish Notation.
+    int evalRPN(vector<string>& tokens) {
+        stack<int> s;
+//         ASSUMING VALID
+        for(int i=0; i<tokens.size(); i++) {
+            if(tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/" ) {
+                int second = s.top();
+                s.pop();
+                int first = s.top();
+                s.pop();
+                int result = 0;
+                if(tokens[i] == "+") {
+                  result= first+second;
+                }
+                else if(tokens[i] == "-") {
+                  result= first-second;
+                }
+                else if(tokens[i] == "*") {
+                  result= first*second;
+                }
+                else if(tokens[i] == "/") {
+                  result= first/second;
+                }
+                s.push(result);
+            }else{
+//                 we have an interger
+                s.push(stoi(tokens[i]));
+            }
+        }
+        return s.top();
+    }
+};

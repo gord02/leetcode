@@ -1,0 +1,16 @@
+// 462. Minimum Moves to Equal Array Elements II
+// time taken: 12 minutes
+// Runtime: 16 ms, faster than 55.47% of C++ online submissions for Minimum Moves to Equal Array Elements II.
+// Memory Usage: 10.8 MB, less than 59.74% of C++ online submissions for Minimum Moves to Equal Array Elements II.
+class Solution {
+public:
+    int minMoves2(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int middle = nums[nums.size()/2];
+        int moves = 0;
+        for(int i=0; i<nums.size(); i++) {
+            moves+= abs(nums[i]-middle); // we only need to difference it would take to reach middle from this num nums[i], the 'direction' you would need to move is irrelevant
+        }
+        return moves;
+    }
+};

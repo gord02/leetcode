@@ -1,0 +1,47 @@
+class Solution {
+public:
+    // 935. Knight Dialer
+//     time takne: roughly an hours, issues was that used wrong mod!!!! you also need to be careful of how you take mode, take mode of two numbers like this res = (res+ rec(i,1,n)) % 1000000007;
+//     Runtime: 700 ms, faster than 13.41% of C++ online submissions for Knight Dialer.
+// Memory Usage: 70.3 MB, less than 11.69% of C++ online submissions for Knight Dialer.
+
+    map<int, vector<int>> adj;
+    vector<vector<int>> dp;
+    
+    int rec(int i, int nums, int n) {
+        if(nums == n) {
+            return 1;// one combo created
+        }
+        if (dp[nums][i] != -1) {
+            return dp[nums][i];
+        }
+        auto it = adj.find(i);
+        int res = 0;
+        for(int x: it->second) {
+            res= (res + rec(x, nums+1, n))  % 1000000007;
+        }
+        dp[nums][i] = res;
+        return res;
+    }
+    int knightDialer(int n) {
+        adj[0] = {4,6};
+        adj[1] = {6,8};
+        adj[2] = {7,9};
+        adj[3] = {4,8};
+        adj[4] = {0,3,9};
+        adj[5] = {};
+        adj[6] = {0,1,7};
+        adj[7] = {2,6};
+        adj[8] = {1,3};
+        adj[9] = {2,4};
+        
+        vector<vector<int>> dp_init(n+1, vector<int> (10, -1));
+        dp = dp_init;
+        
+        int res = 0;
+        for(int i=0; i< 10; i++) {
+            res = (res+ rec(i,1,n)) % 1000000007;
+        }
+        return res;
+    }
+};

@@ -1,0 +1,25 @@
+// 1448. Count Good Nodes in Binary Tree
+// time taken: 14 minutes
+// Runtime: 275 ms, faster than 7.39% of C++ online submissions for Count Good Nodes in Binary Tree.
+// Memory Usage: 86.3 MB, less than 56.84% of C++ online submissions for Count Good Nodes in Binary Tree.
+class Solution {
+public:
+//     global good vairble that recusive func can access
+    int good = 0; // root node is always good
+//     recusvie function, travesing all nodes
+    void df(TreeNode* node, int largestAbove) {
+        if(node == nullptr) {
+            return;
+        }
+        if(node->val >= largestAbove) {
+            good++;
+        }
+        df(node->left, max(largestAbove, node->val));
+        df(node->right, max(largestAbove, node->val));
+    }
+    int goodNodes(TreeNode* root) {
+        df(root, INT_MIN);
+//         return global vairble good
+        return good;
+    }
+};

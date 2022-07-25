@@ -1,0 +1,22 @@
+// 1673. Find the Most Competitive Subsequence
+// time tkane: 10 minutes 
+// Runtime: 297 ms, faster than 63.12% of C++ online submissions for Find the Most Competitive Subsequence.
+// Memory Usage: 109.7 MB, less than 80.18% of C++ online submissions for Find the Most Competitive Subsequence.
+class Solution {
+public:
+    vector<int> mostCompetitive(vector<int>& nums, int k) {
+        vector<int> s;
+        for(int i=0; i<nums.size(); i++) {
+//             helps optimize and matinin mono incresing vector
+            while(s.empty() == false && s.back() > nums[i] && k-s.size() < nums.size()-i) {
+                s.pop_back();
+            }
+            s.push_back(nums[i]);
+//             makes sure size does not exceed k, and pops the larger numbers that would have been added
+            while(s.size() > k) {
+                s.pop_back();
+            }
+        }
+        return s;
+    }
+};

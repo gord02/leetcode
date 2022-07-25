@@ -1,3 +1,298 @@
+// tim taken: 1 hour, didn't think through logic enouhg, didnt optimize, many small errors in code
+class Trie{
+    public:
+    class TrieNode{
+        public:
+            vector<TrieNode*> children;
+            bool endOfWord = false;
+            TrieNode(){
+                 vector<TrieNode*> children(26, nullptr);
+                this->children = children;
+            }
+    };
+    TrieNode* root = new TrieNode();
+    
+    void addWord(string word) {
+        TrieNode* node = root;
+        for(char c: word) {
+//             if node does not exist, create it
+            if(node->children[c-'a'] == nullptr) {
+                node->children[c-'a'] = new TrieNode();
+            }
+//             travel to the node
+            node = node->children[c-'a'];
+        }
+        node->endOfWord = true;
+    }
+//     recursive
+    vector<string> search(string prefix) {
+        
+        vector<string> words;
+        TrieNode* node = root;
+        string s = "";
+//         words have to start with this prefix
+        for(char c: prefix) {
+            if(node->children[c-'a'] != nullptr) {
+                s += c;
+                node = node->children[c-'a'];
+            }else{
+                return {};// no possible strings
+            }
+        }
+//         enitre prefix is found in trie
+       recFind(node, s, words);
+        return words;
+    }
+     void recFind(TrieNode* node, string s, vector<string> &words) {
+         if(node == nullptr || words.size() == 3) {
+         // if( words.size() == 3) {
+             return;
+         }
+         if(node->endOfWord) {
+             words.push_back(s);
+         }
+         for(int i = 0; i< 26; i++) {
+                   if(node->children[i] != nullptr) {
+             s+= ('a' + i); // this is concatenation and redefintino of new string all in one so we need to backtrack
+                recFind(node->children[i],s , words);
+             s.pop_back();
+             }
+        }
+//          dont visit every node, wastes time
+         // for(int i = 0; i< 26; i++) {
+         //     // if(node->children[i] != nullptr) {
+         //     s+= ('a' + i); // this is concatenation and redefintino of new string all in one so we need to backtrack
+         //        recFind(node->children[i],s , words);
+         //     // }
+         //     s.pop_back();
+         // }
+     }
+};
+class Solution{
+    public:
+      vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+          Trie trie = Trie();
+          for(string s: products) {
+              trie.addWord(s);
+          }
+          vector<vector<string>> res;
+          string prefix = "";
+          for(int i=0; i<searchWord.size(); i++) {
+              prefix+= searchWord[i];
+              res.push_back(trie.search(prefix));
+          }
+          return res;
+      }
+};
+
+// Runtime: 1121 ms, faster than 8.58% of C++ online submissions for Search Suggestions System.
+// Memory Usage: 701.4 MB, less than 5.01% of C++ online submissions for Search Suggestions System.
+// // class Trie{
+// //     public:
+// //         class TrieNode{
+// //             public:
+// //                 vector<TrieNode*> children;
+// //                 bool isEnd = false;
+// //             TrieNode(){
+// //                 vector<TrieNode*> child(26, nullptr);
+// //                  children  = child;
+// //             }
+// //         };
+
+// //     TrieNode* root = new TrieNode();
+
+// //     void add(string word) {
+// //         TrieNode* node = root;
+// //         for(char c: word) {
+// //             if(node->children[c - 'a'] == nullptr) {
+// //                 node->children[c - 'a'] = new TrieNode();
+// //             }
+// //             node = node->children[c-'a'];
+// //         }
+// //         node->isEnd = true;
+// //     }
+    
+// //     void getAll(TrieNode* node, string prefix, vector<string>& results) {
+// //         if(results.size() == 3) {
+// //             return;
+// //         }
+// //         if(node->isEnd == true) { 
+// //                 results.push_back(prefix);
+// //         }
+// // //         below is wrong becuase you were returning once you reached the end of one word but its possible a word could extend further
+// //         // if(node->isEnd == true) { // return only after word is found
+// //         //     if(results.size() < 3) {
+// //         //         cout << "ADDING" << endl;
+// //         //         results.push_back(prefix);
+// //         //     }
+// //         //     return;
+// //         // }
+// // //             travel to a trieNode only if char is found
+// //         for(int i=0; i<26; i++) {
+// //             if(node->children[i] != nullptr) {
+// //                 getAll(node->children[i], prefix+=(i+'a'), results);
+// //                 prefix.pop_back();// back track
+// //             }
+// //         }
+// //     }
+
+// // //     this search should just a for loop, looping through the chars of prefix and advancing thorugh trie tree, then pass current trieNode to getAll words which returns vector of strings 
+// //     vector<string> search(string prefix, TrieNode* node, vector<string> results) {
+// //         for(char c: prefix) {
+// //             if(node->children[c-'a'] == nullptr) {
+// //                 return results;
+// //             }
+// //             node = node->children[c-'a'];
+// //         }
+// //         getAll(node, prefix, results);
+// //         return results;
+// //     }
+
+// // };
+// // class Solution {
+// // public:
+
+// //     vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+// //         // Trie trie = new Trie(); error: no viable conversion from 'Trie *' to 'Trie'
+// //         Trie trie = Trie();
+// //         vector<vector<string>> res;
+        
+// //         for(string product: products) {
+// //             trie.add(product);
+// //         }
+        
+// //         for(int i=1; i<=searchWord.length(); i++) {
+// //             string prefix = searchWord.substr(0, i);
+// //             // cout << "prefix: "<< prefix << endl;
+// //             res.push_back(trie.search(prefix, trie.root, {}));
+// //         }
+// //         return res;
+// //     }
+// // };
+// // ==========================
+
+// class Trie{
+//     public:
+//         // priority_queue<string> q;
+//         int k = 0;
+//         class TrieNode{
+//             public:
+//                 vector<TrieNode*> children;
+//                 bool isEnd = false;
+//             TrieNode(){
+//                 // children = vector<TrieNode*> child(26, nullptr);
+//                 vector<TrieNode*> child(26, nullptr);
+//                  children  = child;
+//             }
+//         };
+
+//     TrieNode* root = new TrieNode();
+
+//     void add(string word) {
+//         TrieNode* node = root;
+//         for(char c: word) {
+//             if(node->children[c - 'a'] == nullptr) {
+//                 node->children[c - 'a'] = new TrieNode();
+//             }
+//             node = node->children[c-'a'];
+//         }
+//         node->isEnd = true;
+//     }
+    
+//     void getAll(TrieNode* node, string prefix, vector<string>& results) {
+//         if(results.size() == 3) {
+//             return;
+//         }
+//         if(node->isEnd == true) { 
+//                 results.push_back(prefix);
+//         }
+// //         below is wrong becuase you were returning once you reached the end of one word but its possible a word could extend further
+//         // if(node->isEnd == true) { // return only after word is found
+//         //     if(results.size() < 3) {
+//         //         cout << "ADDING" << endl;
+//         //         results.push_back(prefix);
+//         //     }
+//         //     return;
+//         // }
+// //             travel to a trieNode only if char is found
+//         for(int i=0; i<26; i++) {
+//             if(node->children[i] != nullptr) {
+//                 getAll(node->children[i], prefix+=(i+'a'), results);
+//                 prefix.pop_back();// back track
+//             }
+//         }
+//     }
+// //     void getAll(TrieNode* node, string prefix) {
+// //         if(node->isEnd == true) { // return only after word is found
+// //             if(q.size() < 3) {
+// //                 q.push(prefix);
+// //             }else{
+// //                 if(q.top() > prefix) {
+// //                     q.pop();
+// //                     q.push(prefix);
+// //                 }
+// //             }
+// //             return;
+// //         }
+// // //             travel to a trieNode only if char is found
+// //         for(int i=0; i<26; i++) {
+// //             if(node->children[i] != nullptr) {
+// //                 getAll(node->children[i], prefix+=(i+'a'));
+// //                 prefix.pop_back();
+// //             }
+// //         }
+// //     }
+// //     this search should just a for loop, looping through the chars of prefix and advancing thorugh trie tree, then pass current trieNode to getAll words which returns vector of strings 
+//     vector<string> search(string prefix, TrieNode* node, vector<string> results) {
+//         for(char c: prefix) {
+//             if(node->children[c-'a'] == nullptr) {
+//                 return results;
+//             }
+//             node = node->children[c-'a'];
+//         }
+//         getAll(node, prefix, results);
+//         return results;
+//     }
+// //     void search(string prefix, int i, TrieNode* node) {
+// //         if(i > prefix.length()) {
+// //             getAll(node, prefix);
+// //             vector<string> strings;
+// //             while(q.empty() == false) {
+// //                 strings.push_back(q.top());
+// //                 q.pop();
+// //             }
+// //             res.push_back(strings);
+// //             return;
+// //         }
+// //         if(node->children[prefix[i] - 'a'] != nullptr) {
+// //             search(prefix, i+1, node->children[prefix[i]-'a']);
+// //         }
+
+// //     }
+// };
+// // class Solution {
+// // public:
+
+// //     vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+// //         // Trie trie = new Trie(); error: no viable conversion from 'Trie *' to 'Trie'
+// //         Trie trie = Trie();
+// //         vector<vector<string>> res;
+        
+// //         for(string product: products) {
+// //             trie.add(product);
+// //         }
+
+// //         for(int i=1; i<=searchWord.length(); i++) {
+// //             string prefix = searchWord.substr(0, i);
+// //             // cout << "prefix: "<< prefix << endl;
+// //             res.push_back(trie.search(prefix, trie.root, {}));
+// //         }
+// //         return res;
+// //     }
+// // };
+
+======
+
 Runtime: 1121 ms, faster than 8.58% of C++ online submissions for Search Suggestions System.
 Memory Usage: 701.4 MB, less than 5.01% of C++ online submissions for Search Suggestions System.
 // class Trie{

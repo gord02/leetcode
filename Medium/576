@@ -1,0 +1,38 @@
+class Solution {
+public:
+//     576. Out of Boundary Paths
+//     40 minutes, didnt memeoize intially, also peoblem with taking mod, needed to do it more times
+    // Runtime: 102 ms, faster than 9.37% of C++ online submissions for Out of Boundary Paths.
+// Memory Usage: 23.4 MB, less than 7.30% of C++ online submissions for Out of Boundary Paths.
+    vector<vector<vector<int>>> dp;
+    vector<vector<int>> dirs{{0,1}, {1, 0}, {-1, 0}, {0, -1}};
+    int rec(int row, int col, int moves, int max, int m, int n) {
+        if(moves > max) { // this will prevent the infintie loop since we can traverse areas more than once
+            return 0;
+        }
+        if(row < 0 || row>=m || col < 0 || col>=n) {
+            return 1; // reached outside of grid bounds
+        }
+        if(dp[row][col][moves] != -1) {
+            return dp[row][col][moves];
+        }
+       int res = 0;
+        for(vector<int> way: dirs) {
+            int r = row + way[0];
+            int c = col + way[1];
+           // res+=  fmod(rec(r, c, moves+1, max, m, n), (pow(10, 9) + 7));
+           res+= (rec(r, c, moves+1, max, m, n) % 1000000007);
+            res = res % 1000000007;
+            
+        }
+        dp[row][col][moves] = res;
+        return res;
+    }
+    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+         vector<vector<vector<int>>> dp_init(m, vector<vector<int>> (n, vector<int>(maxMove+1, -1)));
+        dp = dp_init;
+         return rec(startRow, startColumn, 0, maxMove, m, n);
+        
+        // return dp[startRow][startColumn][maxMove];
+    }
+};

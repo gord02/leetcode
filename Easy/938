@@ -1,4 +1,32 @@
 // 938. Range Sum of BST
+// time taken: 13 minutes
+// Runtime: 156 ms, faster than 74.85% of C++ online submissions for Range Sum of BST.
+// Memory Usage: 64.6 MB, less than 92.41% of C++ online submissions for Range Sum of BST.
+class Solution {
+public:
+    int dfs(TreeNode* node, int low, int high) {
+        if(node == nullptr) {
+            return 0;
+        }
+        int sum = 0;
+        if(low <= node->val &&  node->val <= high) {
+            sum = node->val;
+            sum += dfs(node->left, low, high);
+            sum += dfs(node->right, low, high);
+        }else if(node->val < low) {
+            sum+= dfs(node->right, low, high);
+        }else if (node->val > high) {
+            sum += dfs(node->left, low, high);
+        }
+       
+        return sum;
+    }
+    int rangeSumBST(TreeNode* root, int low, int high) {
+        return dfs(root, low, high);
+    }
+};
+
+// 938. Range Sum of BST
 // 7 minutes, made stupid error, delayed very SIMPLE problem
 // faster than 13.17%, : 64.7 MB, less than 17.57%
 class Solution {

@@ -1,0 +1,48 @@
+// 951. Flip Equivalent Binary Trees
+// time: 31 minutes, mainly failed test cases, overcomplciated logic and did comparisoins myself, should have just left it to explore both to the recusive options of flip or dont flip
+// Runtime: 0 ms, faster than 100.00% of C++ online submissions for Flip Equivalent Binary Trees.
+// Memory Usage: 12.3 MB, less than 26.58% of C++ online submissions for Flip Equivalent Binary Trees.
+class Solution {
+public:
+    bool flipEquiv(TreeNode* root1, TreeNode* root2) {
+        if(root1 == nullptr && root2 == nullptr) {
+            return true;
+        }
+        if( (root1 == nullptr && root2 != nullptr) || (root1 != nullptr && root2 == nullptr) ) {
+            return false;
+        }
+        if(root1->val != root2->val) {
+            return false;
+        }
+        
+        // bool left = false;
+        // bool right = false;
+//         checking left first then right
+//         if(root1->left != nullptr && root2->left != nullptr) {
+//             if(root1->left->val == root2->left->val) {
+//                 left = flipEquiv(root1->left, root2->left);
+//                 right = flipEquiv(root1->right, root2->right);
+//             }else{
+//                 // if(root2->right == nullptr || root2->right->val != root1->left->val) {
+//                 //     return false;
+//                 // }else{
+// //                     flipping
+//                 // cout << root1->val << " - "<< endl;
+//                     left = flipEquiv(root1->left, root2->right);
+//                     right = flipEquiv(root1->right, root2->left);
+//                 // }
+//             }
+//         }else{
+//             left = flipEquiv(root1->left, root2->right);
+//              right = flipEquiv(root1->right, root2->left);
+//         }
+         bool left = flipEquiv(root1->left, root2->left);
+         bool right = flipEquiv(root1->right, root2->right);
+        
+         bool leftFlip = flipEquiv(root1->left, root2->right);
+         bool rightFlip = flipEquiv(root1->right, root2->left);
+        
+        // cout << root1->val << ": "<< left << " " << right << endl;
+        return left&&right || leftFlip&&rightFlip;
+    }
+};

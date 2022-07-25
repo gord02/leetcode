@@ -1,0 +1,22 @@
+// 1304. Find N Unique Integers Sum up to Zero
+// time taken: 6 minutes
+// Runtime: 5 ms, faster than 22.16% of C++ online submissions for Find N Unique Integers Sum up to Zero.
+// Memory Usage: 6.8 MB, less than 51.38% of C++ online submissions for Find N Unique Integers Sum up to Zero.
+class Solution {
+public:
+    vector<int> sumZero(int n) {
+        vector<int> res;
+        if(n%2 != 0) {
+            res.push_back(0);
+        }
+        n--;
+        int i = 1;
+        while(res.size() < n) {
+            res.push_back(i);
+            res.push_back(-i);
+            i++;
+        }
+        
+        return res;
+    }
+};

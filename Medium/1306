@@ -1,0 +1,47 @@
+// 1306. Jump Game III
+// time taken: 30 minutes
+// Runtime: 62 ms, faster than 61.61% of C++ online submissions for Jump Game III.
+// Memory Usage: 31.3 MB, less than 76.75% of C++ online submissions for Jump Game III.
+class Solution {
+public:
+
+    bool canReach(vector<int>& arr, int start) {
+        // visted array boolean
+        vector<bool> seen(arr.size(), false);
+//         queue for bfs
+        queue<int> q;
+        q.push(start);
+//         BFS to get all possible nodes 
+        while(q.empty() == false) {
+            //                 return true if current index value is zero
+            int curr = q.front();
+            q.pop();
+            seen[curr] = true;
+            if(arr[curr] == 0) {
+                return true;
+            }
+//                   if index is out of bounds, dont push continue
+            int moveLeft = curr- arr[curr];
+            if(moveLeft >= 0) { // no negative so dont need to worry about moving left but acutally going right
+                //  if index is arledy visted dont push to queue
+                if(!seen[moveLeft]) {
+                    q.push(moveLeft);
+                }
+                
+            }
+            int moveRight = curr+ arr[curr];
+            if(moveRight <arr.size()) { // no negative so dont need to worry about moving left but acutally going right
+                //  if index is arledy visted dont push to queue
+                if(!seen[moveRight]) {
+                    q.push(moveRight);
+                }
+                
+            }
+        }
+
+        
+        
+        // return false at the end since we didnt reach a zero
+        return false;
+    }
+};

@@ -1,0 +1,105 @@
+ // 1377. Frog Position After T Seconds
+// time taken: very ling, messed up implemnetation quite a few times
+// Runtime: 68 ms, faster than 9.91% of C++ online submissions for Frog Position After T Seconds.
+// Memory Usage: 17.7 MB, less than 13.70% of C++ online submissions for Frog Position After T Seconds.
+class Solution {
+public:
+//         define map for adjency mapping 
+        map<int, vector<int>> adj;
+//     define visited un_ordered set(efficiency) 
+        unordered_set<int> set;
+//     recusive function traverse edges
+    double rec(int i,int time, int t, int target) {
+        // cout << "i: " << i << endl;
+        //         base case for recusive function
+        if(time == t) {
+            if(i == target) {
+                // cout << "here" << endl;
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+       
+        set.insert(i);
+        
+        auto it = adj.find(i);
+        //         first case is for uncinnected graph
+        if(it == adj.end()) {
+        // if(it == adj.end() || it->second.size() == 0) { it->second.size() wont give acurate info if node is 'leaf'
+//             we cant go any further, this is a base case, since frog cant go back to visited leaves and will hope in place, it will eithe rhop in place st target or is not at target
+            // cout << "here" << endl;
+             if(i == target) {
+                 // cout << "there" << endl;
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+        int size = 0;
+        // cout << "connects to: " << endl;
+        for(int j: it->second) {
+            //     add up to res at the end
+            if(set.find(j) == set.end()) {
+                // cout << j << endl;
+                size++;
+            }
+        }
+//         first case is for uncinnected graph
+        if( size == 0) {
+        // if(it == adj.end() || it->second.size() == 0) { it->second.size() wont give acurate info if node is 'leaf'
+//             we cant go any further, this is a base case, since frog cant go back to visited leaves and will hope in place, it will eithe rhop in place st target or is not at target
+            // cout << "here" << endl;
+             if(i == target) {
+                 // cout << "there" << endl;
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+        // cout << "sixe at: " << i << " " << it->second.size() << endl;
+        double res = 1;
+   
+        double sum = 0;
+        for(int j: it->second) {
+            //     add up to res at the end
+            if(set.find(j) == set.end()) {
+                double prob = rec(j, time+1, t, target);
+                // cout << "from J: "<< j << " "<< prob << endl;
+                 // if(prob != 0){
+                    sum = sum + prob*((double)1/size);
+                // cout << "sum st j: "<< j << " " << sum << endl;
+                // }
+            }
+        }
+//         back track, make node not visited anymore
+        set.erase(i);
+        return res*sum;
+    }
+
+    double frogPosition(int n, vector<vector<int>>& edges, int t, int target) {
+//         adjency mapping for nodes, loop through edges
+            for(int i=0; i<edges.size(); i++) {
+                int a = edges[i][0];
+                int b = edges[i][1];
+                
+//                 bi-directional mapping
+                auto it = adj.find(a);
+                if(it == adj.end()) {
+                    adj.insert(pair<int, vector<int>> (a, {b}));
+                }else{
+                    it->second.push_back(b);
+                }
+                it = adj.find(b);
+                if(it == adj.end()) {
+                    adj.insert(pair<int, vector<int>> (b, {a}));
+                }else{
+                    it->second.push_back(a);
+                }
+            }
+        
+//         return final results res
+        return rec(1,0, t, target);
+        
+    }
+};

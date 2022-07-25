@@ -1,0 +1,60 @@
+// 1647. Minimum Deletions to Make Character Frequencies Unique
+// time taken: 40 minutes, didnt think throuhg logic of pushing max to set intialiy enitrley, should have saved index of max char, not just count
+// Runtime: 81 ms, faster than 58.14% of C++ online submissions for Minimum Deletions to Make Character Frequencies Unique.
+// Memory Usage: 17.5 MB, less than 37.08% of C++ online submissions for Minimum Deletions to Make Character Frequencies Unique.
+class Solution {
+public:
+    int minDeletions(string s) {
+//         define our answer, number of deletions
+        int dels = 0;
+//         defin the set we push to 
+        unordered_set<int> set;
+        
+//         vector for occurences
+        vector<int> count(26, 0);
+        
+//         max vairble 
+        int max_c = 0;
+        
+//         loop through and get max
+//         
+        for(int i=0; i<s.length(); i++) {
+            count[s[i] - 'a']++;
+           if(count[max_c] < count[s[i] - 'a']) {
+               max_c = s[i] - 'a';
+            }
+        }
+//         push our answer of max to set, and then go down from here
+        set.insert(count[max_c]);
+        count[max_c] = 0;
+            
+//           loop through and push to set
+            for(int i=0; i<count.size(); i++) {
+                 // if the number is in the set, loop through from the number down to zero and see if it can be placed in the set
+                if(set.find(count[i]) == set.end()) {
+                    // cout << "here" << endl;
+                    set.insert(count[i]);
+                }else{
+                    // cout << "counts: " << count[i] << endl;
+                    //if not, i.e we reach n=0, we have to delete all the charters, 
+//             else, add the number [i] - n to our deletions
+                    int n = count[i]-1;
+                    while(n>=0) {
+                        if(n == 0) {
+                            dels += count[i]; // had to delete all chars 
+                                break;
+                        }
+                        if(set.find(n) == set.end()) {
+                            set.insert(n);
+                            dels += count[i] - n;
+                            break;
+                        }
+                        n--;
+                    }
+                }
+            }
+            
+//             return number of deletions
+        return dels;
+    }
+};

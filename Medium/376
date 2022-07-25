@@ -1,0 +1,54 @@
+// 376. Wiggle Subsequence
+// time takne: 38 minutes, errors wiht logic that I just didnt consider, confused scenario with base case, but overall knew what to do since it was recusion take or dont take, then memoized
+// know how to do it roughly, was out of pratice with dp recusion, just need to brush up on these tyoes 
+// Runtime: 216 ms, faster than 5.09% of C++ online submissions for Wiggle Subsequence.
+// Memory Usage: 384.2 MB, less than 5.01% of C++ online submissions for Wiggle Subsequence.
+class Solution {
+public:
+    vector<int> dp;
+    int rec(int i, int last, vector<int> nums) {
+        if(i>= nums.size()) {
+            return 0;
+        }
+        if(i -1 <0) {
+         // can include this number 
+            return 1+ max(rec(i+1, last, nums), rec(i+1, -last, nums)); //dont know which is best for next wiggle
+        }
+        
+        if(dp[i] != 2222) {
+            return dp[i];
+        }
+        
+//         else we can get curDiff
+        int curDiff = nums[i] - nums[i-1];
+        
+//         ==============
+//         THESE ARE NOT BASE CASES!!! need to still recurse
+//         ==============
+        if(curDiff  == 0) {
+            // return 0; // cant include number
+            return rec(i+1, last, nums);// dont INCLUDE number
+        }
+        if(curDiff < 0 && last < 0) {
+            // return 0;
+            return rec(i+1, last, nums);
+        }
+         if(curDiff > 0 && last > 0) {
+            // return 0;
+            return rec(i+1, last, nums);
+        }
+//         else, they ware wiggling, alternating
+//         therefore chose or don't chose current indes to add to set
+        int choose = 1+ rec(i+1, curDiff, nums);
+        int dont = rec(i+1, last, nums); // NOT considering current diff
+        
+//          choose best option between two choices
+        dp[i] = max(choose, dont);
+        return dp[i];
+    }
+    int wiggleMaxLength(vector<int>& nums) {
+        vector<int> dp_init(nums.size(), 2222);
+        dp = dp_init;
+        return rec(0, 2000, nums);
+    }
+};

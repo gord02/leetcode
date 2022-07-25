@@ -1,3 +1,39 @@
+// 833. Find And Replace in String
+// time: 26 minutes, small error of appending string instead of length at end ot i
+// Runtime: 7 ms, faster than 68.12% of C++ online submissions for Find And Replace in String.
+// Memory Usage: 10.6 MB, less than 78.83% of C++ online submissions for Find And Replace in String.
+class Solution{
+    public:
+     string findReplaceString(string s, vector<int>& indices, vector<string>& sources, vector<string>& targets) {
+         map<int, int> index;
+         for(int i=0; i< indices.size(); i++) {
+             index.insert(pair<int, int> (indices[i], i));
+         }
+         string res = "";
+         int i=0;
+         while(i < s.length()) {
+             auto it = index.find(i);
+             if(it == index.end()) {
+                 res+=s[i];
+                 i++;
+             }else{
+//                  check for replacement 
+                 int vecIndex = it->second;
+                string sub  = s.substr(i, sources[vecIndex].length());
+                 if(sub == sources[vecIndex]) {
+                     res+=targets[vecIndex];
+                     i = i+ sources[vecIndex].length();
+                 }else{
+//                      substitution failed
+                    res+=s[i];
+                    i++;
+                 }
+            }
+         }
+         return res;
+     }
+};
+
 class Solution {
 public:
     // 833. Find And Replace in String

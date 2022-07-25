@@ -1,0 +1,41 @@
+class Solution {
+public:
+    // 371. Sum of Two Integers
+    // time taken: roughly an hour, many small errors in logic, many concerning the setting of carry
+//     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Sum of Two Integers.
+// Memory Usage: 5.9 MB, less than 26.15% of C++ online submissions for Sum of Two Integers.
+
+    int getSum(int a, int b) {
+        int res = 0;
+        int carry = 0;
+        for(int i=0; i< 32; i++) {
+            int lastInA = 1;
+            int lastInB = 1;
+            int aBit= lastInA&a;
+            int bBit= lastInB&b;
+            // cout << "aBit: " << aBit << endl;
+            // cout << "bBit: " << bBit << endl;
+            int addedBit = carry;
+            if(aBit==1 && bBit == 1) {
+                carry = 1;
+            }
+            else if(carry == 1) {
+                if(aBit ==1 || bBit == 1) {
+                    carry = 1;
+                }else{
+                    carry = 0;
+                }
+            }else{
+                carry = 0;
+            }
+            // cout << "c: " << carry << endl;
+            addedBit= addedBit^aBit^bBit;
+            // cout << "i: "<< i << " "<< addedBit << endl;
+            // cout << "======" << endl;
+            res = res^(addedBit << i);
+            a = a>>1;
+            b = b>>1;
+        }
+        return res;
+    }
+};

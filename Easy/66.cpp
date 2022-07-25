@@ -1,3 +1,29 @@
+class Solution {
+public:
+// could have optimitexd 
+    // 66. Plus One
+//     time taken: 10 minutes
+    // Runtime: 12 ms, faster than 7.22% of C++ online submissions for Plus One.
+// Memory Usage: 8.9 MB, less than 12.12% of C++ online submissions for Plus One.
+    vector<int> plusOne(vector<int>& digits) {
+        int carry = 1;
+        for(int i=digits.size()-1; i>=0; i--) {
+            int new_d = carry + digits[i];
+            if(new_d > 9) {
+                carry = 1;
+                digits[i] = new_d -10;
+            }else{
+                digits[i]  = new_d;
+                carry = 0;
+            }
+        }
+        if(carry == 1) {
+            digits.insert(digits.begin(), 1);
+        }
+        return digits;
+    }
+};
+
 // PLUS ONE
 // TIME: 33 minutes
 // 

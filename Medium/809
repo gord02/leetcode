@@ -1,0 +1,58 @@
+class Solution {
+public:
+//     809. Expressive Words
+//     didn't consider case that size of word or char counts in words might exceed !!!!!
+    // Runtime: 6 ms, faster than 75.67% of C++ online submissions for Expressive Words.
+// Memory Usage: 9.4 MB, less than 22.04% of C++ online submissions for Expressive Words.
+    int expressiveWords(string s, vector<string>& words) {
+        int count = 0;
+        vector<pair<char, int>> s_groups;
+        int i=0; 
+        while(i < s.length()) {
+            int start = i;
+            while(i < s.length() && s[start] == s[i]) {
+                i++;
+            }
+            s_groups.push_back(make_pair(s[start], i-start));
+        }
+        // cout << "here" << endl;
+        
+        for(string word: words) {
+            
+            vector<pair<char, int>> w_groups;
+            int i=0; 
+            while(i < word.length()) {
+                int start = i;
+                while(i < word.length() && word[start] == word[i]) {
+                    i++;
+                }
+                w_groups.push_back(make_pair(word[start], i-start));
+            }
+        // cout << "2" << endl;
+            
+            
+            if(s_groups.size() != w_groups.size()) {
+                continue;
+            }
+            for(int j=0; j < w_groups.size(); j++) {
+                if(w_groups[j].first != s_groups[j].first) {
+                    break;
+                }
+                if(w_groups[j].second > s_groups[j].second) {
+                    break;
+                }
+                if(w_groups[j].second != s_groups[j].second) {
+                    int needed = s_groups[j].second - w_groups[j].second;
+                    if(needed + w_groups[j].second < 3) {
+                        break;
+                    }
+                }
+                
+                if(j == w_groups.size() -1) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+};

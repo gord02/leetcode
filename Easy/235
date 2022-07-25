@@ -1,3 +1,33 @@
+// 235. Lowest Common Ancestor of a Binary Search Tree
+// time taken: 10 minutes
+// Runtime: 33 ms, faster than 77.55% of C++ online submissions for Lowest Common Ancestor of a Binary Search Tree.
+// Memory Usage: 23.3 MB, less than 63.82% of C++ online submissions for Lowest Common Ancestor of a Binary Search Tree.
+class Solution {
+public:
+    TreeNode* lca = nullptr;
+    bool recFind(TreeNode* node, TreeNode* p, TreeNode* q) {
+        if(node == nullptr) {
+            return false;// p and q have to exist thefeore not here
+        }
+        bool isNode = false;
+        if(node == p || node == q) {
+            isNode = true;
+        }
+        bool left = recFind(node->left, p, q);
+        bool right = recFind(node->right, p, q);
+        if( (isNode && left) || (isNode&& right) || (left&& right) ) {
+            if(lca == nullptr) {
+                lca = node;
+            }
+        }
+        return isNode||left||right;
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        recFind(root, p, q);
+        return lca;
+    }
+};
+
 //     235. Lowest Common Ancestor of a Binary Search Tree
 //     Time Taken: intial problem and psedo code, 11 minutes, implementation was 19 minutes. From there there were issues such as with mis reading thw question, then fixing up the way dF worked since, my understand is still a bit shacky. Additional hour roughly to get everything up and running.
 //     Runtime: 62 ms, faster than 5.98% of C++. Memory Usage: 23.3 MB, less than 11.59% 

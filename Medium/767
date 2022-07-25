@@ -1,3 +1,61 @@
+class Solution {
+public:
+    // 767. Reorganize String
+//    Time: 36 minutes, took too long to implement, messed up condition checking of I going out of bounds
+    // Runtime: 0 ms, faster than 100.00% of C++ online submissions for Reorganize String.
+// Memory Usage: 6.2 MB, less than 66.99% of C++ online submissions for Reorganize String.
+    string reorganizeString(string s) {
+        map<char, int> counts;
+        // string res = s;
+        int max_char = 0;
+        for(int i=0; i<s.length(); i++) {
+            counts[s[i]]++;
+            max_char = max(counts[s[i]], max_char);
+        }
+        if(s.length() % 2 == 0 && s.length()/2 < max_char) {
+            return "";
+        } 
+        if(s.length() % 2 != 0 && s.length()/2 + 1 < max_char) {
+            return "";
+        }
+        
+        map<char, int>::iterator it = counts.begin();
+        auto max_it = it;
+        while(it != counts.end()) {
+          if( max_it->second < it->second) {
+              max_it = it;
+          }
+            it++;
+        }
+        
+        int i =0;
+      while(max_it->second > 0) {
+        s[i] = max_it->first;
+          i = i+2;
+          max_it->second--;
+      }
+    counts.erase(max_it);
+        
+    // it = counts.begin();
+    while(counts.empty() == false) {
+        it = counts.begin();
+        // cout << "it->first: " << it->first << " " << it->second << endl;
+        while(it->second > 0) {
+            if(i >= s.length()) {
+                i = 1;
+            }
+            s[i] = it->first;
+            it->second--;
+            // cout << "left:" << it->second << " placed at: " << i << endl;
+            i= i+2;
+        }
+        counts.erase(it);
+    }
+        return s;
+        
+    }
+};
+
 Runtime: 3 ms, faster than 60.28% of C++ online submissions for Reorganize String.
 // Memory Usage: 6.4 MB, less than 35.78% of C++ online submissions for Reorganize String.
 // class Solution{
