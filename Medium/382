@@ -1,0 +1,38 @@
+class Solution {
+public:
+    // 382. Linked List Random Node
+//     8 minutes: didnt save head as class varible, didnt dp return type at the ned of function, small errorrs
+    // Runtime: 60 ms, faster than 21.69% of C++ online submissions for Linked List Random Node.
+// Memory Usage: 16.7 MB, less than 54.45% of C++ online submissions for Linked List Random Node.
+    int size = 0;
+    ListNode* head;
+    Solution(ListNode* head) {
+        this->head = head;
+        ListNode* copy = head;
+        while(copy != nullptr) {
+            size++;
+            copy = copy->next;
+        }
+    }
+    
+    int getRandom() {
+        ListNode* copy = head;
+        int i = 0;
+        int x = rand() % size;
+        while( copy != nullptr) {
+            if(i == x) {
+                return copy->val;
+            }
+            
+            i++;
+            copy= copy->next;
+        }
+        return 0;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(head);
+ * int param_1 = obj->getRandom();
+ */x

@@ -1,0 +1,21 @@
+class Solution {
+    
+public:
+    // 717. 1-bit and 2-bit Characters
+    // Runtime: 17 ms, faster than 5.25% of C++ online submissions for 1-bit and 2-bit Characters.
+// Memory Usage: 9.7 MB, less than 14.12% of C++ online submissions for 1-bit and 2-bit Characters.
+    bool isOneBitCharacter(vector<int>& bits) {
+        int i = 0;
+        while(i< bits.size()) {
+            if(i == bits.size()-1 && bits[i] == 0) {
+                return true;
+            }
+            if(bits[i] == 1) {
+                i = i + 2;
+            }else{
+                i++;
+            }
+        }
+        return false;
+    }
+};

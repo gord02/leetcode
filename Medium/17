@@ -1,3 +1,43 @@
+
+class Solution{
+    public:
+//     17. Letter Combinations of a Phone Number
+//     time taken: 16 minutes 
+    // Runtime: 3 ms, faster than 46.37% of C++ online submissions for Letter Combinations of a Phone Number.
+// Memory Usage: 6.8 MB, less than 12.27% of C++ online submissions for Letter Combinations of a Phone Number.
+    vector<string> res;
+    map<int, vector<char>> mapping;
+    void bT(int i, string combo, string digits) {
+        if(i>=digits.size()) {
+            res.push_back(combo);
+            return;
+        }
+//         digits[i] is char of digit, convert to number 
+        auto it = mapping.find(digits[i] - '0');
+        for(char c: it->second) {
+            combo+= c;
+            bT(i+1, combo, digits);
+            combo.pop_back();
+        }
+    }
+    
+    vector<string> letterCombinations(string digits) {
+        if(digits.size() == 0) {
+            return res;
+        }
+        mapping.insert(pair<int, vector<char>> (2, {'a', 'b', 'c'}));
+        mapping.insert(pair<int, vector<char>> (3, {'d', 'e', 'f'}));
+        mapping.insert(pair<int, vector<char>> (4, {'g', 'h', 'i'}));
+        mapping.insert(pair<int, vector<char>> (5, {'j', 'k', 'l'}));
+        mapping.insert(pair<int, vector<char>> (6, {'m', 'n', 'o'}));
+        mapping.insert(pair<int, vector<char>> (7, {'p', 'q', 'r', 's'}));
+        mapping.insert(pair<int, vector<char>> (8, {'t', 'u', 'v'}));
+        mapping.insert(pair<int, vector<char>> (9, {'w', 'x', 'y','z'}));
+        bT(0, "", digits);
+        return res;
+    }
+};
+
 class Solution {
 public:
     // 17. Letter Combinations of a Phone Number

@@ -1,5 +1,28 @@
 class Solution {
 public:
+// 1143. Longest Common Subsequence
+// time: 22 minutes, careful when typing it in
+    int longestCommonSubsequence(string text1, string text2) {
+        vector<vector<int>> dp(text1.size() +1, vector<int> (text2.size() + 1, 0));
+        
+        for(int i=1; i< dp.size(); i++) {
+            for(int j =1; j < dp[i].size(); j++) {
+                dp[i][j] = dp[i-1][j-1];
+
+                if(text1[i-1] == text2[j-1]) {
+                    dp[i][j]++;
+                }else{
+                    dp[i][j] = max(dp[i][j], dp[i-1][j]);
+                    dp[i][j] = max(dp[i][j], dp[i][j-1]);
+                }
+            }
+        }
+        return dp[text1.size()][text2.size()];
+    }
+};
+
+class Solution {
+public:
     // 1143. Longest Common Subsequence
     // Runtime: 39 ms, faster than 33.88% of C++ online submissions for Longest Common Subsequence.
 // Memory Usage: 12.9 MB, less than 51.80% of C++ online submissions for Longest Common Subsequence.
@@ -18,3 +41,5 @@ public:
         return dp[text1.length()][text2.length()];
     }
 };
+
+// solution from not taking char from s1 or not taking from s2, since they dont match, disregard which ever char would yield the worse answer

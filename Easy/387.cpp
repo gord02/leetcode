@@ -1,3 +1,24 @@
+class Solution {
+public:
+    // 387. First Unique Character in a String
+//     time taken: 6 minutes
+    // Runtime: 52 ms, faster than 56.18% of C++ online submissions for First Unique Character in a String.
+// Memory Usage: 10.7 MB, less than 71.90% of C++ online submissions for First Unique Character in a String.
+
+    int firstUniqChar(string s) {
+        vector<int> chars(26, 0);
+        for(int i=0; i< s.length(); i++) {
+            chars[s[i]-'a']++;
+        }
+        for(int i=0; i< s.length(); i++) {
+            if(chars[s[i]-'a'] == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+};
+
 //     387. First Unique Character in a String
 //     TIME TAKEN: very long time, didn't realize the order that pairs are placed into map
 //     faster than 24.79%, space, less than 13.89%

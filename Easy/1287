@@ -1,0 +1,24 @@
+
+class Solution {
+    // 1287. Element Appearing More Than 25% In Sorted Array
+//     time taken: 12 minutes 
+    // Runtime: 15 ms, faster than 85.30% of C++ online submissions for Element Appearing More Than 25% In Sorted Array.
+// Memory Usage: 12.5 MB, less than 70.19% of C++ online submissions for Element Appearing More Than 25% In Sorted Array.
+public:
+    int findSpecialInteger(vector<int>& arr) {
+        int i=0;
+        int num = 0;
+        int most = 0;
+        while(i < arr.size()) {
+            int start = i;
+            while(i < arr.size() && arr[start] == arr[i]) {
+                i++;
+            }
+            if(i-start > most) {
+                num = arr[start];
+                most = i-start;
+            }
+        }
+        return num;
+    }
+};

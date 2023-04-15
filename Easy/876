@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // 876. Middle of the Linked List
+    // Runtime: 4 ms, faster than 49.93% of C++ online submissions for Middle of the Linked List.
+// Memory Usage: 7.1 MB, less than 22.04% of C++ online submissions for Middle of the Linked List.
+    ListNode* middleNode(ListNode* head) {
+        ListNode* copy = head;
+        int size = 0;
+        while( copy != nullptr) {
+            size++;
+            copy = copy->next;
+        }
+        int n = 0;
+        
+        while(head != nullptr) {
+            if(n == size/2 ) {
+                return head;
+            }
+            n++;
+            head= head->next;
+        }
+        return nullptr;
+    }
+};

@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int lastStoneWeightII(vector<int>& stones) {
+        int sum = 0;
+        for(int n: stones) {
+            sum += n;
+        }
+        int target = ceil(sum/2.0);
+        vector<vector<bool>> dp(target+1, vector<bool> (stones.size()+1, false));
+        int res = 0;
+        for(int j = 0; j< stones.size(); j++) {
+            dp[0][j] = true;
+        }
+        int best = 0;
+        // cout << "t: " << target << endl;
+        for(int i=1; i< dp.size(); i++) {
+            // if(i == 31) {
+            //  cout << "i: " << i << endl;
+            // }
+            
+            // careful with getting all indices! 
+            for(int j = 1; j< dp[0].size(); j++) {
+                // same row but take form the left to represent not taking current number and choosing a different possible way to achieve the same value of i
+                int val = stones[j-1];
+
+                dp[i][j] =  dp[i][j] || dp[i][j-1];
+
+                // value is the stone wieght, i is the sum
+                if(i >= val) {
+                    dp[i][j] = dp[i][j] || dp[i-val][j-1];
+                }
+                // if(i == 71 && val == 40) {
+                //     // cout << "pos: " << i-val << endl;
+                //     // cout << dp[i][j] << " " << dp[i-val][j-1] << endl;
+                // }
+                if(dp[i][j]) {
+                    // cout << "valid: " << i << endl;
+                    // cout << "b: " << best << endl;
+                    // i is the acheivable sum
+                    // best = max(best, i);
+                    // choose closest sum to target
+                    if( abs(i - target) < abs(target - best) ) {
+                        best = i;
+                    }
+                }
+            }
+        }
+        // we want to largerest value colsets to half of the total sum of the array
+        int half1 = best;
+        int half2 = sum - best;
+        cout << "half1: " << half1 << " " << half2 << endl;
+
+        return abs(half1 - half2);
+        
+    }
+};

@@ -1,0 +1,48 @@
+class Solution {
+public:
+    // 1007. Minimum Domino Rotations For Equal Row
+//     time taken: 22 minutes 
+    // Runtime: 294 ms, faster than 15.26% of C++ online submissions for Minimum Domino Rotations For Equal Row.
+// Memory Usage: 111.7 MB, less than 49.88% of C++ online submissions for Minimum Domino Rotations For Equal Row.
+
+    int minDominoRotations(vector<int>& tops, vector<int>& bottoms) {
+        int bestTopCount = INT_MAX;
+        int bestBottomCount = INT_MAX;
+        for(int n = 1; n<=6; n++) {
+            int topSwap = 0;
+            for(int i=0; i< tops.size(); i++) {
+//                 number n is not fonud therefore cant make full top of n
+                if(tops[i] != n && bottoms[i] != n) {
+                    break;
+                }
+//                 number n is not at top but is at bottom
+                else if(tops[i] != n) {
+                    topSwap++;
+                }
+                if(i == tops.size() -1) {
+                    bestTopCount = min(bestTopCount, topSwap);
+                }
+            }
+            int bottomSwaps = 0;
+            for(int i=0; i< bottoms.size(); i++) {
+//                 number n is not fonud 
+                if(bottoms[i] != n && tops[i] != n) {
+                    break;
+                }
+//                 number n is not at top but is at bottom
+                else if(bottoms[i] != n) {
+                    bottomSwaps++;
+                }
+                if(i == bottoms.size() -1) {
+                    bestBottomCount = min(bestBottomCount, bottomSwaps);
+                }
+            }
+        }
+        
+        if(bestBottomCount == INT_MAX & bestTopCount == INT_MAX) {
+            return -1;
+        }
+        
+        return min(bestBottomCount, bestTopCount);
+    }
+};

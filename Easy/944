@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int minDeletionSize(vector<string>& strs) {
+        // 944. Delete Columns to Make Sorted
+        // Runtime: 77 ms, faster than 66.67% of C++ online submissions for Delete Columns to Make Sorted.
+// Memory Usage: 25.8 MB, less than 5.35% of C++ online submissions for Delete Columns to Make Sorted.
+
+        vector<char> vec = {};
+        vector<vector<char>> vecs(strs[0].size(), vec);
+        
+        for(string s: strs) {
+            for(int i = 0; i<s.size(); i++) {
+                vecs[i].push_back(s[i]);
+            }
+        }
+        int dels = 0;
+        for(vector<char> vec: vecs) {
+            bool Delete = false;
+            for(int i=1; i< vec.size(); i++) {
+                if(vec[i-1] > vec[i]) {
+                    Delete = true;
+                    break;
+                }
+            }
+            
+            if(Delete) {
+                dels++;
+            }
+        }
+        
+        return dels;
+    }
+};

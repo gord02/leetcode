@@ -1,0 +1,43 @@
+class Solution {
+public:
+    // 227. Basic Calculator II
+//     time taken: 30 minutes, small error in typing, put string instead of char for opp, did i-1 instead of size -1 
+    // Runtime: 18 ms, faster than 46.70% of C++ online submissions for Basic Calculator II.
+// Memory Usage: 7.8 MB, less than 91.03% of C++ online submissions for Basic Calculator II.
+    int calculate(string s) {
+        int res = 0;
+        int lastNum = 0;
+        int curNum = 0;
+        char opp = '+';
+        
+        int i=0; 
+        while(i < s.size()) {
+            if(isdigit(s[i])) {
+                curNum = curNum*10 + (s[i] - '0');
+            }
+            if( (s[i] != ' ' && !isdigit(s[i])) || i == s.size()-1) {
+//                 process operation
+                
+                if(opp == '+') {
+                    res+= lastNum;
+                    lastNum = curNum;
+                }
+                else if (opp == '-') {
+                    res+= lastNum;
+                    lastNum = -curNum;
+                }
+                else if(opp == '*') {
+                    lastNum = lastNum*curNum;
+                }
+                else if(opp == '/') {
+                    lastNum = lastNum/curNum;
+                }
+                curNum = 0;
+                opp = s[i];
+            }
+            i++;
+        }
+        res+= lastNum;
+        return res;
+    }
+};

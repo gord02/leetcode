@@ -1,0 +1,87 @@
+class Solution {
+public:
+// time taken: 36 minutes
+// Messed up starting index of new substrings, they build off of each other since i wanted to iterate just three in each loop! Also failed to consider stoi limitations 
+// Runtime
+// 2 ms
+// Beats
+// 72.79%
+// Memory
+// 6.5 MB
+// Beats
+// 70.83%
+    bool isValid(string s) {
+        if(s.size() < 1) {
+            return false;
+        }
+        // leading zero ex: 04, 00, 09
+        if(s.size() > 1 && s[0] == '0' ) {
+            return false;
+        } 
+        // cout << "s: " << s << endl;
+        // if number does not contain leading zero we can easily convert string of number to number
+        int num = stol(s);
+        if( 0 <= num && num <= 255) {
+            return true;
+        }
+
+        return false;
+    }
+    vector<string> restoreIpAddresses(string s) {
+
+        
+        vector<string> res;
+
+        for(int i = 1; i<=3; i++) {
+            // if(i > s.size())
+            string g1 = s.substr(0, i);
+            if( !isValid(g1)) {
+                continue;
+            }
+            // cout << "g1: " << g1 << endl;
+
+            for(int j= 1; j<=3; j++) {
+                if(i >= s.size()) {
+                    break;
+                }
+                string g2 = s.substr(i, j);
+
+                if( !isValid(g2)) {
+                    continue;
+                }
+                // cout << "g2: " << g2 << endl;
+
+                for(int k = 1; k<=3; k++) {
+                    if(i+j >= s.size()) {
+                        // this prevents the substr from throwing an error
+                        break;
+                    }
+
+                    string g3 = s.substr(i+j, k);
+
+                    if( !isValid(g3)) {
+                        continue;
+                    }
+                    // cout << "g3: " << g3 << endl;
+
+
+                    if(i+j+k >= s.size()) {
+                        break;
+                    }
+
+                    string g4 = s.substr(i+j+k, s.size());
+
+                    if( !isValid(g4)) {
+                        continue;
+                    }
+                    // cout << "g4: " << g4 << endl;
+
+                    // here means we have a valid non empty string, thus we have found all necessary components
+                    string ip = g1 + "." + g2 + "." + g3 + "." + g4;
+                    res.push_back(ip);
+                }
+            }
+        }
+        return res;
+    }
+};

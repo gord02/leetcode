@@ -1,0 +1,96 @@
+class Solution {
+public:
+    int best = 0;
+    // int rec(int node, map<int, vector<int>>& adj, vector<int>& dp, string s) {
+    //     auto it = adj.find(node);
+    //     // recurse down berfore processing current node so we have answer to work with
+    //     if(it != adj.end() ) {
+    //         for(int next: it->second) {
+    //             rec(next, adj, dp, s);
+    //         }
+    //     }
+
+    //     // if children exist, use cur node as "root"
+    //     vector<int> children;
+    //     if(it != adj.end() ) {
+    //         for(int next: it->second) {
+    //             if(s[node] != s[next]) {
+    //                 children.push_back(dp[next]);
+    //             }
+    //         }
+    //     }
+    //     // get best paths from children
+    //     sort(children.begin(), children.end());
+    //     int c1 = 0;
+    //     int c2 = 0;
+
+    //     if(children.size() >= 1) {
+    //         c1 = children[children.size()-1];
+    //     }
+    //     // we can make cur node the "root" or just middle node between two other paths fromed by its children
+    //     if(children.size() >= 2) {
+    //         c2 = children[children.size()-2];
+    //         best = max(best, c1 + c2 + 1);
+    //     }
+    //     // return best partial path to path further up tree, not using this node as the middle of a path, just as an edge to connect the rest of the path to
+    //     int res = max(c1, c2) + 1;
+    //     dp[node] = res;
+    //     best = max(best, res);
+    //     // cout << node << ": " <<  dp[node] << endl;
+    //     return res;
+    // }
+
+      int rec(int node,vector<vector<int>>& adj, vector<int>& dp, string s) {
+        // auto it = adj.find(node);
+        // recurse down berfore processing current node so we have answer to work with
+        for(int next: adj[node]) {
+            rec(next, adj, dp, s);
+        }
+
+        // if children exist, use cur node as "root"
+        vector<int> children;
+        // if(it != adj.end() ) {
+        //     for(int next: it->second) {
+        for(int next: adj[node]) {
+            if(s[node] != s[next]) {
+                children.push_back(dp[next]);
+            }
+        }
+
+        // get best paths from children
+        sort(children.begin(), children.end());
+        int c1 = 0;
+        int c2 = 0;
+
+        if(children.size() >= 1) {
+            c1 = children[children.size()-1];
+        }
+        // we can make cur node the "root" or just middle node between two other paths fromed by its children
+        if(children.size() >= 2) {
+            c2 = children[children.size()-2];
+            best = max(best, c1 + c2 + 1);
+        }
+        // return best partial path to path further up tree, not using this node as the middle of a path, just as an edge to connect the rest of the path to
+        int res = max(c1, c2) + 1;
+        dp[node] = res;
+        best = max(best, res);
+        // cout << node << ": " <<  dp[node] << endl;
+        return res;
+    }
+    int longestPath(vector<int>& parent, string s) {
+        // map<int, vector<int>> adj;
+        vector<vector<int>> adj(parent.size(), vector<int> (0, 0));
+        vector<int> dp(parent.size(), -1);
+        for(int i = 1; i< parent.size(); i++) {
+            adj[parent[i]].push_back(i);
+            // auto it = adj.find(parent[i]);
+            // if(it == adj.end()) {
+            //     adj.insert(pair<int, vector<int>> (parent[i], {i}));
+            // }else{
+            //     it->second.push_back(i);
+            // }
+        }
+        rec(0, adj, dp, s);
+        return best;
+    }
+};

@@ -1,0 +1,69 @@
+// now comes a part where we need to iterate over each row;
+        for(int i = 1; i < row; i++){ // each row starting with 1
+            // In this each row of dp, we need to excise our logic picking that particular column, as the starting position
+            // we need to loop on all the columns precise in this row
+            // as i told there will be n * m column
+            for(int c1 = 0; c1 < col; c1++){ 
+                for(int c2 = 0; c2 < col; c2++){
+                    // now from every column we need to fill the cube; for all the combinations or all the cell we can reach; with respective robot1 & robot2
+                    // now we need to 1st take the previous value, that we disucssed
+                    int prev = dp[i - 1][c1][c2]; 
+                    if(prev >= 0){ // if that the case, we need to perform our operation, if it is a -ve value it means that we haven't reach yet that particular cell. And above that's why we intialize the whole array with -1
+                        // Now we need to iterate over all the combinations of column that c1 & c2 can be in. For that we had define a direction array at the top
+                        for(int d1: dir){ // for c1 we have the direction "d1" and we iterate over it
+                            col1 = d1 + c1; // and column1 will be d1 + c1
+                            for(int d2: dir){ // for c2 we have the direction "d2" and we iterate over it
+                                col2 = d2 + c2; // and column2 will be d2 + c2
+                            // Now we need to check is the new col1 & col2 are in the range of 0 & col. And for that we need to create a new method, which will check is the new col1 & col2 are in the range
+                                if(inRange(col1, col) && inRange(col2, col)){
+                                    dp[i][col1][col2] = Math.max(dp[i][col1][col2], prev+(col1 == col2 ? grid[i][col1] : (grid[i][col1] + grid[i][col2]))); // if the value are int this range, we need to update the col1 & col2 position in the i'th row
+                                    max = Math.max(max, dp[i][col1][col2]); // we need to update the maximum at each step. Taking max of max value & also the new column that we have filled
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+        return max; // return max at the end
+
+
+
+class Solution {
+public:
+    map<vector<int>, int> dp;
+    int rec(int r1, int c1, int r2, int c2, vector<vector<int>> &grid) {
+     
+         if(r1 >= grid.size() || r1 < 0 || c1 >= grid[0].size() || c1 < 0) {
+            return 0;
+        }
+
+        if(r2 >= grid.size() || r2 < 0 || c2 >= grid[0].size() || c2 < 0) {
+            return 0;
+        }
+
+        auto it = dp.find({r1, c1, r2, c2});
+        if(it != dp.end()) {
+            return it->second;
+        }
+        int res = 0;
+        if(r1 == r2 && c1 == c2) {
+            res += grid[r1][c1];
+        }else{
+            res +=  grid[r1][c1];
+            res+=  grid[r2][c2];
+        }
+        int best = 0;
+        for(int i=-1; i< 2; i++) {
+            for(int j=-1; j< 2; j++) {
+                best = max(rec(r1 + 1, c1 + i, r2+1, c2 + j, grid), best);
+            }
+        }
+        dp.insert(pair<vector<int>, int> ({r1, c1, r2, c2}, best+ res));
+        return res+ best;
+    }
+    int cherryPickup(vector<vector<int>>& grid) {
+        return rec(0, 0, 0, grid[0].size()-1, grid);
+    }
+};

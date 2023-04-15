@@ -1,0 +1,52 @@
+class Solution {
+public:
+//     1926. Nearest Exit from Entrance in Maze
+//     time: 28 minutes, didnt test code against exmaples, didnt use seen vector, didnt get exit conditions right
+    // Runtime: 1094 ms, faster than 5.02% of C++ online submissions for Nearest Exit from Entrance in Maze.
+// Memory Usage: 93.5 MB, less than 5.12% of C++ online submissions for Nearest Exit from Entrance in Maze.
+
+    int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) {
+        queue<vector<int>> q;
+        q.push(entrance);
+        vector<vector<int>> dirs = {{0,1}, {1, 0}, {-1, 0}, {0, -1}};
+        int steps = 0;
+        set<vector<int>> seen;
+        while(q.empty() == false) {
+            int size = q.size();
+            while(size > 0) {
+                vector<int> cell = q.front();
+                q.pop();
+                size--;
+                
+                // if(seen.find(cell) != see.end()) {
+                //     continue;
+                // }
+                seen.insert(cell);
+                
+                if(cell != entrance && 
+                   
+                   ((cell[0] == 0 || cell[0] == maze.size()-1) 
+                   ||  
+                   (cell[1] == 0 || cell[1] == maze[0].size()-1)
+                  )) {
+                    return steps;
+                }
+                
+                for (auto dir: dirs) {
+                    int r = cell[0] + dir[0];
+                    int c = cell[1] + dir[1];
+                    
+//                     cell to expand to, that is inside of matrix
+                    if( r >= 0 && r < maze.size() && c>=0 && c < maze[0].size() && maze[r][c] != '+' && seen.find({r,c}) == seen.end() ) {
+                        q.push({r,c});
+                        // cout << "here" << endl;
+                        seen.insert({r,c});
+                    } 
+                }
+            }
+            // cout << "lvl" << endl;
+            steps++;
+        }
+        return -1;
+    }
+};

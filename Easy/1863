@@ -1,0 +1,21 @@
+class Solution {
+public:
+//     1863. Sum of All Subset XOR Totals
+//     time taken: 7 minutes
+    // Runtime: 4 ms, faster than 71.84% of C++ online submissions for Sum of All Subset XOR Totals.
+// Memory Usage: 7.1 MB, less than 86.42% of C++ online submissions for Sum of All Subset XOR Totals.
+    int res = 0;
+    void rec(int i, int XOR, vector<int> &nums) {
+        if(i >= nums.size()) {
+            res+= XOR;
+            return;
+        }
+        rec(i+1, XOR^nums[i], nums);
+        rec(i+1, XOR, nums);
+    }
+    
+    int subsetXORSum(vector<int>& nums) {
+        rec(0, 0, nums);
+        return res;
+    }
+};

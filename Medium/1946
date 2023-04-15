@@ -1,0 +1,30 @@
+class Solution {
+public:
+    // 1946. Largest Number After Mutating Substring
+//     time taken: 28 minutes, didnt check type of varibles propery was trying to access indeices with char of a number not number itslef.
+    // Lesson: you cannot append anumber to a string, convert number to string, nor convert number to char then append to string 
+    // Runtime: 228 ms, faster than 5.26% of C++ online submissions for Largest Number After Mutating Substring.
+// Memory Usage: 34.8 MB, less than 5.56% of C++ online submissions for Largest Number After Mutating Substring.
+    string maximumNumber(string num, vector<int>& change) {
+//         bool to check for change
+        bool changed = false;
+        
+        string maxNum = "";        
+        int i=0;
+//         loop through all of chars in num
+        while(i < num.size()) {
+            if( (num[i]-'0') < change[num[i] -'0'] && !changed) {
+                changed = true;
+                while(i < num.size() && (num[i]-'0') <= change[num[i] -'0'] ) {
+                    maxNum+= to_string(change[num[i]-'0']);
+                    i++;
+                }
+            }else{
+                maxNum+=num[i]; 
+                i++;
+            }
+        }
+        
+        return maxNum;
+    }
+};

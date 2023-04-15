@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> successfulPairs(vector<int>& spells, vector<int>& potions, long long success) {
+        sort(potions.begin(), potions.end());
+        vector<int> res(spells.size(), 0);
+        int size = potions.size();
+        for(int i=0; i< spells.size(); i++) {
+            long long int target = ceil( success/(1.0*spells[i]) );
+            int l = 0;
+            int r = size-1;
+            while(l < r) {
+                int m = (r-l)/2 + l;
+                if(potions[m] >= target) {
+                    r = m;
+                }else{
+                    l = m+1;
+                }
+            }
+            // number of elements that would create proudct greater than success
+            // long long int firstProduct= (spells[i]% 100000) * (potions[l] % 100000);
+            if(potions[l] >= target ) {
+            // if( firstProduct >= success) {
+                res[i] = size- l;
+            }
+        }
+        return res;
+    }
+};

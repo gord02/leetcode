@@ -1,6 +1,38 @@
 class Solution {
 public:
     // 124. Binary Tree Maximum Path Sum
+//     time taken: 15 minutes, small errors with using wrong var name and forgetting = sign
+    // Runtime: 20 ms, faster than 98.64% of C++ online submissions for Binary Tree Maximum Path Sum.
+// Memory Usage: 28.2 MB, less than 22.17% of C++ online submissions for Binary Tree Maximum Path Sum.
+    int res = INT_MIN;
+    int rec(TreeNode* node) {
+        if(node == nullptr) {
+            return 0;
+        }
+        
+        int left = rec(node->left);
+        int right = rec(node->right);
+        
+        int best = max(node->val, node->val + left);
+        best  = max(best, node->val+right);
+        best = max(best, node->val+ right + left);
+        
+        res = max(best, res);
+        
+        best = node->val;
+        best = max(node->val+left, best);
+        best = max(best, node->val+right);
+        return best;
+    }
+    int maxPathSum(TreeNode* root) {
+        rec(root);
+        return res;
+    }
+};
+
+class Solution {
+public:
+    // 124. Binary Tree Maximum Path Sum
 //     time taken: 26 minutes, didnt think through the problem properly, returned both paths instead of just one 
 //     Runtime: 41 ms, faster than 31.25% of C++ online submissions for Binary Tree Maximum Path Sum.
 // Memory Usage: 28.2 MB, less than 33.91% of C++ online submissions for Binary Tree Maximum Path Sum.

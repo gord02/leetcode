@@ -1,0 +1,59 @@
+class Solution {
+public:
+    // 1704. Determine if String Halves Are Alike
+//     12 minutes 
+    // Runtime: 6 ms, faster than 58.35% of C++ online submissions for Determine if String Halves Are Alike.
+// Memory Usage: 6.8 MB, less than 16.35% of C++ online submissions for Determine if String Halves Are Alike.
+    bool isVowel(char c) {
+        switch(c) {
+                case 'a':
+                    return true;
+                case 'e':
+                    return true;
+                case 'i':
+                     return true;
+                case 'o':
+                      return true;
+                case 'u':
+                     return true;
+                case 'A':
+                    return true;
+                case 'E':
+                   return true;
+                case 'I':
+                     return true;
+                case 'O':
+                      return true;
+                case 'U':
+                    return true;
+        }
+        return false;
+    }
+    
+    bool halvesAreAlike(string s) {
+        string a = s.substr(0, s.size()/2);
+        string b = s.substr(s.size()/2, s.size()/2);
+        
+        int v1 = 0;
+        int v2 = 0;
+        
+        for(char c: a) {
+           if( isVowel(c)) {
+               v1++;
+           }
+        }
+        
+        for(char c: b) {
+           if( isVowel(c)) {
+               v2++;
+           }
+        }
+        
+        if(v1 == v2) {
+            return true;
+        }
+        
+        return false;
+        
+    }
+};

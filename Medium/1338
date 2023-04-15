@@ -1,0 +1,38 @@
+class Solution { 
+public:
+    // 1338. Reduce Array Size to The Half
+//     time taken: 20 minutes many errors, didnt read over code
+    // Runtime: 501 ms, faster than 16.10% of C++ online submissions for Reduce Array Size to The Half.
+// Memory Usage: 82.9 MB, less than 13.94% of C++ online submissions for Reduce Array Size to The Half.
+
+    static bool func(pair<int, int> i, pair<int, int> j) {
+        return i.second < j.second;
+    }
+    int minSetSize(vector<int>& arr) {
+        map<int, int> mapping;
+        for(int i=0 ; i< arr.size(); i++) {
+            auto it = mapping.find(arr[i]);
+            if(it == mapping.end()) {
+                mapping.insert(pair<int, int> (arr[i], 1));
+            }else{
+                it->second++;
+            }
+        }
+        vector<pair<int, int>> values;
+        for(auto pair: mapping) {
+            values.push_back(pair);
+        }
+        sort(values.begin(), values.end(), func);
+        int size = arr.size();
+        int half = arr.size()/2;
+        int count = 0;
+        while(values.size() > 0 && size >half) {
+            int remove = values.back().second;
+            values.pop_back();
+            
+            size -= remove;
+            count++;
+        }
+        return count;
+    }
+};

@@ -1,0 +1,54 @@
+class Solution {
+public:
+// 2492. Minimum Score of a Path Between Two Cities
+// time 30 minutes, careful with typing
+
+
+// imporvements
+// didnt need set, since nodes are from 1 to n, use array
+// BFS would have been faster, no recursion and same logic applies, push 1 and n initially
+    int rec(int node, set<int>&seen, map<int, vector<vector<int>>>&adj) {
+        if(seen.find(node) != seen.end()) {
+            return INT_MAX;
+        }
+        seen.insert(node);
+        int score = INT_MAX;
+        auto it = adj.find(node);
+        if(it != adj.end()) {
+            for(vector<int> path: it->second) {
+                int next = path[0];
+                int dist = path[1];
+                score = min(dist, score);
+                score = min(rec(next, seen, adj), score);
+            }
+        }
+        return score;
+    }
+    int minScore(int n, vector<vector<int>>& roads) {
+        map<int, vector<vector<int>>> adj;
+        for(vector<int> edge: roads) {
+            int a = edge[0];
+            int b = edge[1];
+            int dist = edge[2];
+
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<vector<int>>> (a, {{b, dist }}));
+            }else {
+                it->second.push_back({b, dist});
+            }
+            it = adj.find(b);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<vector<int>>> (b, {{a, dist }}));
+            }else {
+                it->second.push_back({a, dist});
+            }
+        }
+        set<int> seen;
+        // since we are guranteed a path from 1 to n, and we are allowed to revisit nodes including 1 and n, we just need to find edge that is reachable from either 1 and n that is the smallest and get that result and return it
+        int src = rec(1, seen, adj);
+        seen.clear();
+        int dst = rec(n, seen, adj);
+        return min(src, dst);
+    }
+};

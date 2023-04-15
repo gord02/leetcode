@@ -1,0 +1,45 @@
+class Solution {
+public:
+    // 1432. Max Difference You Can Get From Changing an Integer
+    // time : 20 minutes, careless with necessary conditions like non zero and leading zeroes 
+    // Runtime: 16 ms, faster than 6.00% of C++ online submissions for Max Difference You Can Get From Changing an Integer.
+// Memory Usage: 6.4 MB, less than 5.00% of C++ online submissions for Max Difference You Can Get From Changing an Integer.
+    int maxDiff(int num) {
+        vector<int> nums;
+        
+        // char y = (6+'0');
+        // cout << y << endl;
+        
+        for(int i = 0; i<= 9; i++) {
+            for(int j = 0; j<=9; j++) {
+                int x = i;
+                char y = (j+'0');
+                string s = to_string(num);
+                for(int k = 0; k<= s.size(); k++) {
+                    if((s[k] - '0') == x) {
+                        s[k] = y;
+                    }
+                    if((s[k] - '0') == x) {
+                        s[k] = y;
+                    }
+                }
+                bool valid = true;
+//                 if you loop through and encounter a zero before a non zero, in valid number
+                 for(int k = 0; k<= s.size(); k++) {
+                     if(s[k] - '0' == 0) {
+                         valid = false;
+                     }else{
+                         break;
+                     }
+                 }
+                if(valid) {
+                    nums.push_back( stoi(s));
+                }
+            }
+        }
+        
+        sort(nums.begin(), nums.end());
+        // cout << nums[nums.size()-1] << " - " <<  nums[0] << endl;
+        return nums[nums.size()-1] - nums[0];
+    }
+};

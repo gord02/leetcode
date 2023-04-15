@@ -1,3 +1,54 @@
+
+class Solution {
+    // 71. Simplify Path
+    // 28 minutes: error with not having begining '/' and also didnt realize poping empty stack is an error
+    // Runtime: 12 ms, faster than 41.37% of C++ online submissions for Simplify Path.
+// Memory Usage: 9.2 MB, less than 76.29% of C++ online submissions for Simplify Path.
+    
+    public:
+    string simplifyPath(string path) {
+        if(path[path.size()-1] != '/') {
+            path += '/';
+        }
+        stack<string> s;
+        int i = 0;
+        while(i < path.size()) {
+            while(i < path.size() && path[i] == '/'){
+                i++;
+            }
+            int start = i;
+            while(i < path.size() && path[i] != '/') {
+                i++;
+            }
+            string dir = path.substr(start, i-start+1);
+            if(dir == "../") {
+                if(s.empty() == false) {
+                    s.pop();
+                }
+                
+            }
+            else if(dir != "./") {
+                s.push(dir);
+            }
+        }
+        string canPath = "";
+        while(s.empty() == false) {
+            canPath = s.top() + canPath;
+            s.pop();
+        }
+        if(canPath.size() > 0) {
+            canPath.pop_back();
+        }
+        if(canPath == "") {
+            return "/";
+        }
+            // if(path[0] != '/') {
+        canPath = '/' + canPath;
+        // }
+        return canPath;
+    }
+};
+
 // 71. Simplify Path
 // time taken: 34 minutes, many small erorrs in logic, didnt think through thorugly enough
 // Runtime: 7 ms, faster than 70.68% of C++ online submissions for Simplify Path.

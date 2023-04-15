@@ -1,3 +1,47 @@
+
+class Solution {
+public:
+    // 658. Find K Closest Elements
+//     18 minutes, runtime error with k out of bounds, didnt anticapte how prioirty queue would sort everything, didnt sort in the end
+    // Runtime: 1247 ms, faster than 5.06% of C++ online submissions for Find K Closest Elements.
+// Memory Usage: 210.7 MB, less than 7.40% of C++ online submissions for Find K Closest Elements.
+    struct compare{
+        bool operator()(vector<int> i, vector<int> j) {
+            if(i[0] == j[0]) {
+                return i[1] < j[1];
+            }
+            return i[0] < j[0];
+        }
+    };
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        priority_queue<vector<int>, vector<vector<int>>, compare> q;
+        for(int i=0; i< arr.size(); i++) {
+            int close = abs(x-arr[i]);
+            if(q.size() < k) {
+                q.push({close, arr[i]});
+            }else{
+                if(q.top()[0] > close) {
+                    q.pop();
+                    q.push({close, arr[i]});
+                }else if(q.top()[0] == close && q.top()[1] > arr[i]) {
+                     q.pop();
+                    q.push({close, arr[i]});
+                }
+            }
+        }
+        vector<int> res(k, 0);
+        k--;
+        while(q.empty() == false) {
+            int val = q.top()[1];
+            q.pop();
+            res[k] = val;
+            k--;
+        }
+        sort(res.begin(), res.end());
+        return res;
+    }
+};
+
 class Solution {
 public:
     // 658. Find K Closest Elements

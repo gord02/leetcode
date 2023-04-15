@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // 744. Find Smallest Letter Greater Than Target
+//     time 12 mins, many small erros in code(2)
+    // Runtime: 39 ms, faster than 9.16% of C++ online submissions for Find Smallest Letter Greater Than Target.
+// Memory Usage: 15.9 MB, less than 25.68% of C++ online submissions for Find Smallest Letter Greater Than Target.
+    char nextGreatestLetter(vector<char>& letters, char target) {
+        int l = 0;
+        int r = letters.size()-1;
+        while(l < r) {
+            int m = (r-l)/2 + l;
+            if( letters[m] <= target) {
+                l = m+1;
+            }else{
+                r = m;
+            }
+        }
+//         spciecal case for wrapping around
+        if(letters[l] <= target) {
+            return letters[0];
+        }
+        return letters[l];
+    }
+};

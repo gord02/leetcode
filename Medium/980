@@ -1,0 +1,74 @@
+
+class Solution {
+public:
+    vector<vector<int>> moves = {{0,1}, {1,0}, {-1, 0}, {0, -1}};
+    
+    int rec(int r, int c, int zs, vector<vector<int>> &grid, map<vector<int>, int> &dp, set<vector<int>> seen) {
+        cout<< r << " " << c << " " << zs  << endl;
+
+        // already visited cell
+        if(seen.find({r,c}) != seen.end() ) {
+            cout << "seen " << r << " " << c << " " << zs  << endl;
+            return 0;
+        }
+        seen.insert({r,c});
+
+
+        // cout << "here" << endl;
+        // base cases
+        if(grid[r][c] == 2 && zs == 0) {
+            cout << "res" << endl;
+
+            return 1;
+        }
+        if(grid[r][c] == 2 || grid[r][c] == -1) {
+            return 0;
+        }
+
+        // // memoization CANNOT MEMMOIZE SINCE IT IS TRAVERSING ALL PATHS, WE WANT TO FIND ALL PATHS TO GET TO TARGET SO NO OVERLAPPING SUBPROBLEMS!!!!!
+        // if(dp.find({r,c,zs}) != dp.end()) {
+        //     cout << "find" << endl;
+        //     return dp.find({r,c,zs})->second;
+        // }
+        
+        // cout<< r << " " << c << " " << zs  << endl;
+
+        // solution to sub-problem
+        int res = 0;
+        for(vector<int> move: moves) {
+            int nR = r + move[0];
+            int nC = c + move[1];
+            if(nR >=0 && nR <grid.size() && nC>=0 && nC < grid[0].size() && seen.find({nR, nC}) == seen.end()) {
+                if(grid[r][c] == 0) {
+                    res+= rec(nR, nC, zs-1, grid, dp, seen);
+                }else{
+                    res+= rec(nR, nC, zs, grid, dp, seen);
+                }
+            }
+        }
+        // insert to map
+        vector<int> state = {r,c, zs};
+        dp.insert(make_pair(state, res));
+        return res;
+    }
+    int uniquePathsIII(vector<vector<int>>& grid) {
+        // vector<vector<vector<int> > > dp(vector<vector<int>>)
+        map<vector<int>, int> dp;
+        int count = 0;
+        int r = 0;
+        int c = 0;
+        for(int i=0; i<grid.size(); i++) {
+            for(int j = 0; j<grid[i].size(); j++) {
+                if(grid[i][j] == 0) {
+                    count++;
+                }
+                if(grid[i][j] == 1) {
+                    r = i;
+                    c = j;
+                }
+            } 
+        }
+        // set<vector<int>> seen;
+        return rec(r,c, count, grid, dp, {});
+    }
+};

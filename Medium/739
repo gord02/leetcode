@@ -1,5 +1,29 @@
 class Solution {
 public:
+// 739. Daily Temperatures
+// time taken: 7 minutes
+
+// Thought process:
+// BF: from each index, scan right to find first larger element than current. This creates repeated checking of some indices inbetween
+// optimized: find each indexes next greatest, if we havent found the next grearest for any elemnt yet then keep these values(in stack) in a decreasing order, since the smallest elemnts we find also need to have their largest also so as soon as we find element that breaks this pattern we can start taking elemnts out of the stack since this is there next greatest
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        stack<int> s;
+        vector<int> res (temperatures.size(), 0);
+        for(int i=0; i< temperatures.size(); i++) {
+            while(s.size() > 0 && temperatures[s.top()] <temperatures[i]) {
+                int j = s.top();
+                s.pop();
+                // distance from temperature in stack from the closest largest temp to its right
+                res[j] = i-j;
+            }
+            s.push(i);
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
     // 739. Daily Temperatures
 //     time taken: 15 minutes
 //     Runtime: 189 ms, faster than 89.06% of C++ online submissions for Daily Temperatures.

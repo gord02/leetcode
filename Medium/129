@@ -1,0 +1,30 @@
+
+class Solution {
+public:
+// time: 10 minutes
+// Runtime
+// 0 ms
+// Beats
+// 100%
+// Memory
+// 9.1 MB
+// Beats
+// 87.90%
+    void rec(TreeNode* node, int n, int &sum) {
+        if(node == nullptr) {
+            return;
+        }
+        n = n*10 + node->val;
+        rec(node->left, n, sum);
+        rec(node->right, n, sum);
+
+        if(node->left == nullptr && node->right == nullptr) {
+            sum += n;
+        }
+    }
+    int sumNumbers(TreeNode* root) {
+        int sum = 0;
+        rec(root, 0, sum);
+        return sum;
+    }
+};

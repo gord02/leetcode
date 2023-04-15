@@ -1,3 +1,135 @@
+class Solution {
+public:
+// Runtime
+// 2 ms
+// Beats
+// 76.4%
+// Memory
+// 7.4 MB
+// Beats
+// 29.83%
+
+// 376. Wiggle Subsequence
+// time taken: 18 minutes
+    int wiggleMaxLength(vector<int>& nums) {
+        vector<int> startNeg;
+        vector<int> startPos;
+// seqeunce either start with neg or positive, optimal solution must start with either and builds matain the proper sequecne
+        for(int i=1; i< nums.size(); i++) {
+            int diff = nums[i] - nums[i-1];
+            // starting seqeunce
+            if(startPos.size() == 0 && diff > 0) {
+                startPos.push_back(diff);
+            }
+            // adding to seqeuence
+            if(startPos.size() != 0) {
+                if ( (startPos.back() < 0 && diff > 0) || (startPos.back() > 0 && diff < 0) ) {
+                    startPos.push_back(diff);
+                }
+            } 
+        }
+
+        for(int i=1; i< nums.size(); i++) {
+            int diff = nums[i] - nums[i-1];
+            // starting seqeunce
+            if(startNeg.size() == 0 && diff < 0) {
+                startNeg.push_back(diff);
+            }
+            // adding to seqeuence
+            if(startNeg.size() != 0) {
+                if ( (startNeg.back() < 0 && diff > 0) || (startNeg.back() > 0 && diff < 0) ) {
+                    startNeg.push_back(diff);
+                }
+            } 
+        }
+
+        return 1+ max(startNeg.size(), startPos.size());
+
+    }
+};
+
+
+// solution using montonic statck expect we maintain an alternating increading and decresing numbers based on their wiggle
+class Solution{
+    public:
+    map< vector<int>, int> dp;
+    int backTrack(int i, int last, int lastDiff, vector<int> &nums) {
+//         beyond array
+        if(i >= nums.size()) {
+            return 0;
+        }
+//         solved subproblem 
+        if( dp.find({i, lastDiff}) != dp.end()) {
+            return dp.find({i, lastDiff})->second;
+        }
+        
+        int res = 0;
+        int diff = lastDiff;
+        if(last == 2222) {
+             res += 1 + backTrack(i+1, nums[i], lastDiff, nums);
+        } 
+           // can't choose current
+        else if(nums[i] == last) {
+           res = backTrack(i+1, last, lastDiff, nums);
+        }
+        else if ( (nums[i] - last < 0 && lastDiff < 0) || (nums[i] - last > 0 && lastDiff > 0) ) {
+            res = backTrack(i+1, last, lastDiff, nums);
+        }
+        
+        else{
+//             have choice between taking or not taking current number
+            int newDiff = 1;
+            if(nums[i] - last < 0) {
+                newDiff = -1;
+            }
+            int without = backTrack(i+1, last, lastDiff, nums);
+      
+            int with = 1 + backTrack(i+1, nums[i], newDiff, nums);
+            res = max(with, without);
+            if(res == with) {
+                diff = newDiff;
+            }
+            
+        }
+        dp.insert(pair<vector<int>, int> ({i, diff}, res));
+        return res;
+    }
+        int wiggleMaxLength(vector<int>& nums) {
+            // return backTrack(0, 2222, 2222, nums);
+            stack<int> s;
+            for(int i=0; i< nums.size(); i++) {
+                if(s.size() < 2) {
+                    if(s.size() == 1) {
+                        if(s.top() == nums[i]) {
+                            s.pop();
+                        }
+                    }
+                    s.push(nums[i]);
+                }else{
+                    int last = s.top();
+                    s.pop();
+                    int second = s.top();
+                    s.push(last);
+                    
+                    if(last - second < 0 && nums[i] - last < 0) {
+                        s.pop();
+                    }
+                    else if(nums[i] == last) {
+                        s.pop();
+                    }
+                    else if( last - second == 0 && nums[i] - last == 0) {
+                        s.pop();
+                    }
+                    else if( last - second > 0 && nums[i] - last > 0) {
+                        s.pop();
+                    }
+                    s.push(nums[i]);
+                }
+            }
+            return s.size();
+        }
+};
+
 // 376. Wiggle Subsequence
 // time takne: 38 minutes, errors wiht logic that I just didnt consider, confused scenario with base case, but overall knew what to do since it was recusion take or dont take, then memoized
 // know how to do it roughly, was out of pratice with dp recusion, just need to brush up on these tyoes 

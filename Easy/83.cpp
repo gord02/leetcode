@@ -1,3 +1,34 @@
+class Solution {
+public:
+//     83. Remove Duplicates from Sorted List
+//     time taken: 21 minutes
+    // Runtime: 22 ms, faster than 29.94% of C++ online submissions for Remove Duplicates from Sorted List.
+// Memory Usage: 11.7 MB, less than 36.39% of C++ online submissions for Remove Duplicates from Sorted List.
+
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode* last = nullptr;
+        ListNode* prev = nullptr;
+        ListNode* dHead = new ListNode(0);
+        dHead->next = head;
+        while(head != nullptr) {
+            if(prev != nullptr && prev->val == head->val) {
+                 prev->next = nullptr;
+                if(last != nullptr) {
+                    last->next = head;                 
+                }else{
+//                     at the start of the list
+                    dHead->next = head;
+                }
+            }else{
+                last = prev;
+            }
+            prev = head;
+            head= head->next;
+        }
+        return dHead->next;
+    }
+};
+
 // 83. Remove Duplicates from Sorted List
 // TIME TAKEN: 44 minutes
 // very fast and space efficient 

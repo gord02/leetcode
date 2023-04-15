@@ -1,5 +1,44 @@
 class Solution {
 public:
+//     239. Sliding Window Maximum
+//     time taken: 37 minutes, many small errors in execution, use indices in deque, refine how to remove from dqeue, indice based. 
+    // Runtime: 694 ms, faster than 38.97% of C++ online submissions for Sliding Window Maximum.
+// Memory Usage: 134.7 MB, less than 61.46% of C++ online submissions for Sliding Window Maximum.
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> d; // sotres indices!!!
+        int l = 0;
+        vector<int> res;
+        for(int r = 0; r< nums.size(); r++) {
+            
+            // while( d.empty() == false && nums[d.front()] <= nums[r]) {
+            //     d.pop_front();
+            // }
+            
+            while( d.empty() == false && nums[d.back()] <= nums[r]) {
+                d.pop_back();
+            }
+            d.push_back(r);
+            while(d.empty() == false && r - k + 1 > d.front()) {
+                d.pop_front();
+            }
+            // if( r - l +1 > k) {
+            // // if(d.size() > k) {
+            //     // cout << "remove " << r << " " << l << endl;
+            //     d.pop_front();
+            //     l++;
+            // }
+            // cout << r << " " << d.size() << endl;
+            if( r >= k - 1 && d.empty() == false) {
+                // cout << "here at: " << r << endl;
+                res.push_back(nums[d.front()]);
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
     // 239. Sliding Window Maximum
 //     time taken: 38 minutes, we try to maintain larget current element at front of queue but smaller numbers that are pushed behind the max should also maintain the property so that there isnt a smaller value pushed between to local maxs
 //     Runtime: 465 ms, faster than 33.50% of C++ online submissions for Sliding Window Maximum.

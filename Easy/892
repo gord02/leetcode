@@ -1,0 +1,62 @@
+class Solution {
+public:
+    // 892. Surface Area of 3D Shapes
+//     22 minutes, failed to considered height of zero 
+    // Runtime: 27 ms, faster than 6.36% of C++ online submissions for Surface Area of 3D Shapes.
+// Memory Usage: 9.4 MB, less than 13.07% of C++ online submissions for Surface Area of 3D Shapes.
+    int surfaceArea(vector<vector<int>>& grid) {
+        int n = grid.size();
+        // int res = 2*(n*n);
+        int res = 0;
+         for(int i=0; i< grid.size(); i++) {
+               for(int j=0; j< grid[i].size(); j++) {
+                   if(grid[i][j] > 0) {
+                       res++;
+                   }
+               }
+         }
+        res= res*2;
+        
+        
+        for(int i=0; i< grid.size(); i++) {
+//         for each row
+            int last = 0;
+//         left side
+            for(int j=0; j< grid[i].size(); j++) {
+                if(last <= grid[i][j]) {
+                    res+= grid[i][j]-last;
+                }
+                last = grid[i][j];
+            }
+            
+//         right side
+            last = 0;
+            for(int j=grid[i].size()-1;j>=0; j--) {
+                if(last <= grid[i][j]) {
+                    res+= grid[i][j]-last;
+                }
+                last = grid[i][j];
+            }
+        }
+        
+        for(int j = 0; j< grid[0].size(); j++) {
+            int last = 0;
+//             front 
+            for(int i=0; i< grid.size(); i++) {
+                if(last <= grid[i][j]) {
+                    res+= grid[i][j]-last;
+                }
+                last = grid[i][j];
+            }
+            
+            last = 0;
+            for(int i=grid.size()-1; i>=0; i--) {
+                if(last <= grid[i][j]) {
+                    res+= grid[i][j]-last;
+                }
+                last = grid[i][j];
+            } 
+        }
+        return res;
+    }
+};

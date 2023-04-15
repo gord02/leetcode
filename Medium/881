@@ -1,0 +1,32 @@
+class Solution {
+public:
+// 881. Boats to Save People
+// time: 10 minutes
+// Runtime
+// 83 ms
+// Beats
+// 81.96%
+// Memory
+// 41.9 MB
+// Beats
+// 59.84%
+    int numRescueBoats(vector<int>& people, int limit) {
+        // intution: match smallest number with largest number needed to put in boat, if sum > lim then since the array is sorted, the larger number will not match with any other number and thus must be placed in boat all by themselves, else, the two can fit in one boat together. We do not match an index again so decrement
+        sort(people.begin(), people.end());
+        int l = 0;
+        int r = people.size()-1;
+        int res = 0;
+        while(l <=r) {
+            if(people[l] + people[r] > limit) {
+                // only the r person can fit in one boat, so put them there by themselves
+                r--;
+            }else{
+                // both elements can fit into one boat, so we dont need to match them again
+                r--;
+                l++;
+            }
+            res++;
+        }
+        return res;
+    }
+};

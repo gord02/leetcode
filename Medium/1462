@@ -1,0 +1,57 @@
+class Solution {
+public:
+// 1462. Course Schedule IV
+// Runtime
+// 268 ms
+// Beats
+// 63.20%
+// Memory
+// 70.9 MB
+// Beats
+// 29.29%
+    vector<vector<int>> dp;
+    bool rec(int node, int target, map<int, vector<int>> &adj) {
+        if(node == target) {
+            return true;
+        }
+        if(dp[node][target] != -1) {
+            return dp[node][target];
+        }
+        auto it = adj.find(node);
+        bool found = false;
+        if(it != adj.end()) {
+            for(int next: it->second) {
+                found = found || rec(next, target, adj);
+            }
+        }
+        dp[node][target]= found;
+        return found;
+    }
+    vector<bool> checkIfPrerequisite(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>>& queries) {
+        map<int, vector<int>> adj;
+        vector<vector<int>> dp1(numCourses+1, vector<int> (numCourses+1, -1));
+        dp = dp1;
+        for(auto edge: prerequisites) {
+            int a = edge[0];
+            int b = edge[1];
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<int>> (a, {b}));
+            }else{
+                it->second.push_back(b);
+            }
+        }
+        vector<bool> res;
+        for(auto q: queries) {
+            int start = q[0];
+            int end = q[1];
+            if(start == end) {
+                res.push_back(false);
+            }else{
+                bool found = rec(start, end, adj);
+                res.push_back(found);
+            }
+        }
+        return res;
+    }
+};

@@ -1,0 +1,27 @@
+
+ class Solution {
+public:
+    // n^2 apporach, TLE
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+        int n = gas.size() ;
+       for(int i=0; i< gas.size(); i++) {
+           int j = 0;
+           int g = 0;
+           bool loop = false;
+           
+           while(true) {
+               if(i + j % n == i && loop) {
+                   return i;
+               }
+    //    -----     //    check if we can reach i+j, checking next position, using gas from current position 
+                if( g + gas[(i+j) % n] <  cost[(i+j) % n]) {
+                   break;
+                }
+                g = g + gas[(i+j) % n] - cost[(i+j) % n];
+                j++;
+                loop = true;
+           }
+       }
+       return -1;
+    }
+};

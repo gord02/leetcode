@@ -1,3 +1,110 @@
+
+// 1091. Shortest Path in Binary Matrix
+// A* implmentation
+// Runtime: 1713 ms, faster than 5.01% of C++ online submissions for Shortest Path in Binary Matrix.
+// Memory Usage: 235.1 MB, less than 5.38% of C++ online submissions for Shortest Path in Binary Matrix.
+class Solution{
+    public:
+    struct compare{
+        bool operator()(vector<double> i, vector<double> j) {
+            return i[0] > j[0];
+        }
+    };
+    
+    vector<vector<int>> dirs{{0,1}, {1,0}, {-1, 0}, {0, -1}, {1,1}, {-1,-1}, {-1,1}, {1,-1}};
+    
+       int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+           vector<vector<int>> bestPath(grid.size(), vector<int> (grid[0].size(), INT_MAX));
+           priority_queue<vector<double>, vector<vector<double>>, compare>q; // min priority_queue
+           if(grid[0][0] == 1) {
+               return -1;
+           }else{
+               bestPath[0][0] = 1;
+               q.push({1,1,0,0});
+            }
+           
+           while(q.empty() == false) {
+               int curPath = q.top()[1];
+               int r = q.top()[2];
+               int c = q.top()[3];
+               q.pop();
+               
+               if(r == grid.size()-1 && c == grid[0].size() -1) {
+                   return curPath; // optimized way to get here
+               }
+               for(vector<int> dir: dirs) {
+//                    check if we can relax, relax if valid and grid has 0 value
+                   int i = r + dir[0];
+                   int j = c + dir[1];
+                   if(i >=0 && i < grid.size() && j>=0 && j <grid[0].size() && grid[i][j] == 0) {
+                       if(curPath + 1 < bestPath[i][j]) {
+                           bestPath[i][j] = curPath + 1;
+//                            euclidean disntace since 8 directions are allowed
+                           double h = sqrt( (r-i)*(r-i) + (c-j)*(c-j) );
+                           
+                           q.push({curPath + 1 + h,(curPath + 1)*1.0, i*1.0, j*1.0});
+                       }
+                   }
+               }
+           }
+           
+           return -1;
+           
+       }
+};
+
+// 1091. Shortest Path in Binary Matrix
+// time takne to implement only: 14 minutes
+// Runtime: 1884 ms, faster than 5.01% of C++ online submissions for Shortest Path in Binary Matrix.
+// Memory Usage: 186.9 MB, less than 5.38% of C++ online submissions for Shortest Path in Binary Matrix.
+class Solution{
+    public:
+    struct compare{
+        bool operator()(vector<int> i, vector<int> j) {
+            return i[0] > j[0];
+        }
+    };
+    
+    vector<vector<int>> dirs{{0,1}, {1,0}, {-1, 0}, {0, -1}, {1,1}, {-1,-1}, {-1,1}, {1,-1}};
+    
+       int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+           vector<vector<int>> bestPath(grid.size(), vector<int> (grid[0].size(), INT_MAX));
+           priority_queue<vector<int>, vector<vector<int>>, compare>q; // min priority_queue
+           if(grid[0][0] == 1) {
+               return -1;
+           }else{
+               bestPath[0][0] = 1;
+               q.push({1,0,0});
+            }
+           
+           while(q.empty() == false) {
+               int curPath = q.top()[0];
+               int r = q.top()[1];
+               int c = q.top()[2];
+               q.pop();
+               
+               if(r == grid.size()-1 && c == grid[0].size() -1) {
+                   return curPath; // optimized way to get here
+               }
+               for(vector<int> dir: dirs) {
+//                    check if we can relax, relax if valid and grid has 0 value
+                   int i = r + dir[0];
+                   int j = c + dir[1];
+                   if(i >=0 && i < grid.size() && j>=0 && j <grid[0].size() && grid[i][j] == 0) {
+                       if(curPath + 1 < bestPath[i][j]) {
+                           bestPath[i][j] = curPath + 1;
+                            grid[i][j] = 1; // prevents you for revisiting the same zero mutpiple times fron the same current position
+                           q.push({curPath + 1, i, j});
+                       }
+                   }
+               }
+           }
+           
+           return -1;
+           
+       }
+};
+
 // impovred runtime: dont use set, use n^n boolean visited grid and bfs
 
 class Solution {

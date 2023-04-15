@@ -1,5 +1,39 @@
 class Solution {
 public:
+// careful with typing variable names
+    int numUniqueEmails(vector<string>& emails) {
+        set<string> uniq;
+        for(string str: emails) {
+            string newStr = "";
+            int i =0;
+            // loop until @
+            while(i < str.size() && str[i] != '@') {
+                if(str[i] == '+')  {
+                    break;
+                }
+                if(str[i] != '.')  {
+                    newStr += str[i];
+                }
+                i++;
+            }
+            // get i to @ if not there(resulting from a break)
+          while(i < str.size() && str[i] != '@') {
+            i++;
+          }
+
+            // loop to end of string
+            while(i < str.size()) {
+                newStr += str[i];
+                i++;
+            }
+            uniq.insert(newStr);
+        }
+        return uniq.size();
+    }
+};
+
+class Solution {
+public:
     // 929. Unique Email Addresses
 //     26 minutes
 //     Runtime: 43 ms, faster than 24.30% of C++ online submissions for Unique Email Addresses.

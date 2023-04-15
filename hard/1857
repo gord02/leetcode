@@ -1,0 +1,60 @@
+// class Solution {
+
+//     public:
+//     unordered_map<int, vector<int>> adj;
+//     unordered_set<int> seen;
+//     int largest = 0;
+//     bool cycle = false;
+//     // void dfs(int i, string &colors, vector<int> chars, int last) {
+//     void dfs(int i, string &colors, vector<int> chars) {
+//         if(seen.find(i) != seen.end()) {
+//             cycle = true; // visitng already seen node
+//             return;
+//         }
+//         seen.insert(i);
+//         chars[colors[i]-'a']++;
+
+//         largest = max(largest, chars[colors[i]-'a'] );
+
+//         auto it = adj.find(i); 
+        
+//         if(it != adj.end() && it->second.size() != 0) {
+//             for(int next: it->second) {
+//                 dfs(next, colors, chars);
+//             }
+//         }
+//         // backtrakcing
+//         chars[colors[i]-'a']--;
+//         seen.erase(i);
+//     }
+    
+//     int largestPathValue(string colors, vector<vector<int>>& edges) {
+        
+// //         mapping
+//         for(int i=0; i< edges.size(); i++) {
+//             int a = edges[i][0];
+//             int b = edges[i][1];
+            
+//             auto it = adj.find(a);
+//             if(it == adj.end()) {
+//                 adj.insert(pair<int, vector<int>> (a, {b}));
+//             }else{
+//                 it->second.push_back(b);
+//             }
+//         }
+        
+//         unordered_set<int> init;
+        
+// //         we dont have starting node, also graph might not be fully conneceted
+//         for(int i=0; i< colors.size(); i++) {
+//             vector<int> chars(26, 0);
+//             dfs(i, colors, chars);
+//             if(cycle) {
+//                 return -1;
+//             }
+//                 //         reset after each dfs
+//             seen = init;
+//         }
+//         return largest;
+//     }
+// };

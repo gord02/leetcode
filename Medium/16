@@ -1,0 +1,32 @@
+class Solution {
+public:
+    // 16. 3Sum Closest
+//     time taken: 17 minutes, didnt chose arbitraryl large enough number 
+    // Runtime: 605 ms, faster than 29.02% of C++ online submissions for 3Sum Closest.
+// Memory Usage: 16.3 MB, less than 86.06% of C++ online submissions for 3Sum Closest.
+    int threeSumClosest(vector<int>& nums, int target) {
+        int bestSum = 1000000;
+        sort(nums.begin(), nums.end());
+        for(int i=0; i+2 < nums.size(); i++) {
+            int l = i+1; 
+            int r = nums.size()-1;
+            while(l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+                if( abs(sum - target) < abs(bestSum - target) ) {
+                    bestSum = sum;
+                }
+                if(sum == target) {
+                    l++;
+                    r--;
+                }
+                else if(sum < target) {
+                    l++;
+                }
+                else{
+                    r--;
+                }
+            }
+        }
+        return bestSum;
+    }
+};

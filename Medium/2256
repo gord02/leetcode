@@ -1,0 +1,36 @@
+class Solution {
+public:
+    // 2256. Minimum Average Difference
+//     time taken: 25 minutes 
+    // Runtime: 360 ms, faster than 15.96% of C++ online submissions for Minimum Average Difference.
+// Memory Usage: 84.8 MB, less than 28.51% of C++ online submissions for Minimum Average Difference.
+    int minimumAverageDifference(vector<int>& nums) {
+        vector<long> sum(nums.size(), 0);
+        int n = nums.size();
+        sum[0] = nums[0];
+        for(int i=1; i< nums.size(); i++) {
+            sum[i] = sum[i-1] + nums[i];
+        }
+        int sm_ind = 0;
+        int sm_diff = INT_MAX;
+        
+        for(int i=0; i< sum.size()-1; i++) {
+            int avg1 = sum[i]/ (i+1);
+            int avg2 = (sum[n-1] - sum[i])/ (n-i-1) ;
+            
+            int diff = abs(avg1 - avg2);
+            if(diff < sm_diff) {
+                sm_diff = diff;
+                sm_ind = i;
+            }
+        }
+        
+        int lastDiff = sum[n-1]/n;
+        if(lastDiff < sm_diff) {
+                sm_diff = lastDiff;
+                sm_ind = n-1;
+        }
+        
+        return sm_ind;
+    }
+};

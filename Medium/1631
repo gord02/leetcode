@@ -1,0 +1,43 @@
+class Solution {
+public:
+//     time taken: 33 minutes -> TLE
+//     didnt update value in cellBest properly, confused this set with why I was tkaing the largest of abs into q
+    vector<vector<int>> dirs {{0,1}, {1,0}, {-1,0}, {0,-1}};
+    struct compare{
+        bool operator()(vector<int> i, vector<int> j) {
+            return i[0] > j[0];
+        }
+    };
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        // set<vecotr<int>> seen;
+        priority_queue<vector<int>, vector<vector<int>>, compare> q;
+        vector<vector<int>> cellBest(heights.size(), vector<int>(heights[0].size(), INT_MAX));
+        cellBest[0][0] = 0;
+        q.push({0, 0, 0});
+        while(q.empty() == false) {
+            int curRow = q.top()[1]; 
+            int curCol = q.top()[2]; 
+            int curDiff = q.top()[0]; 
+            q.pop();
+            
+            if(curRow == heights.size()-1 && curCol == heights[0].size()-1) {
+                return curDiff;
+            }
+            
+//             relaxation
+            for(auto dir: dirs) {
+                int r = curRow + dir[0];
+                int c = curCol + dir[1];
+                
+                if(r>=0 && r<heights.size() && c>=0 && c< heights[0].size()) {
+                    int diff = abs(heights[r][c] - heights[curRow][curCol]);
+                    if(diff < cellBest[r][c]) {
+                        q.push({ max(curDiff,diff), r, c});
+                         cellBest[r][c] = diff;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};

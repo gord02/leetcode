@@ -1,0 +1,45 @@
+class Solution {
+public:
+    // 1162. As Far from Land as Possible
+    // 27 minutes
+    vector<vector<int>> dirs{{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+    int maxDistance(vector<vector<int>>& grid) {
+        queue<vector<int>> q;
+        int dist = -1;
+        for(int i=0; i< grid.size(); i++) {
+            for(int j=0; j< grid[i].size(); j++) {
+                if(grid[i][j] == 1) {
+                    q.push({i, j});
+                }
+            }
+        }
+        int lvl = 2;
+        while(q.size() != 0) {
+            int lvl_size = q.size();
+            while(lvl_size > 0) {
+                lvl_size--;
+                vector<int> cell = q.front();
+                int row = cell[0];
+                int col = cell[1];
+                q.pop();
+
+                for(auto dir: dirs) {
+                    int r = row + dir[0];
+                    int c = col + dir[1];
+
+                    if(r>=0 && r<grid.size() && c>=0 && c< grid[0].size() ) {
+                        // if(grid[r][c] == 0 || grid[r][c] > lvl) {
+                        if(grid[r][c] == 0) { // we will never have to update a cell since the closets land mass to any water cell will be reach it in the minimum dist possible before any other farther away cell
+                            grid[r][c] = lvl;
+                            q.push({r, c});
+                            dist = max(dist, lvl-1);
+                        }
+                    }
+                }
+            }
+            lvl++;
+        }
+
+        return dist;
+    }
+};

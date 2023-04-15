@@ -1,5 +1,54 @@
 class Solution {
 public:
+    // 139. Word Break
+//     time taken: 21 minutes
+//     DIDN'T MEMOIZE!!!!!! repeated function calls at same index!!!!! 
+//     jumped in also
+    // Runtime: 48 ms, faster than 18.31% of C++ online submissions for Word Break.
+// Memory Usage: 18.9 MB, less than 10.76% of C++ online submissions for Word Break.
+
+    set<string> words;
+    vector<int> dp;
+    
+    bool rec(int i, string s) {
+        if(i>=s.size()) {
+            return true;
+        }
+        
+        if(dp[i] != -1) {
+            return dp[i];
+        }
+        
+        for(int j=1; j<= s.size(); j++) {
+            string subS = s.substr(i, j);
+            
+            if(words.find(subS) != words.end()) {
+                bool res = rec(i+j, s);
+//                 found way to break into words all found in wordDict
+                if(res) {
+                     dp[i] = 1;
+                    return res;
+                }
+            }
+        }
+        dp[i] = 0;
+        
+        return false;
+    }
+    
+    bool wordBreak(string s, vector<string>& wordDict) {
+        for(string word: wordDict) {
+            words.insert(word);
+        }
+        vector<int> dp_init(s.size(), -1);
+        dp = dp_init;
+        return rec(0, s);
+        
+    }
+};
+
+class Solution {
+public:
     // Given an array of length n, there are n+1 ways/intervals to partition it into two parts. Each interval has two choices - split or not. In the worse case, we will have to check all possibilities, which becomes O(2^(n+1)) -> O(2^n). This analysis is similar to palindrome partitioning
     map<string, int>dict;
     bool backTrack(string &s, int i){

@@ -1,0 +1,45 @@
+class Solution {
+public:
+    // 410. Split Array Largest Sum
+//     time: 26 minutes, needed hint towards binary search, took time to fix bugs in code(used m as vairble name when already given AND didnt realizing its m subgroups, not division, subtract by 1)
+//     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Split Array Largest Sum.
+// Memory Usage: 7.3 MB, less than 35.94% of C++ online submissions for Split Array Largest Sum.
+    int splitArray(vector<int>& nums, int m) {
+        int lower = 0;
+        int upper = 0;
+        for(int i=0; i< nums.size(); i++) {
+            lower = max(lower, nums[i]);
+            upper += nums[i];
+        }
+        
+        while(lower < upper) {
+            int mid = (upper-lower)/2 + lower;
+            // cout << "mid: " << mid << endl;
+            int sum = nums[0];
+            int breaks = m-1;
+            int valid = true;
+            
+            for(int i=1; i< nums.size(); i++) {
+                if(sum + nums[i] > mid) {
+                    if(breaks > 0) {
+                        sum = 0;
+                        breaks--;
+                    }
+                }
+                sum+= nums[i];
+                if(sum > mid) {
+                    valid = false;
+                    break;
+                }
+            }
+            if(valid) {
+//                 try to find lower 
+                upper = mid;
+            }else{
+//              too small of a largest sum apporixmation
+                lower = mid+1;
+            }
+        }
+        return lower;
+    }
+};

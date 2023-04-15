@@ -1,3 +1,44 @@
+  class Solution {
+public:
+//     821. Shortest Distance to a Character
+//     time: 13 minutes 
+// the character c is either to the left or right of element, use stack since 
+    // Runtime: 3 ms, faster than 83.49% of C++ online submissions for Shortest Distance to a Character.
+// Memory Usage: 7 MB, less than 15.49% of C++ online submissions for Shortest Distance to a Character.
+    vector<int> shortestToChar(string s, char c) {
+        stack<int> st;
+//         will be overwrote
+        vector<int> res(s.size(), INT_MAX);
+        
+        for(int i = 0; i< s.size(); i++) {
+            st.push(i);
+            if(s[i] == c) {
+                while(st.size() > 0) {
+                    int j = st.top();
+                    st.pop();
+                    res[j] = min( abs(i-j), res[j]);
+                }
+            }
+        }
+        stack<int> st2;
+        st = st2;
+
+        for(int i = s.size()-1; i>=0; i--) {
+            st.push(i);
+            if(s[i] == c) {
+                while(st.size() > 0) {
+                    int j = st.top();
+                    st.pop();
+                    res[j] = min( abs(i-j), res[j]);
+                }
+            }
+        }
+        
+        return res;
+    }
+};
+
+  
   // 821. Shortest Distance to a Character
 //     Time taken: spent seven minutes trying to come up with more optimzited version to no avail, realized i was asked to compute the distance from c for each indeex vaules in s therefore I would need to iterate through every value anyway so went with burte force method
 //     Runtime: 4 ms, faster than 62.63% of C++ Memory Usage: 6.8 MB, less than 12.42%

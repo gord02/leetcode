@@ -1,0 +1,76 @@
+
+class Solution {
+public:
+// 2326. Spiral Matrix IV
+// time taken: 30 minutes 
+// Beats
+// 37.92%
+// Memory
+// 127.9 MB
+// Beats
+// 77.70%
+    vector<vector<int>> spiralMatrix(int m, int n, ListNode* head) {
+        vector<vector<int>> grid(m, vector<int> (n, -1));
+
+        int topR = 0;
+        int bottomR = m-1;
+        int leftC = 0;
+        int rightC = n-1;
+
+        int r = 0;
+        int c = 0;
+        bool empty = false;
+
+        while(head != nullptr) {
+
+            // move right
+            while(c <= rightC) {
+                if(head == nullptr) {
+                    return grid;
+                }
+                grid[r][c] = head->val;
+
+                head = head->next;
+                c++;
+            }
+            c = rightC;
+            topR++;
+            r = topR;
+            while(r <= bottomR) {
+                if(head == nullptr) {
+                    return grid;
+                }
+                grid[r][c] = head->val;
+                r++;
+                head = head->next;
+            }
+            r = bottomR;
+            rightC--;
+            c = rightC;
+
+            while(c >= leftC) {
+                if(head == nullptr) {
+                    return grid;
+                }
+                grid[r][c] = head->val;
+                c--;
+                head = head->next;
+            }
+            c = leftC;
+            bottomR--;
+            r= bottomR;
+            while(r >= topR) {
+                if(head == nullptr) {
+                    return grid;
+                }
+                grid[r][c] = head->val;
+                r--;
+                head = head->next;
+            }
+            r = topR;
+            leftC++;
+            c = leftC;
+        }
+        return grid;
+    }
+};

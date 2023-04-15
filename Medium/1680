@@ -1,0 +1,38 @@
+class Solution {
+public:
+//     didnt do if else for adding to binary represtation propery, modfied for loop itertor varibale leading to infinite loop
+    int concatenatedBinary(int n) {
+        long long sum = 0;
+        string res = "";
+        for(int x = 1; x<= n; x++) {
+            int i = 0;
+            while( pow(2, i) <= x ) {
+                i++;
+            }
+            i--;
+            int num = x;
+            // cout << "power: " << i << endl;
+            while( i >= 0) {
+                if(num >= pow(2, i)) {
+                    num = num - pow(2,i);
+                    res+= "1";
+                }else{
+                    res+= "0";
+                }
+                i--;
+            } 
+            // cout << res << endl;
+        }
+        
+        int i = 0;
+        while(res != "") {
+            if(res[res.size()-1] == '1') {
+                sum+= pow(2, i);
+                sum = sum % 1000000007;
+            }
+            res.pop_back();
+            i++;
+        }
+        return sum % 1000000007;
+    }
+};

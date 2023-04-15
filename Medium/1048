@@ -1,0 +1,102 @@
+class Solution {
+public:
+// 1048. Longest String Chain
+// time 31 minutes 
+Runtime
+183 ms
+Beats
+51.56%
+Memory
+32.5 MB
+Beats
+21.81%
+    static bool func(string i, string j) {
+        return i.size() < j.size();
+    }
+
+    bool isSub(string a, string b) {
+        int p1 = 0;
+        int p2 = 0;
+        while(p2 < b.size() && p1 < a.size()) {
+            // if we found necessary char from a in b, advance p1 pointer and search for next char
+            if(a[p1] == b[p2]) {
+                p1++;
+            }
+            // wether they match or not, advance p2
+            p2++;
+        }
+        
+        if(p1 != a.size()) {
+            return false;
+        }
+
+        // found all necssary chars
+        return true;
+    }
+    int longestStrChain(vector<string>& words) {
+        
+        vector<int> dp(words.size(), 1);
+        sort(words.begin(), words.end(), func);
+
+        for(int i = 1; i< words.size(); i++) {
+            for(int j = 0; j < i; j++) {
+                if(words[i].size() - 1 != words[j].size()) {
+                    // no more predessors left to check since pred needs to be of size one less in size
+                    continue;
+                }
+
+                if( !isSub(words[j], words[i])) {
+                    continue;
+                }
+                // map<char, int> map1;
+                // map<char, int> map2;
+                // for(char c: words[j]) {
+                //     auto it = map1.find(c);
+                //     if(it == map1.end()) {
+                //         map1.insert(make_pair(c, 1));
+                //     }else{
+                //         it->second++;
+                //     }
+                // }
+                // for(char c: words[i]) {
+                //     auto it = map2.find(c);
+                //     if(it == map2.end()) {
+                //         map2.insert(make_pair(c, 1));
+                //     }else{
+                //         it->second++;
+                //     }
+                // }
+                // int 
+                vector<int> set1 (52, 0);
+                vector<int> set2 (52, 0);
+                for(char c: words[i]) {
+                    if(isupper(c)) {
+                        set1[ (c - 'A') + 26]++;
+                    }else{
+                        set1[ c - 'a']++;
+                    }
+                }
+                for(char c: words[j]) {
+                    if(isupper(c)) {
+                        set2[ (c - 'A') + 26]++;
+                    }else{
+                        set2[ c - 'a']++;
+                    }
+                }
+                int diff = 0;
+                for(int i = 0; i < set2.size(); i++) {
+                    diff += abs(set2[i] - set1[i]);
+                }
+                if(diff == 1){
+                    dp[i] = max(dp[j] + 1, dp[i]);
+                }
+            }
+        }
+        int res = 0;
+        for(int i=0; i< dp.size(); i++) {
+            res = max(dp[i], res);
+        }
+        return res;
+    }
+
+};

@@ -1,0 +1,24 @@
+
+237. Delete Node in a Linked List
+// time : 8 minutes
+ Runtime
+10 ms
+Beats
+97.12%
+Memory
+7.6 MB
+Beats
+47.33%
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        while(node->next != nullptr) {
+            node->val = node->next->val;
+            if(node->next->next == nullptr) {
+                node->next = nullptr;
+                return;
+            }
+            node = node->next;
+        }
+    }
+};

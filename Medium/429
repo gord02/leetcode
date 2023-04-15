@@ -1,0 +1,37 @@
+
+class Solution {
+    // 429. N-ary Tree Level Order Traversal
+//     time taken: 10 minutes
+    // Runtime: 46 ms, faster than 24.79% of C++ online submissions for N-ary Tree Level Order Traversal.
+// Memory Usage: 11.8 MB, less than 65.30% of C++ online submissions for N-ary Tree Level Order Traversal.
+
+public:
+    vector<vector<int>> levelOrder(Node* root) {
+        vector<vector<int>> res;
+        if(root == nullptr) {
+            return res;
+        }
+        queue<Node*> q;
+        q.push(root);
+        while(q.empty() == false) {
+            vector<int> nodes;
+            int size = q.size();
+            while(size> 0) {
+                Node* curNode = q.front();
+                q.pop();
+                size--;
+                
+                nodes.push_back(curNode->val);
+                
+                for(Node* next: curNode->children) {
+                    if(next != nullptr) {
+                        q.push(next);
+                    }
+                }
+            }
+            res.push_back(nodes);
+        }
+        return res;
+    }
+    
+};

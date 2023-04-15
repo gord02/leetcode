@@ -1,3 +1,53 @@
+class Solution {
+public:
+    // 65. Valid Number
+//     time taken: 32 minutes 
+    // Runtime: 5 ms, faster than 41.56% of C++ online submissions for Valid Number.
+// Memory Usage: 6 MB, less than 41.42% of C++ online submissions for Valid Number.
+    bool isNumber(string s) {
+        bool sign = false;
+        bool digits = false;
+        bool period = false;
+        bool e = false;
+        for(int i=0; i< s.size(); i++) {
+            if( isalpha(s[i]) && s[i]!= 'e' && s[i]!= 'E') {
+                return false;
+            }
+            if(isdigit(s[i])) {
+                digits = true;
+            }
+            if(s[i] == '.') {
+//                 found two periods
+                if(period) {
+                    return false;
+                }
+                if(e) {
+                    return false;
+                }
+                period = true;
+            }
+            
+            if( (s[i] == '+' || s[i] == '-') && i != 0 && tolower(s[i-1]) != 'e') {
+                return false;
+            }
+            
+            if( tolower(s[i]) == 'e') {
+                if(!digits) {
+                    return false;
+                }
+                if(e) {
+                    return false;
+                }
+                e = true;
+                period = false;
+                digits = false;
+                sign = false;
+            }
+        }
+        return digits;
+    }
+};
+
 class Solution{
     // 65. Valid Number
     // time taken: 30 minutes, didnt cnosider all cases 

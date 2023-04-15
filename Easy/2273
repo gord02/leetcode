@@ -1,0 +1,49 @@
+class Solution {
+public:
+//     2273. Find Resultant Array After Removing Anagrams
+//     time taken: 23 minutes, overcomplicated problem, tried to go linear
+    // Runtime: 30 ms, faster than 27.90% of C++ online submissions for Find Resultant Array After Removing Anagrams.
+// Memory Usage: 14.6 MB, less than 13.07% of C++ online submissions for Find Resultant Array After Removing Anagrams.
+    vector<string> removeAnagrams(vector<string>& words) {
+//         map<string, string> strs;
+//         map<string, int> dict;
+        
+//         for(string s: words) {
+//             string original = s;
+//             sort(s.begin(), s.end());
+//             auto it = strs.find(s);
+// //             we only care about the rep
+//             if(it == strs.end()) {
+//                 strs.insert(pair<string, string> (original, s));
+//             }
+// //             count each anagram
+//             it = dict.find(s);
+//             if(it == dict.end()) {
+//                 dict.insert(pair<string, int> (s, 1));
+//             }else{
+//                 it->second++;
+//             }
+//         }
+        vector<vector<string> > pairs;
+        for(int i=0; i < words.size(); i++) {
+            string s = words[i];
+            sort(s.begin(), s.end());
+            pairs.push_back({words[i], s});
+        }
+        int i = 1;
+        while( i < pairs.size()) {
+//             if i ever reaches end of array, nothing left to remove, if we do remove, we start back over from the beginning
+            if( pairs[i-1][1] == pairs[i][1] ) {
+                pairs.erase(pairs.begin() + i);
+                i = 1;
+                continue;
+            }
+            i++;
+        }
+        vector<string> res;
+        for(auto pair: pairs) {
+            res.push_back(pair[0]);
+        }
+        return res;
+    }
+};

@@ -1,6 +1,46 @@
 class Solution {
 public:
 //     931. Minimum Falling Path Sum
+// time taken: 23 minutes with explanation. 
+// Runtime
+// 38 ms
+// Beats
+// 34.96%
+// Memory
+// 10.2 MB
+// Beats
+// 66.30%
+// Notes: runtime is O(n^2), recursion or dp is O(n^2) this is because, each cell only has at most three options 
+// to traverese to, save these values and work from bottom up(iterative)
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        // vector<vector<int>> dp(matrix.size(), vector<int> (matrix.size(), 0));
+        vector<vector<int>> dp = matrix;
+
+        for(int r = matrix.size()-2; r>=0; r--) {
+            for(int c = 0; c<matrix[r].size(); c++) {
+                int low = INT_MAX;
+
+                // check the three options 
+                for(int i = -1; i<=1; i++) {
+                    if(c + i >= 0 && c + i < matrix[r].size()) {
+                        low = min(low, dp[r+1][c+i]);
+                    }
+                }
+                dp[r][c] = low + matrix[r][c];
+            }
+        }
+        int res = INT_MAX;
+        for(int c =0; c<dp[0].size(); c++) {
+            res = min(res, dp[0][c]);
+        }
+        return res;
+    }
+};
+
+
+class Solution {
+public:
+//     931. Minimum Falling Path Sum
 //     time taken: 38 minutes 
 //     Runtime: 30 ms, faster than 16.72% of C++ online submissions for Minimum Falling Path Sum.
 // Memory Usage: 10.3 MB, less than 42.98% of C++ online submissions for Minimum Falling Path Sum.

@@ -1,0 +1,66 @@
+class Solution {
+public:
+// 1061. Lexicographically Smallest Equivalent String
+// time : 30 minutes,
+// was correct with the disjoint set approach but didnt make sure I was working with chars vs integers correclt in its correct spot
+// Runtime
+// 2 ms
+// Beats
+// 84.40%
+// Memory
+// 6.4 MB
+// Beats
+// 94.50%
+    void unit( int x, int y, vector<char> &parent) {
+        // positions of parents in array, chose smaller of them
+        int X = find(x, parent);
+        int Y = find(y, parent);
+        
+        if(X <= Y) {
+            parent[Y] = X + 'a';
+        }else{
+            parent[X] = Y + 'a';
+        }
+        // cout << "parents: "<< X << " " << Y << endl;
+        // cout << parent[X] << " " << parent[Y] << endl;
+    }
+    int find(int x, vector<char> &parent) {
+        // char is its own parent
+        // cout << x << " - " << parent[x] - 'a' << endl;
+        if(x == parent[x] - 'a') {
+            return x;
+        }
+        // updating all children of x to have exact parent not chain
+        int res = find(parent[x] - 'a', parent);
+        // cout << "res: "<< res << endl;
+        // cout << " res + a" << res + 'a' << endl;
+        parent[x] =  res + 'a';
+        // parent[x] = find(parent[x], parent) + 'a';
+        return parent[x] -'a';
+    }
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        vector<char> parent(26, 'a');
+
+        for(int i= 0; i< parent.size(); i++) {
+            parent[i] = i + 'a';
+            // cout << parent[i] << " " << flush;
+        }
+        for(int i=0; i< s1.size(); i++) {
+            char x = s1[i];
+            int xPos = x - 'a'; // position in parent array that needs to be merged 
+            
+            char y = s2[i];
+            int yPos = y - 'a';
+            // cout << "here" << xPos << " " << yPos << endl;
+            unit(xPos, yPos, parent);
+        }
+        string res = "";
+        for(char c: baseStr) {
+            int cPos = c - 'a';
+            int pPos = find(cPos, parent);
+            char parentChar = pPos + 'a';
+            res += parentChar;
+        }
+        return res;
+    }
+};

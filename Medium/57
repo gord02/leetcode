@@ -1,3 +1,48 @@
+class Solution {
+public:
+// 28 minutes, MANY errors
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        vector<vector<int>> res;
+        res.push_back(newInterval);
+
+        for(int i = 0; i< intervals.size(); i++) {
+            vector<int> A = res.back();
+            res.pop_back();
+            int a1 = A[0];
+            int a2 = A[1];
+
+            int b1 = intervals[i][0];
+            int b2 = intervals[i][1];
+
+            cout << a1 << " " << a2 << " " << b1 << " " << b2 << endl;
+            // no overlap 
+            // CANT HAVE EQUAL TO HERE, since they the would be overlapping!
+            if(a1 < b1 && a2 < b1) {
+
+            //   push since interval interval comes after one at the end of our final list
+                cout << "insert after" << endl;
+                res.push_back(A);
+                res.push_back({b1, b2});
+            }
+            else if(b1 < a1 && b2 < a1) {
+                // push then re-insert A
+                cout << "insert before" << endl;
+                res.push_back({b1, b2});
+                res.push_back(A);
+            }
+
+            // overlap, HAVE TO HAVE EQUAL SIGN HERE!!
+            else if(a1 <= b2 && b1 <= a2) {
+                cout << "overlap" << endl;
+                res.push_back({min(a1, b1), max(a2, b2)});
+                // cout << res.back()[0] << " "<< res.back()[1] << endl;
+            }
+        }
+        return res;
+    }
+};
+
+
 //     57. Insert Interval
 //     time taken: this second apporach too 15 minutes to develop idea and implement using the old apporach, first apporach took 35 minutes, was too slow becuase of insertion and deletion
 // 244ms faster than 5.02% of C++ online submissions for Insert Interval.

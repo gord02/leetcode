@@ -1,0 +1,54 @@
+// 1170. Compare Strings by Frequency of the Smallest Character
+class Solution {
+public:
+    int charCount(string s) {
+        vector<int> chars(26, 0);
+        for(char c: s) {
+            chars[c-'a']++;
+        }
+        return smallestCharCount(chars);
+    }
+    int smallestCharCount(vector<int> chars) {
+        int maxChar = 0;
+        for(int i = 0; i< chars.size(); i++) {
+            if(chars[i] != 0) {
+                maxChar = chars[i];
+                break;
+            }
+        }
+        return maxChar;
+    }
+
+    vector<int> numSmallerByFrequency(vector<string>& queries, vector<string>& words) {
+        vector<int> fOfWords;
+        for(string s: words) {
+            int maxChar = charCount(s);
+            fOfWords.push_back(maxChar);
+        }
+        sort(fOfWords.begin(), fOfWords.end());
+
+        vector<int> res(queries.size(), 0);
+        for(int i=0; i< queries.size(); i++) {
+            int c = charCount(queries[i]);
+            int l = 0;
+            int r= fOfWords.size();
+            // SEARCH FOR all counts strictly great than c, use binary search to do this instead of linear scan
+            while(l < r) {
+                int m = (r-l)/2 + l;
+                if( c >= fOfWords[m] ) {
+                    l = m+1;
+                }else{
+                    r = m;
+                }
+            }
+            // valid check
+            if(l <fOfWords.size() && fOfWords[l] > c) {
+                res[i] = fOfWords.size() - l;
+            }else{
+                res[i] = 0;
+            }
+            // cout << "add"<<endl;
+        }
+        return res;
+    }
+};

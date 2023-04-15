@@ -1,4 +1,28 @@
- class Solution {
+
+class Solution{
+    // 3. Longest Substring Without Repeating Characters
+//     time taken: 10 minutes but code had a lot of syntax errors
+    // Runtime: 31 ms, faster than 48.41% of C++ online submissions for Longest Substring Without Repeating Characters.
+// Memory Usage: 10.8 MB, less than 29.80% of C++ online submissions for Longest Substring Without Repeating Characters.
+    public:
+       int lengthOfLongestSubstring(string s) {
+           unordered_set<char> dict;
+           int best = 0;
+           int l = 0;
+           for(int r = 0; r< s.size(); r++) {
+
+               while(dict.find(s[r]) != dict.end()) {
+                   dict.erase(s[l]);
+                   l++;
+               }
+               dict.insert(s[r]);
+               best = max(best, r-l+1);
+           }
+           return best;
+       }
+};
+
+class Solution {
 public:
     // 3. Longest Substring Without Repeating Characters
     time taken: 15 minutes, could have had more polished idea for code implemneation but it at least ran without errors

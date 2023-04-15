@@ -1,4 +1,93 @@
-  
+  class Solution {
+public:
+// 30 + 14 = 44 minutes, plus help from succefuls submission in the past
+// Runtime
+// 46 ms
+// Beats
+// 39.87%
+// Memory
+// 20.5 MB
+// Beats
+// 10.44%
+    struct compare {
+        public:
+        bool operator()(vector<int> i, vector<int> j) {
+            // we want minimum pq(prioirty queue) the smallest value of cost of a flight to be the most accessible
+            return i[0] > j[0];
+        }
+    };
+
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        map<int, vector<vector<int>>> adj;
+        for(auto flight: flights) {
+            int from = flight[0];
+            int to = flight[1];
+            int price = flight[2];
+
+            auto it = adj.find(from);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<vector<int>>> (from, {{to, price}} ));
+            }else{
+                it->second.push_back({to, price});
+            }
+        }
+
+        priority_queue<vector<int> , vector<vector<int>>, compare> pq;
+
+// *     we arsked to potimize for two variables, cost and number of stops, hence use two stores for this. We also need to update these two states of our graph each time we make a movement 
+
+        // stores least amount of stops and cost necessary per node, respecevitely  
+        vector<int> stops(n, INT_MAX);
+        vector<int> bestCost(n, INT_MAX);
+        stops[src] = 0;
+        bestCost[src] = 0;
+        pq.push({0, src, 0});
+
+        while(pq.empty() == false) {
+            // get the next moveemnt(this is the best of all avaible options, least valued option)
+            vector<int> cur = pq.top();
+            int steps = cur[2]; 
+            int node = cur[1];
+            int curCost = cur[0];
+            pq.pop();
+            // overstepd k allowance 
+            if(steps > k + 1) {
+                continue;
+            }
+            if(node == dst) {
+                return curCost;
+            }
+
+            // traverse edges
+            auto it = adj.find(node);
+            if(it == adj.end()) {
+                continue;
+            }
+
+            for(vector<int> flight: it->second) {
+                int nextNode = flight[0];
+                int cost = flight[1];
+
+                // relax node
+                if(curCost + cost < bestCost[nextNode]) {
+                    // update all states and push relaxed node to potetnially get knew and better movemnt later on in pq
+                    bestCost[nextNode] = curCost + cost;
+                    stops[nextNode] = steps +1;
+                    pq.push({curCost+cost, nextNode, steps+1});
+                }
+                // optiimzes for the least amount of stops
+                else if(steps < stops[nextNode]) {
+                    // we need to update these data sets for movement, I think this is justified since we have if and else if, these two statments arent running at the same time so the movemnt down here is still valid and needs to be trated as such by updating state of traversal through flights accordingly 
+                    stops[nextNode] = steps +1;
+                    bestCost[nextNode] = curCost + cost;
+                    pq.push({curCost+cost, nextNode, steps+1});
+                }
+            }
+        }
+        return -1;
+    }
+};
+
   class Solution {
 public:
 //      

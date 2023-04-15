@@ -1,0 +1,80 @@
+class Solution {
+public:
+// 40. Combination Sum II
+// time 40 minutes, was contemplating optimzation of DP and iterative apporch
+// runtime: 0(2^n) since we try to find unique subsequcnes that sum to t, it is still possible to acheive the same subsequence again therefore save subseuqcnes to set once we have the answer for them(finsihed anserwed subseqence). 
+
+    vector<vector<int>> res;
+    set<vector<int>> seen;
+    void rec(int i, int sum, vector<int> vec, int t, vector<int> &candidates) {
+        // already found and checked
+        if(seen.find(vec) != seen.end()) {
+            return;
+        }
+        if(sum == t) {
+            if(seen.find(vec) == seen.end()) {
+                res.push_back(vec);
+            }
+            seen.insert(vec);
+            return; // pos values no need to continue
+        }
+        if(sum > t) {
+            // add to seen after already figuring out sequence doesnt work
+            seen.insert(vec);
+            return;
+        }
+        // have to check sum before this since it imght have taken last element in array to acheive sum
+        if(i >= candidates.size()) {
+            seen.insert(vec);
+            return;
+        }
+
+        //   take element
+            vec.push_back(candidates[i]);
+            rec(i+1, sum + candidates[i], vec, t, candidates );
+            vec.pop_back();
+            // dont take
+            rec(i+1, sum, vec, t, candidates);
+    }
+
+    // void rec(int i, int sum, vector<int> vec, int t, vector<int> &candidates) {
+    //     if(sum == t) {
+    //         if(seen.find(vec) == seen.end()) {
+    //             res.push_back(vec);
+    //         }
+    //         seen.insert(vec);
+    //         return; // pos values no need to continue
+    //     }
+    //     if(sum > t) {
+    //         return;
+    //     }
+    //     // have to check sum before this since it imght have taken last element in array to acheive sum
+    //     if(i >= candidates.size()) {
+    //         return;
+    //     }
+    //     // for(int j = i; j< candidates.size(); j++) {
+    //     //     // we dont want to repeat the start of a subsequence 
+    //     //     while(j != i && candidates[i-1] == candiates[i]) {
+    //     //         i++;
+    //     //     }
+    //     //     // take element
+    //     //     vec.push_back(candidates[i]);
+    //     //     rec(j, sum + candidates[i], vec, t, candidates );
+    //     //     vec.pop_back();
+    //     //     // dont take
+    //     //     rec(j, sum, vec, t, candidates[i]);
+    //     // }
+
+    //     //   take element
+    //         vec.push_back(candidates[i]);
+    //         rec(i+1, sum + candidates[i], vec, t, candidates );
+    //         vec.pop_back();
+    //         // dont take
+    //         rec(i+1, sum, vec, t, candidates);
+    // }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        rec(0, 0, {}, target, candidates);
+        return res;
+    }
+};

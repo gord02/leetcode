@@ -1,3 +1,40 @@
+
+class Solution {
+public:
+    // 140. Word Break II
+//     time tkane: 19 minutes 
+//     problem with how c++ does substrings, you are allowed to exceed size of string and still form substring, could have planned out code better instead of jumping in
+    
+    // Runtime: 11 ms, faster than 7.11% of C++ online submissions for Word Break II.
+// Memory Usage: 7.4 MB, less than 37.84% of C++ online submissions for Word Break II.
+    vector<string> sents;
+    set<string> dict;
+    
+    void rec(int i, string sent, string &s) {
+        // cout << i <<" sent: " <<sent << endl;
+        if(i >= s.size()) {
+//             leading space at beginning
+            sents.push_back(sent.substr(1, sent.size()));
+            return;
+        }
+        
+        for(int j=1; i+j<=s.size(); j++) {
+            string subS = s.substr(i, j);
+            if(dict.find(subS) != dict.end()) {
+                string newSent = sent + " " + subS;
+                rec(i+j, newSent, s);
+            }
+        }
+    }
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        // cout<< "init size: " << s.size() << endl;
+        for(string d: wordDict) {
+            dict.insert(d);
+        }
+        rec(0, "", s);
+        return sents;
+    }
+};
 // 140. Word Break II
 // time taken: 36 minutes, serveral error tho
 // error with not correctly using everything in question, forgot to add spaces!! error with concatention, didnt reallize s+= sub when passed into a function modfifed s everywhere. didnt realize there was no stop for substr, just continues taking how ever much is valid of the string, doesnt matter if there are serverl charcters after are beyond string length(not too much my fault)

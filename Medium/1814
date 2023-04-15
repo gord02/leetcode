@@ -1,0 +1,30 @@
+class Solution {
+public:
+    // 1814. Count Nice Pairs in an Array
+    // Runtime: 329 ms, faster than 15.39% of C++ online submissions for Count Nice Pairs in an Array.
+// Memory Usage: 57 MB, less than 50.65% of C++ online submissions for Count Nice Pairs in an Array.
+    int rev(int num) {
+        string s = to_string(num);
+        string res = "";
+        for(int i=0; i< s.length(); i++) {
+            res.insert(0,1, s[i]);
+        }
+        return stoi(res);
+    }
+    int countNicePairs(vector<int>& nums) {
+        map<int, int> found;
+        int count = 0;
+        for(int i=0; i< nums.size(); i++) {
+            int value = nums[i] - rev(nums[i]);
+            auto it = found.find(value);
+            if(it == found.end()) {
+                found.insert(pair<int, int> (value, 1));
+            }else{
+                count+= it->second % 1000000007; // existing values that can be matched with current one
+                count = count % 1000000007;
+                it->second++; // new value just found
+            }
+        }
+        return count% 1000000007;
+    }
+};

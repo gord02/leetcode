@@ -1,3 +1,82 @@
+ class Solution {
+public:
+// 1377. Frog Position After T Seconds
+// time: 30 minutes 
+// negelcted a detail in question, "Otherwise, when the frog can not jump to any unvisited vertex, it jumps forever on the same vertex." 
+// Runtime
+// 43 ms
+// Beats
+// 53.57%
+// Memory
+// 17.2 MB
+// Beats
+// 10.97%
+    double rec(int node,  map<int, vector<int>>& adj, int cur_time, int t, int target, vector<bool>& seen) {
+        
+        // weve found target at desired time so it is currenlt 100% prob of reaching it 
+        if(cur_time == t && node == target) {
+            return 1;
+        }
+        // didnt make it to target in time so just return 0 early 
+        if(cur_time == t) {
+            return 0;
+        }
+        seen[node] = true;
+
+        double res = 0;
+
+        int un_visited  = 0;
+
+        auto it = adj.find(node);
+
+        if(it != adj.end()) {
+            for(int next: it->second) {
+                if(seen[next] == false) {
+                    un_visited++;
+                }
+            }
+
+            for(int next: it->second) {
+                if(seen[next] == false && un_visited != 0) {
+                    res = res + (1.0/un_visited) * rec(next, adj, cur_time + 1, t, target, seen);
+                }
+            }
+        }
+        if(it == adj.end() || un_visited == 0) {
+             res = res + rec(node, adj, cur_time + 1, t, target, seen);
+        }
+
+        return res;
+    }
+    double frogPosition(int n, vector<vector<int>>& edges, int t, int target) {
+        map<int, vector<int>> adj;
+        vector<bool> seen (n +1, false);
+
+        for(auto edge: edges) {
+            int a = edge[0];
+            int b = edge[1];
+
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<int>> (a, {b}));
+            }else{
+                it->second.push_back(b);
+            }
+
+            it = adj.find(b);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<int>> (b, {a}));
+            }else{
+                it->second.push_back(a);
+            }
+        }
+
+        return rec(1, adj, 0, t, target, seen);
+    }
+};
+
+ 
+ 
  // 1377. Frog Position After T Seconds
 // time taken: very ling, messed up implemnetation quite a few times
 // Runtime: 68 ms, faster than 9.91% of C++ online submissions for Frog Position After T Seconds.

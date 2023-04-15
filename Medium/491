@@ -1,3 +1,42 @@
+  class Solution {
+public:
+// 491. Non-decreasing Subsequences
+//time taken: 25 minutes
+    void rec(int i, vector<int> seq, set<vector<int>> &s, vector<int> &nums) {
+        if( i == nums.size()) {
+            if(seq.size() >= 2) {
+                s.insert(seq);
+            }
+            return;
+        }
+        if(seq.size() == 0 || seq[seq.size() -1] <= nums[i]) {
+            seq.push_back(nums[i]);
+            rec(i+1, seq, s, nums);
+            seq.pop_back();
+        }
+        rec(i+1, seq, s, nums);
+    }
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        // map<int, vector<vector<int>> > dict;
+        // dict.insert(pair<int, vector<vector<int>> > (0, {{nums[0]}}));
+        vector<vector<int>> res;
+        set<vector<int>> s;
+        rec(0, {}, s, nums);
+        for(auto vec: s) {
+            res.push_back(vec);
+        }
+        return res;
+        // for(int i=1; i<nums.size(); i++) {
+        //     for(int j = 0; j< i; j++) {
+        //         if( nums[j] <= nums[i]) {
+        //             auto it = dict.find()
+        //         }
+        //     }
+        // }
+    }
+};
+  
+  
     // 491. Increasing Subsequences
 //     Time taken: 38 minutes, issue arose when I decided to return after encoutnering number larger than back, this means the path is cut off so ...
     

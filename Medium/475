@@ -1,0 +1,79 @@
+class Solution {
+public:
+// time: 30 + 16 = 46, resloved, just needed next opitmization of using map
+
+// critical intuition: the shortest radius necessary for a home to be warmed is
+//  achieved from the distance between the house and the closest heater(abs diff).
+// We can loop through all heaters and get the abs diff between the heater and the 
+// necessary houses. The best radius used for a house is the smallest one. Our answer
+//  is composed fo the largest of the radii used in warming the houses after finding
+//  the smallest radii necessary for each house
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        int mHouse = 0;
+        for(int i=0; i< houses.size(); i++) {
+            mHouse = max( houses[i], mHouse);
+        }
+        vector<int> dp(mHouse+1, INT_MAX); // optimize by using map instead of array
+        int minRad = -1;
+        for(int n: heaters) {
+            for(int i: houses) {
+                int minR = abs(n-i);
+                dp[i] = min(dp[i], minR);
+            }
+        }
+        for(int i: houses) {
+            minRad = max(dp[i], minRad);
+        }
+        return minRad;
+    }
+    // int findRadius(vector<int>& houses, vector<int>& heaters) {
+    //     int lvl = 0;
+    //     queue<int> q;
+    //     unordered_set<int> unMarkedHouses;
+    //     unordered_set<int> warmers;
+    //     unordered_set<int> seen;
+    //     for(int n: heaters) {
+    //         q.push(n);
+    //         warmers.insert(n);
+    //     }
+    //     for(int n: houses) {
+    //         // dont want the house with a heater to be set to unmarked
+    //         if(warmers.find(n) == warmers.end()) {
+    //             unMarkedHouses.insert(n);
+    //         }
+    //     }
+
+    //     while(q.empty() == false) {
+    //         int size = q.size();
+    //         while(size > 0) {
+    //             size--;
+    //             int curHouse = q.front();
+    //             q.pop();
+
+    //             if(unMarkedHouses.find(curHouse) != unMarkedHouses.end()) {
+    //                 unMarkedHouses.erase(curHouse);
+    //             }
+    //             seen.insert(curHouse);
+    //             int leftHouse = curHouse-1;
+    //             int rightHouse = curHouse+1;
+
+    //             if(seen.find(leftHouse) == seen.end() && leftHouse > 0) {
+    //                 q.push(leftHouse);
+    //             }
+    //             // no upperbound on house number
+    //             if(seen.find(rightHouse) == seen.end()) {
+    //                 q.push(rightHouse);
+    //             }
+    //             seen.insert(leftHouse);
+    //             seen.insert(rightHouse);
+    //         }
+    //         // process evertyhing on current level berfore checking 
+    //         if(unMarkedHouses.size() == 0) {
+    //             // no other houses to warm, return
+    //             return lvl;
+    //         }
+    //         lvl++;
+    //     }
+    //     return lvl;
+    // }
+};

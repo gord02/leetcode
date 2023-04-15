@@ -1,0 +1,71 @@
+class Solution {
+public:
+// 2100. Find Good Days to Rob the Bank
+// // time tkane: 18 minutes
+// Runtime
+// 391 ms
+// Beats
+// 33.7%
+    vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+        vector<int> left(security.size(), 0);
+        vector<int> right(security.size(), 0);
+        int last = security[0];
+        // left[0] = 0; 
+        for(int i = 1; i< security.size(); i++) {
+            if(last >= security[i]) {
+                left[i] = left[i-1] + 1;
+            }
+            last = security[i];
+        }
+        // right[0] 
+        last = security[security.size()-1];
+        for(int i = security.size()-2; i>=0; i--) {
+            if(security[i] <= last) {
+                right[i] = right[i+1] + 1;
+            }
+            last = security[i];
+        }
+        vector<int> res;
+        for(int i=0; i< security.size(); i++) {
+            if(left[i] >= time && right[i] >= time) {
+                res.push_back(i);
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    // 2100. Find Good Days to Rob the Bank
+//     time: 18 minutes
+    // Runtime: 388 ms, faster than 16.92% of C++ online submissions for Find Good Days to Rob the Bank.
+// Memory Usage: 90 MB, less than 33.94% of C++ online submissions for Find Good Days to Rob the Bank.
+
+    vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+        vector<int> left(security.size(), 0);
+        vector<int> right(security.size(), 0);
+        
+        vector<int> res;
+        
+        for(int i=1; i< security.size(); i++) {
+            if(security[i-1] >= security[i]) {
+                left[i] = left[i-1] + 1;
+            }
+        }
+        
+        for(int i=security.size()-2; i>=0; i--) {
+            if(security[i] <= security[i+1]) {
+                right[i] = right[i+1] + 1;
+            }
+        }
+        
+        for(int i=0; i< security.size(); i++) {
+            if(left[i] >= time && right[i] >= time) {
+                res.push_back(i);
+            }
+        }
+        
+        return res;
+    }
+};

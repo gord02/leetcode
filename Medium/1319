@@ -1,0 +1,187 @@
+class Solution {
+public:
+// 58 minutes 
+// failed after 25 testcases
+    void unit(int x, int y, vector<int> &parent, vector<int> &rank) {
+        int parX = find(x, parent);
+        int parY = find(y, parent);
+        // cout << x << " par: " << parX << " y: " << y << " parY: " << parY << endl;
+        if(parX == parY) {
+            return;
+        }
+
+        if(rank[parX] == rank[parY]) {
+            parent[parY] = parX; 
+            rank[parX]+= 1;
+        }
+        else if(rank[parX] > rank[parY]) {
+            parent[parY] = parX; 
+        }else{
+            parent[parX] = parY;
+        }
+    }
+    int find(int x, vector<int> &parent) {
+        if(x == parent[x]) {
+            return x;
+        }
+        parent[x] = find(parent[x], parent);
+        return parent[x];
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        if(n > connections.size()+1) {
+            return -1;
+        }
+
+        vector<int> par(n, 0);
+        vector<int> rank(n, 1);
+        for(int i=0; i< n; i++) {
+            par[i] = i;
+        }
+        int parent = -1;
+        int maxRank = -1;
+        for(vector<int> edge: connections) {
+            // cout << edge[0] << " "  <<edge[1] << endl;
+            unit(edge[0], edge[1], par, rank);
+            // cout << "=="<< par[edge[0]] << " "  << par[edge[1]] << endl;
+
+            // maxSize = max( , maxSize );
+            // maxSize = max( par[edge[0]],  );
+            if(rank[edge[0]] > maxRank) {
+                parent = edge[0];
+                maxRank = rank[edge[0]];
+            }else if(rank[edge[1]] > maxRank) {
+                parent = edge[1];
+                maxRank = rank[edge[1]];
+            }
+        }
+
+
+        // code is reliant on all the nodes have to ROOT parent set as their parent, not any inbetween nodes
+        for(int i=0; i< n; i++) {
+            find(i, par);
+        }
+        set<int> comps;
+
+        for(int i=0; i< n; i++) {
+            cout << par[i] << " " << flush;
+            comps.insert(par[i]);
+        }
+  
+        return comps.size()-1;
+    }
+};
+
+class Solution {
+public:
+// failed after 25 testcases
+    void unit(int x, int y, vector<int> &parent, vector<int> &rank) {
+        int parX = find(x, parent);
+        int parY = find(y, parent);
+        // cout << x << " par: " << parX << " y: " << y << " parY: " << parY << endl;
+        if(parX == parY) {
+            return;
+        }
+
+        if(rank[parX] == rank[parY]) {
+            parent[parY] = parX; 
+            rank[parX]+= 1;
+        }
+        else if(rank[parX] > rank[parY]) {
+            parent[parY] = parX; 
+        }else{
+            parent[parX] = parY;
+        }
+    }
+    int find(int x, vector<int> &parent) {
+        if(x == parent[x]) {
+            return x;
+        }
+        parent[x] = find(parent[x], parent);
+        return parent[x];
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        if(n > connections.size()+1) {
+            return -1;
+        }
+
+        vector<int> par(n, 0);
+        vector<int> rank(n, 1);
+        for(int i=0; i< n; i++) {
+            par[i] = i;
+        }
+        int parent = -1;
+        int maxRank = -1;
+        for(vector<int> edge: connections) {
+            // cout << edge[0] << " "  <<edge[1] << endl;
+            unit(edge[0], edge[1], par, rank);
+            // cout << "=="<< par[edge[0]] << " "  << par[edge[1]] << endl;
+
+            // maxSize = max( , maxSize );
+            // maxSize = max( par[edge[0]],  );
+            if(rank[edge[0]] > maxRank) {
+                parent = edge[0];
+                maxRank = rank[edge[0]];
+            }else if(rank[edge[1]] > maxRank) {
+                parent = edge[1];
+                maxRank = rank[edge[1]];
+            }
+        }
+         // code is reliant on all the nodes have to ROOT parent set as their parent, not any inbetween nodes
+        for(int i=0; i< n; i++) {
+            find(i, par);
+        }
+        set<int> comps;
+
+    //  based of of intuition from answer, the error is here, since teo nodes that 
+    // are together in one component code be stored in the set but this doesnt take 
+    // into account that we only need to coonect on edge to the component. Therefor 
+    // we should count the number of distinct components and the number of edges need 
+    // to connect these components is just unique count - 1
+        for(int i=0; i< n; i++) {
+            if(par[i] != parent) {
+                comps.insert(i);
+            }
+        }
+        map<int, vector<int>> adj;
+        for(auto edge: connections) {
+            int a = edge[0];
+            int b = edge[1];
+
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<int>> (a, {b}));
+            }else{
+                it->second.push_back(b);
+            }
+            // bidrectional mapping
+            it = adj.find(b);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<int>> (b, {a}));
+            }else{
+                it->second.push_back(a);
+            }
+        }
+        
+        int res = 0;
+        while(comps.size() > 0) {
+            for(int i=0; i<n; i++) {
+                auto it = adj.find(i);
+                if(it != adj.end() && it->second.size() > 1) {
+                    for(int j = 0; j < it->second.size(); j++) {
+                        for( int k = j+1; k < it->second.size(); k++) {
+                            if(comps.size() == 0) {
+                                return res;
+                            }
+                            if(par[ it->second[j] ] == par[ it->second[k] ] ) {
+                                // we have redunant edge
+                                res++;
+                                comps.erase(comps.begin());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};

@@ -1,3 +1,24 @@
+class Solution {
+public:
+// 797. All Paths From Source to Target
+    // time taken: 19 minutes 
+    void rec(int node, vector<int> path, vector<vector<int>> graph, vector<vector<int>> &res) {
+        path.push_back(node);
+        if(node == graph.size() -1) {
+            res.push_back(path);
+            return;
+        }
+        for(int next: graph[node]) {
+            rec(next, path, graph, res);
+        }
+    }
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        vector<vector<int>> res;
+        rec(0, {}, graph, res);
+        return res;
+    }
+};
+
 // 797. All Paths From Source to Target
     // Time taken: 49 minutes, jumped into problem before having plan, logistical errors, didnt consider base case correctly
     // Runtime: 108 ms, faster than 7.34% Memory Usage: 48.2 MB, less than 5.06% of C++ online submissions for All Paths From 

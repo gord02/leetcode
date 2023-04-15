@@ -1,3 +1,43 @@
+
+
+// 111. Minimum Depth of Binary Tree
+// time: 7 minutes 
+// Runtime: 281 ms, faster than 94.98% of C++ online submissions for Minimum Depth of Binary Tree.
+// Memory Usage: 144.7 MB, less than 71.61% of C++ online submissions for Minimum Depth of Binary Tree.
+class Solution {
+public:
+    
+    int minDepth(TreeNode* root) {
+        if(root == nullptr) {
+            return 0;
+        }
+        queue<TreeNode*>q;
+        q.push(root);
+        
+        int level = 1;
+        while(q.empty() == false) {
+            int size = q.size();
+            while(size > 0) {
+                TreeNode* curNode = q.front();
+                q.pop();
+                size--;
+                
+                if(curNode->left == nullptr && curNode->right == nullptr) {
+                    return level; //at leaf
+                }
+                if(curNode->left != nullptr) {
+                    q.push(curNode->left);
+                }
+                if(curNode->right != nullptr) {
+                    q.push(curNode->right);
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+};
+
 // 111. Minimum Depth of Binary Tree
 // Time taken: 7 minutes, Lesson: CONSIDER BASE CASES
 // Runtime: 328 ms, faster than 61.03% of C++ online submissions for Minimum Depth of Binary Tree.

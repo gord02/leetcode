@@ -1,3 +1,31 @@
+
+class Solution {
+public:
+// took very long, ran with a lot of errors, distinct three poritions that must be unique!
+    int longestMountain(vector<int>& arr) {
+        int best = 0;
+        int start = 0;
+        while(start < arr.size()) {
+            int i = start;
+            while(i+1 < arr.size() && arr[i] < arr[i+1]) {
+                i++;
+            }
+            int top = i;
+            while(i+1 < arr.size() && arr[i] > arr[i+1]) {
+                i++;
+            }
+            if(top != i && start != top) {
+                // cout << start << " "<< end << endl;
+                best = max(best, i-start+1);
+                start = i;
+            }else{
+                start++;
+            }
+        }
+        return best;
+    }
+};
+
 class Solution {
 public:
     // 845. Longest Mountain in Array

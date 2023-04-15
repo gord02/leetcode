@@ -1,0 +1,28 @@
+// 901. Online Stock Span
+// Time tkane: 15 minutes 
+// Runtime: 372 ms, faster than 42.37% of C++ online submissions for Online Stock Span.
+// Memory Usage: 84.3 MB, less than 63.05% of C++ online submissions for Online Stock Span.
+class StockSpanner {
+public:
+//     price and span 
+    stack<pair<int, int>> s;
+    StockSpanner() {
+        
+    }
+    
+    int next(int price) {
+        int span = 1;
+        while(s.empty() == false && price >= s.top().first) {
+            span+=s.top().second;
+            s.pop();
+        }
+        s.push(make_pair(price, span));
+        return span;
+    }
+};
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner* obj = new StockSpanner();
+ * int param_1 = obj->next(price);
+ */

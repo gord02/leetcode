@@ -1,0 +1,88 @@
+class Solution {
+public:
+// 1129. Shortest Path with Alternating Colors
+// missed important realization of edge case of loop back to node with different path value attached!!!!, need to update cur node as well apporiartely 
+    void dfs(int node,int last, int lvl, map<int, vector<int>> &red, map<int, vector<int>> &blue, vector<int> &res, set<vector<int>>&seen ) {
+        if(seen.find({node, last}) != seen.end()) {
+            return;
+        }
+        // we may need to loop back to a cell with different last than before to reach other cells, save specific state of traversal!
+        seen.insert({node, last});
+        // we visit node only once, therefore using the smallest lvl value possible for it, if we cant reach node using dfs then it was unreachlbe from node 0
+        res[node] = min(lvl, res[node]);
+
+        if(last == 0) {
+            
+            auto itR = red.find(node);
+            if(itR != red.end()) {
+                for(int next: itR->second) {
+                    // we are currently taking path red so pass in red, red = 1
+                    dfs(next, 1, lvl+1, red, blue, res, seen);
+                }
+            }
+
+            auto itB = blue.find(node);
+            if(itB != blue.end()) {
+                for(int next: itB->second) {
+                    // we are currently taking path red so pass in red, red = 1
+                    dfs(next, -1, lvl+1, red, blue, res, seen);
+                }
+            }
+        }
+        else if(last == -1) {
+            auto itR = red.find(node);
+            if(itR != red.end()) {
+                for(int next: itR->second) {
+                    // we are currently taking path red so pass in red, red = 1
+                    dfs(next, 1, lvl+1, red, blue, res, seen);
+                }
+            }
+        }
+        else {
+            // last == 1, red = 1, traverse blue
+            auto itB = blue.find(node);
+            if(itB != blue.end()) {
+                for(int next: itB->second) {
+                    // we are currently taking path red so pass in red, red = 1
+                    dfs(next, -1, lvl+1, red, blue, res, seen);
+                }
+            }
+        }
+    }
+    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& redEdges, vector<vector<int>>& blueEdges) {
+        map<int, vector<int>> red;
+        map<int, vector<int>> blue;
+
+        vector<int> res (n, INT_MAX);
+
+        for(vector<int> edge: redEdges) {
+            auto it = red.find(edge[0]);
+            if(it == red.end()) {
+                red.insert(pair<int, vector<int>> (edge[0], {edge[1]} ));
+            }else{
+                it->second.push_back(edge[1]);
+            }
+        }
+
+        for(vector<int> edge: blueEdges) {
+            auto it = blue.find(edge[0]);
+            if(it == blue.end()) {
+                blue.insert(pair<int, vector<int>> (edge[0], {edge[1]} ));
+            }else{
+                it->second.push_back(edge[1]);
+            }
+        }
+
+        // for(int i=1; i< nums.size())
+        set<vector<int>> seen;
+        
+        dfs(0, 0, 0, red, blue, res, seen);
+        for(int i=1; i< n; i++) {
+            // this means unreached
+            if(res[i] == INT_MAX) {
+                res[i] = -1;
+            }
+        }
+        return res;
+    }
+};

@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        vector<int> chars(26, 0);
+        vector<int> strChars(26, 0);
+
+        for(char c: s1) {
+            chars[c -'a']++;
+        }
+        int initCount = 0;
+        for(int i: chars) {
+            if(i > 0){
+                initCount++;
+            }
+        }
+
+        strChars= chars;
+        int count = initCount;
+        for(char c: s2) {
+            // the second condition is since a permuataiotn cannot have extra letters in it
+            if(chars[c-'a'] == 0 || strChars[c-'a'] == 0) {
+                cout << chars[c-'a'] << " " << strChars[c-'a'] << " "<< c<< endl;
+                // reset
+                cout << "restting" << endl;
+                count = initCount;
+
+                // rest by just drawing in left side, slidining window!
+                strChars = chars;
+            }else{
+                strChars[c-'a']--;
+                if(strChars[c-'a'] == 0) {
+                    count--;
+                }
+            }
+
+            if(count == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+};

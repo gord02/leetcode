@@ -1,0 +1,28 @@
+// 868. Binary Gap
+time taken: 16 minutes, with full explination, messed up on excuting without error by forgetting to right shift
+// Runtime: 0 ms, faster than 100.00% of C++ online submissions for Binary Gap.
+// Memory Usage: 5.8 MB, less than 77.57% of C++ online submissions for Binary Gap.
+class Solution {
+public:
+    int binaryGap(int n) {
+        int count = 0;
+        int best = 0;
+        bool found = false;
+        
+        while(n> 0) {
+            count++;
+            if((1& n) == 1) {
+                
+                if(found) {
+                    best = max(best, count);
+                }
+                count = 0;
+                
+                found = true;
+            }
+            n = n >> 1;
+        }
+        
+        return best;
+    }
+};

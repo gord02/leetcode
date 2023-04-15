@@ -1,3 +1,35 @@
+
+class Solution{
+    public:
+//     973. K Closest Points to Origin
+//time: 14 minutes,  mistakenly though to use min queue
+    Runtime: 372 ms, faster than 54.54% of C++ online submissions for K Closest Points to Origin.
+Memory Usage: 72.7 MB, less than 35.21% of C++ online submissions for K Closest Points to Origin.
+      vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+            // priority_queue<pair<int, vector<int>>, vector< pair<int, vector<int>> >, compare> q;
+            priority_queue<pair<int, vector<int>> > q;
+            for(int i=0; i< points.size(); i++) {
+                int dist = (points[i][0])*(points[i][0]) + (points[i][1])*(points[i][1]);
+                // if(q.empty() == false) {
+                    if(q.size() < k) {
+                        q.push(make_pair(dist, points[i]));
+                    }else{
+                        if(q.top().first > dist) {
+                            q.pop();
+                            q.push(make_pair(dist, points[i]));
+                        }
+                    }
+                // }
+            }
+          vector<vector<int>> res;
+          while(q.empty() == false) {
+              res.push_back(q.top().second);
+              q.pop();
+          }
+          return res;
+      }
+};
+
 class Solution {
 public:
     // 973. K Closest Points to Origin

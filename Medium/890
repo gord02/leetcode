@@ -1,0 +1,45 @@
+class Solution {
+public:
+    // 890. Find and Replace Pattern
+    // Runtime: 3 ms, faster than 90.27% of C++ online submissions for Find and Replace Pattern.
+// Memory Usage: 8.5 MB, less than 53.91% of C++ online submissions for Find and Replace Pattern.
+//    26 minutes messed up implemention,JUST PATTERN, map char in word to UNUSED pattern char
+//     bijection misunderstanding?, onto every a in set A maps to a b in set B, and bijections, every a maps to only one b, every B has only one a. Set A is depedent chars from word and set B is just unique set of chars with one a char
+    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
+//         resulting vectro of matching words
+        vector<string> res;
+//         loop through all the words in the vector
+        for(string word: words) {
+//          define a map for each word wed match against the pattern
+            map<char, char> mapping;
+            unordered_set<char> used;
+//             for eahc word loop through all the chars
+            for(int i=0; i<word.length(); i++) {
+             // first check if the char in word is already mapped to something, if it is mapped to something not equal to the char in pattern break, simiilar youd check the other way
+                auto it = mapping.find(word[i]);
+                // auto it2 = mapping.find(pattern[i]);
+                
+                if(it != mapping.end() && it->second != pattern[i]) {
+                    break;
+                }
+//                 cur char doesnt not map to it but the pattern char is used
+                if(it == mapping.end() && used.find(pattern[i]) !=used.end()) {
+                    break;
+                }
+                //  if(it2 != mapping.end() && it2->second != word[i]) {
+                //     break;
+                // }
+                
+                // mapping.insert(pair<char, char> (pattern[i], word[i]));
+                mapping.insert(pair<char, char> (word[i], pattern[i]));
+                used.insert(pattern[i]);
+                
+//              if we reach the last index psuh the word to the results vector
+                if(i == word.length() -1) {
+                    res.push_back(word);
+                }
+            }
+        }
+        return res;
+    }
+};

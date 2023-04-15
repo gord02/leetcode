@@ -1,0 +1,59 @@
+class Solution {
+public:
+// 1509. Minimum Difference Between Largest and Smallest Value in Three Moves
+// 100 ms
+// Beats
+// 87.9%
+// Memory
+// 35.1 MB
+// Beats
+// 94.53%
+/*
+// what we do here is try to close the gap between largest and smallest value in the range by:
+1. making the smallest values the same as max
+2. making largest as small as smallest 
+3. converting two from front to middle
+4. convert one from front and two from back to middle
+*/
+
+// time taken 36 minutes, 25 to plan and prove to myslef, 11 to execute 
+// this approch tragest the exteremes of the values in the given set 
+    int minDifference(vector<int>& nums) {
+        if(nums.size() <=3) {
+            return 0;
+        }
+        // int the_max = INT_MIN;
+        // int the_min = INT_MAX;
+        // int mid = 0;
+        // for(int i=0; i< nums.size(); i++) {
+        //     the_max = max(nums[i], the_max);
+        //     the_min = min(nums[i], the_min);
+        // }
+        // mid = (the_max - the_min)/2 + the_min;
+
+        sort(nums.begin(), nums.end());
+
+        int res = INT_MAX;
+        // take three from front and convert to max
+        // nums[3] holds new smallest value
+        int diff = nums[nums.size()-1] - nums[3]; 
+        res = min(diff, res);
+        
+        // take three from back and convert to min
+        // nums[nums.size()-4] holds the new max
+        diff = nums[nums.size()-4] - nums[0];
+        res = min(diff, res);
+
+
+        // convert one two from front and one from the back
+        // nums[2] is the new smallest value,  nums[nums.size()-2], is the new largest
+        diff =  nums[nums.size()-2] - nums[2];
+        res = min(diff, res);
+
+        // convert one from front and two from the back
+        diff = nums[nums.size()-3] - nums[1];
+        res = min(diff, res);
+
+        return res;
+    }
+};

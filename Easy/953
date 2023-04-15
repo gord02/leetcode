@@ -1,3 +1,56 @@
+// 953. Verifying an Alien Dictionary
+// time take: 27 minutes, errors with INCORECCT mapping delayed process 
+// Runtime: 6 ms, faster than 70.62% of C++ online submissions for Verifying an Alien Dictionary.
+// Memory Usage: 9.7 MB, less than 17.01% of C++ online submissions for Verifying an Alien Dictionary.
+class Solution{
+    public:
+    bool isAlienSorted(vector<string>& words, string order) {
+        map<int, int>pos;
+        for(int i=0; i<order.size(); i++) {
+            pos[order[i]] = i;
+        }
+//         assume that all chars will in alpahbet will be in the order string, no repates
+        for(int i=0; i < words.size()-1; i++) {
+            int l = 0;
+            int r = 0;
+            string word1 = words[i];
+            string word2 = words[i+1];
+            
+            while(l < word1.size() && r < word2.size()) {
+                // cout << "here" << endl; /
+                // cout << word1[l] << " " << word2[r] << endl;
+                // cout << pos.find(word1[l])->second << " " << pos.find(word2[r])->second << endl;
+                if(word1[l] == word2[r]) {
+                    // cout << "1" << endl; 
+                    
+                    l++;
+                    r++;
+                }
+                else if(pos.find(word1[l])->second < pos.find(word2[r])->second ) {
+                    // cout << "2" << endl; 
+                    break; // no longer need to compare
+                }
+                else if(pos.find(word1[l])->second > pos.find(word2[r])->second){
+                    // cout << "3" << endl; 
+                    
+                    return false; // invalid lexio ordering
+                } 
+            }
+//             breaking out of while loop means one string ended before the other or they both ended at the same time
+            if(l == word1.size() && r != word2.size()) {
+                continue;
+            }
+            if(l != word1.size() && r == word2.size()) {
+                return false;
+            }
+            if(l == word1.size() && r == word2.size()) {
+                continue;
+            }
+        } 
+        return true;
+    }
+};
+
 class Solution {
 public:
     // 953. Verifying an Alien Dictionary

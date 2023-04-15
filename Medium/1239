@@ -1,0 +1,107 @@
+class Solution {
+public:
+//     1239. Maximum Length of a Concatenated String with Unique Characters
+//     time taken: 1 hr, rusty on bit operations 
+    // Runtime: 8 ms, faster than 90.04% of C++ online submissions for Maximum Length of a Concatenated String with Unique Characters.
+// Memory Usage: 8.5 MB, less than 83.56% of C++ online submissions for Maximum Length of a Concatenated String with Unique Characters.
+    void bin(unsigned n) {
+    if (n > 1)
+        bin(n >> 1);
+ 
+    printf("%d", n & 1);
+}
+    map<int, string> dict;
+    int best = 0;
+//     bool compare(int bits, int set) {
+//         bin(bits);
+//         cout << endl;
+//         bin(set);
+//         cout << endl;
+        
+//         set = bits^set;
+//         set = ~set;
+//         bin(set);
+//         cout << endl;
+//         cout << " ============"<<endl;
+        
+        
+//         while(set > 0) {
+//             if(set & 1 == 0){
+//                 cout << "here" << endl;
+//                 return false;
+//             }
+//            set = set >> 1;
+//         }
+//         return true;
+//     }
+    bool compare(int bits, int set) {
+           // bin(bits);
+           //  cout << endl;
+           //  bin(set);
+           //  cout << endl;
+        
+        while(set > 0) {
+//             compares least significant bit, right most one
+            // int i = bits >> 
+            int lastB = bits & 1;
+            int lastS = set & 1;
+            if(lastB & lastS == 1) {
+                // cout << "here" << endl;
+                return false;
+            }
+//             removes the last bit from each 32 bit int, rightmost one
+            bits = bits >> 1;
+            set = set >> 1;
+        }
+        return true;
+    }
+    void rec(int i, int bitSet, int size, vector<int> &arr) {
+        best = max(best, size);
+        
+        if(i >= arr.size()) {
+            return;
+        }
+        
+        
+        if(arr[i] != -1 && compare(arr[i], bitSet)) {
+            int newSet = bitSet|arr[i];
+            int len = dict.find(i)->second.size();
+            rec(i+1, newSet, size + len, arr);
+        }
+//         dont take
+        rec(i+1, bitSet, size, arr);
+    }
+    
+    int maxLength(vector<string>& arr) {
+        for(int i=0; i< arr.size(); i++) {
+            dict.insert(pair<int, string> (i, arr[i]));
+        }
+        
+        vector<int> bitSets;
+        for(string s: arr) {
+            int bits = 0;
+            for(char c: s) {
+                int i = 1;
+                i = i << (c-'a');
+                // bin(bits);
+                // cout << endl;
+                // bin(i);
+                // cout << endl;
+                
+                if(!compare(i, bits)) {
+                    bits = -1;
+                    // cout << "jere" << endl;
+                    break;
+                }
+//              shifts 1 to index of char
+                bits = bits|  (1 << (c-'a'));
+            }
+            // cout << bitset<32>(bits).to_string().substr(32 - log2(bits));
+            // bin(bits); 
+            // cout << endl;
+            bitSets.push_back(bits);
+        }
+        rec(0, 0, 0, bitSets);
+        return best;
+    }
+};

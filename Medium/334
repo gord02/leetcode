@@ -1,0 +1,45 @@
+class Solution {
+public:
+//     334. Increasing Triplet Subsequence
+//     had to debug erros, failed to consider popping when equal numbers, also didnt process prev_max propperly since I looped backwards and was pushing 
+//     Runtime: 124 ms, faster than 31.70% of C++ online submissions for Increasing Triplet Subsequence.
+// Memory Usage: 61.9 MB, less than 16.21% of C++ online submissions for Increasing Triplet Subsequence.
+    bool increasingTriplet(vector<int>& nums) {
+        vector<bool> prev_min(nums.size(), false);
+        vector<bool> next_max(nums.size(), false);
+        stack<int> s;
+        for(int i=0; i<nums.size(); i++) {
+            while(s.empty() == false && s.top() >= nums[i]) {
+                s.pop();
+            }
+            if(s.empty()) {
+                prev_min[i] = false;
+            }else{
+                prev_min[i] = true;
+            }
+            s.push(nums[i]);
+        }
+        while(s.empty() == false) {
+            s.pop();
+        }
+        for(int i=nums.size()-1; i>=0; i--) {
+            while(s.empty() == false &&  nums[i] >= s.top()) {
+                s.pop();
+            }
+            if(s.empty()) {
+                next_max[i] = false;
+            }else{
+                next_max[i] = true;
+            }
+            s.push(nums[i]);
+        }
+        
+        for(int i=0; i<nums.size(); i++) {
+            if(next_max[i] && prev_min[i]) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+};

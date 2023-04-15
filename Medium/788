@@ -1,5 +1,42 @@
 class Solution {
 public:
+// 788. Rotated Digits
+// // time: 15 minutes 
+// Runtime
+// 64 ms
+// Beats
+// 11.81%
+// Memory
+// 16.3 MB
+// Beats
+// 5.48%
+    int rotatedDigits(int n) {
+        int count = 0;
+        for(int i=2; i<=n; i++) {
+            vector<int> nums(10, 0);
+            string str = to_string(i);
+            for(char c: str) {
+                nums[c-'0']++;
+            }
+
+            // if we only have 1s zeroes or 8s then any perumation of these numbers when flipped 180 will remain the same, dont increemnt count, else, increment count
+
+            // if dont have 3,4,7
+            if(nums[3] != 0 || nums[4] != 0 || nums[7] != 0) {
+                // dont bother looping through array, cant form good number
+                continue;
+            }
+            
+            if(nums[2] != 0 || nums[5] != 0 || nums[6] != 0 || nums[9] != 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+};
+
+class Solution {
+public:
     // 788. Rotated Digits
 //     Time taken: 16 minutes
 //     Runtime: 32 ms, faster than 23.15% of C++ online submissions for Rotated Digits.

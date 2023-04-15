@@ -1,0 +1,70 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+// didnt come up with three seperate list on my own
+// be wary of realtioin ship between pointers adn where there next goes to!
+// don't forget to nullfy the next node when breaking up a list
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        // ListNode* dummyHead = head;
+        ListNode* evenStart = new ListNode(0);
+        ListNode* oddStart = new ListNode(0);
+        ListNode* even = evenStart;
+        ListNode* odd = oddStart;
+        int pos = 1;
+        while(head != nullptr) {
+            // cout << head->val << endl;
+            if(pos % 2 == 0) {
+                even->next = head;
+                even = even->next;
+                ListNode* node = new ListNode(0);
+                node->next = head->next;
+                head->next = nullptr; // have to remember to nullify to properly break up list
+                head = node;
+            }else{
+                odd->next = head;
+                // cout << odd->next->val << endl;
+                odd = odd->next;
+                ListNode* node = new ListNode(0);
+                node->next = head->next;
+                head->next = nullptr;
+                head = node;
+            }
+            head = head->next;
+            pos++;
+        }
+        ListNode* e = evenStart; 
+        ListNode* o = oddStart; 
+        while(o != nullptr) {
+            cout << o->val << flush;
+            o = o->next;
+        }
+        cout << endl;
+        while(e != nullptr) {
+            cout << e->val << flush;
+            e = e->next;
+        }
+        cout << endl;
+        // cout << odd->val << endl;
+        // cout << evenStart->next->val << endl;
+        // cout << oddStart->next->val << endl;
+
+        odd->next = evenStart->next;
+        cout << "here" << endl;
+        cout << oddStart->next->next->val << endl;
+        ListNode* res = oddStart->next;
+        while( res!= nullptr) {
+            cout << res->val << flush;
+            res = res->next;
+        }
+        return oddStart->next;
+    }
+};

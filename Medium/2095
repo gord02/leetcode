@@ -1,0 +1,36 @@
+class Solution {
+public:
+//     under considered list node neccessities, execute properly dont rush
+    ListNode* deleteMiddle(ListNode* head) {
+        int n = 0;
+        int size = 0;
+        ListNode* dH = new ListNode();
+        dH->next = head;
+        ListNode* copy = head;
+        while(copy != nullptr) {
+            size++;
+            copy= copy->next;
+        }
+        n = size/2;
+        
+        copy = head;
+        int i = 0;
+        ListNode* last = nullptr;
+        while(copy != nullptr) {
+            if(i == n) {
+                if(last != nullptr) {
+                    last->next  = copy->next;
+                    copy->next = nullptr;
+                    return dH->next;
+                }else{
+//                     we are at the start of list 
+                    return copy->next;
+                }
+            }
+            last = copy;
+            copy = copy->next;
+            i++;
+        }
+        return head;
+    }
+};

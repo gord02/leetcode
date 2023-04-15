@@ -1,3 +1,32 @@
+class Solution {
+public:
+//     951. Flip Equivalent Binary Trees
+    // Runtime: 3 ms, faster than 84.51% of C++ online submissions for Flip Equivalent Binary Trees.
+// Memory Usage: 12.2 MB, less than 68.72% of C++ online submissions for Flip Equivalent Binary Trees.
+    bool flipEquiv(TreeNode* root1, TreeNode* root2) {
+        if(root1 == nullptr && root2 == nullptr) {
+            return true;
+        }
+//         passed the condition that BOTH arent null, so if one is null we can't comapre
+        if(root1 == nullptr || root2 == nullptr) {
+            return false;
+        }
+        
+//         both are not null
+        if(root1->val != root2->val) {
+            return false;
+        }
+//         similar at parent node, check the children
+//         two options to explore for the children, either flip was necessary or a flip wasnt necssary, eplore both the paths where we flip or don't flip
+       bool dontFlip =  flipEquiv(root1->left, root2->left) && flipEquiv(root1->right, root2->right);
+       bool flip =  flipEquiv(root1->left, root2->right) && flipEquiv(root1->right, root2->left);
+        
+//         as long as one of them yield the desried result
+        return dontFlip||flip;
+    }
+    
+};
+
 // 951. Flip Equivalent Binary Trees
 // time: 31 minutes, mainly failed test cases, overcomplciated logic and did comparisoins myself, should have just left it to explore both to the recusive options of flip or dont flip
 // Runtime: 0 ms, faster than 100.00% of C++ online submissions for Flip Equivalent Binary Trees.

@@ -1,0 +1,65 @@
+class Solution {
+public:
+    // 76. Minimum Window Substring
+//     time taken: 35 minutes 
+//     erorrs: you can decrement iterator value but need to use another one!, forgot to remove from string 
+    // Runtime: 619 ms, faster than 5.02% of C++ online submissions for Minimum Window Substring.
+// Memory Usage: 360.3 MB, less than 5.01% of C++ online submissions for Minimum Window Substring.
+    string minWindow(string s, string t) {
+        map<char, int> tChars;
+        map<char, int> sChars;
+        // vector<int> tChars(52, 0);
+        // vector<int> sChars(52, 0);
+        for(char c: t) {
+            // int pos = 0;
+            // if(isupper(c)) {
+            //     pos = 26;
+            // }
+            // tChars[tolower(c) - 'a' + pos]++;
+            auto it = tChars.find(c);
+            if(it == tChars.end()) {
+                tChars.insert(pair<char, int> (c, 1));
+            }else{
+                it->second++;
+            }
+        }
+        int neededChars = tChars.size();
+        int l = 0;
+        string res = "";
+        string str = "";
+        for(int r=0; r< s.size(); r++) {
+            str+= s[r];
+            auto it = sChars.find(s[r]);
+            if(it == sChars.end()) {
+                sChars.insert(pair<char, int> (s[r], 1));
+            }else{
+                it->second++;
+            }
+            it = sChars.find(s[r]);
+           // auto sIt = sChars.find(s[r]);
+           auto tIt = tChars.find(s[r]);
+            
+            if(tIt != tChars.end() && it->second == tIt->second) {
+                neededChars--;
+            }
+            
+            while(neededChars == 0) {
+//                 updating 
+                if(res.size() > str.size() || res == "") {
+                    res = str;
+                }
+//                 decrementing window
+                auto it = sChars.find(s[l]);
+                it->second--;
+                it = sChars.find(s[l]);
+                if(tChars.find(s[l]) != tChars.end() && it->second < tChars.find(s[l])->second) {
+                    neededChars++;
+                }
+                str = str.substr(1, str.size());
+                l++;
+            } 
+        }
+        
+        return res;
+    }
+};

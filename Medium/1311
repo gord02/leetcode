@@ -1,0 +1,72 @@
+class Solution {
+public:
+//     1311. Get Watched Videos by Your Friends
+//     23 minutes, minor tpying errors
+    // Runtime: 390 ms, faster than 5.06% of C++ online submissions for Get Watched Videos by Your Friends.
+// Memory Usage: 40.5 MB, less than 16.29% of C++ online submissions for Get Watched Videos by Your Friends.
+    static bool func(pair<string, int> i, pair<string, int> j) {
+        if( i.second == j.second) {
+            return i.first < j.first;
+        }
+        return i.second < j.second;
+    }
+    vector<string> watchedVideosByFriends(vector<vector<string>>& watchedVideos, vector<vector<int>>& friends, int id, int level) {
+        map<int, vector<int>> adj;
+        map<string, int> dict;
+        
+        set<int> seen;
+        
+        for(int i = 0; i< friends.size(); i++) {
+//             each i is unique
+            adj.insert(pair<int, vector<int>> (i, friends[i]));
+        }
+        queue<int> q;
+        int lvl = 0;
+        q.push(id);
+        
+        while(q.empty() == false) {
+            int size = q.size();
+            while( size > 0) {
+                int person = q.front();
+                q.pop();
+                size--;
+                seen.insert(person);
+                    
+                if( lvl == level) {
+                    
+                    for( string movie: watchedVideos[person]) {
+                        auto it = dict.find(movie);
+                        if(it == dict.end()) {
+                            dict.insert(make_pair(movie, 1));
+                            // dict.insert((movie, 1));
+                        }else{
+                            it->second++;
+                        }
+                    }
+                }else{
+//                     get list of current person's frineds 
+                    auto it = adj.find(person);
+                    
+                    for( int nextFriend: it->second) {
+                        if(seen.find(nextFriend) == seen.end()) {
+                            q.push(nextFriend);
+                            seen.insert(nextFriend);
+                        }
+                    }
+                }
+            }
+            lvl++;
+        }
+        vector<pair<string, int>> movies;
+        for(auto pair: dict) {
+            movies.push_back(pair);
+        }
+        sort(movies.begin(), movies.end(), func);
+        vector<string> res;
+        
+        for(auto pair: movies) {
+            res.push_back(pair.first);
+        }
+        return res;
+    }
+};

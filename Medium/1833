@@ -1,0 +1,33 @@
+class Solution {
+public:
+// 1833. Maximum Ice Cream Bars
+// time : 7 mins 
+/*
+goal: buy as many as possible 
+ - to maximize total number bought, buy as many least valued ones as possible
+
+*/
+Runtime
+258 ms
+Beats
+47.50%
+Memory
+76.4 MB
+Beats
+76.68%
+    int maxIceCream(vector<int>& costs, int coins) {
+        int count = 0;
+        sort(costs.begin(), costs.end());
+        int i = 0;
+        while(i < costs.size() && coins > 0) {
+            if(costs[i] <= coins) {
+                count++;
+                coins -= costs[i];
+            }else{
+                break;
+            }
+            i++;
+        }
+        return count;
+    }
+};

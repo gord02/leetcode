@@ -1,5 +1,42 @@
 class Solution {
 public:
+    
+    // 451. Sort Characters By Frequency
+//     time taken: 9 minutes 
+    // Runtime: 13 ms, faster than 87.24% of C++ online submissions for Sort Characters By Frequency.
+// Memory Usage: 8.6 MB, less than 40.07% of C++ online submissions for Sort Characters By Frequency.
+    static bool func(pair<char, int> i,pair<char, int> j) {
+        return i.second > j.second;
+    }
+    string frequencySort(string s) {
+        map<char, int> dict;
+        vector<pair<char, int>> pairs;
+        
+        for(char c: s) {
+            auto it = dict.find(c);
+            if(it == dict.end()) {
+                dict.insert(pair<char, int> (c, 1));
+            }else{
+                it->second++;
+            }
+        }
+        for(auto pair: dict) {
+            pairs.push_back(pair);
+        }
+        sort(pairs.begin(), pairs.end(), func);
+        string res = "";
+        for(auto pair: pairs) {
+            while(pair.second > 0) {
+                res += pair.first;
+                pair.second--;
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
     // 451. Sort Characters By Frequency
 //     time taken: 12 minutes 
 //     Runtime: 12 ms, faster than 79.42% of C++ online submissions for Sort Characters By Frequency.

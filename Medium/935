@@ -1,5 +1,60 @@
 class Solution {
 public:
+
+// 935. Knight Dialer
+// Runtime
+// 255 ms
+// Beats
+// 44.33%
+// Memory
+// 22.2 MB
+// Beats
+// 59.34%
+    int knightDialer(int n) {
+        vector<vector<int>> dp(10, vector<int> (n+1, 0));
+
+        for(int r=0; r<dp.size(); r++) {
+            dp[r][1] = 1;
+        }
+        map<int, vector<int>> dict;
+        dict.insert(pair<int, vector<int>> (0, {4, 6}));
+        dict.insert(pair<int, vector<int>> (1, {6, 8}));
+        dict.insert(pair<int, vector<int>> (2, {7, 9}));
+        dict.insert(pair<int, vector<int>> (3, {4, 8}));
+        dict.insert(pair<int, vector<int>> (4, {3, 9, 0}));
+        dict.insert(pair<int, vector<int>> (5, {}));
+        dict.insert(pair<int, vector<int>> (6, {0,1,7}));
+        dict.insert(pair<int, vector<int>> (7, {2,6}));
+        dict.insert(pair<int, vector<int>> (8, {1,3}));
+        dict.insert(pair<int, vector<int>> (9, {2,4}));
+
+        // length of number to build that we build off of 
+        for(int j = 2; j< dp[0].size(); j++) {
+
+            // i is 0-9, 
+            for(int i = 0; i<dp.size(); i++) {
+                auto it = dict.find(i);
+                // will be defined since only digits
+                for(int x: it->second) {
+                    long long val = dp[x][j-1] % 1000000007;
+                    dp[i][j] += val;
+                    dp[i][j] = dp[i][j] % 1000000007;
+                }
+            }
+        }
+
+        int count = 0;
+        for(int i = 0; i<dp.size(); i++) {
+            long long val =  (dp[i][n] % 1000000007);
+             count += val;
+             count = count % 1000000007;
+        }
+        return count;
+    }
+};
+
+class Solution {
+public:
     // 935. Knight Dialer
 //     time takne: roughly an hours, issues was that used wrong mod!!!! you also need to be careful of how you take mode, take mode of two numbers like this res = (res+ rec(i,1,n)) % 1000000007;
 //     Runtime: 700 ms, faster than 13.41% of C++ online submissions for Knight Dialer.

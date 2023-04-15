@@ -1,0 +1,80 @@
+class Solution {
+public:
+// Runtime
+// 136 ms
+// Beats
+// 86.82%
+// Memory
+// 69.2 MB
+// Beats
+// 85.58%
+// 904. Fruit Into Baskets
+// time 18 minutes, error with typing and using correct variables 
+ int totalFruit(vector<int>& fruits) {
+    vector<int> occs(fruits.size(), 0);
+    int count = 0;
+    int best = 0;
+    int r = 0;
+    int l = 0;
+    while(r < fruits.size()) {
+        // tracknig fruits not index!!
+        if(occs[fruits[r]] + 1 == 1) {
+            // cout <<"r is : " << r << " " <<occs[r] << endl;
+            // cout << "here" << endl;
+            count++;
+        }
+        occs[fruits[r]]++;
+        // maintain valid window
+        while (count > 2) {
+            // cout << "dec" << endl;
+            if(occs[fruits[l]] -1 == 0) {
+                count--;
+            }
+            occs[fruits[l]]--;
+            l++;
+        }
+        // cout << l << " " << r << " "<< count << endl;
+        best = max(r-l+1, best); //uppdate best answer
+        r++;
+    }
+    return best;
+ }
+
+class Solution {
+public:
+// 904. Fruit Into Baskets
+// time: 17 minutes 
+Runtime
+175 ms
+Beats
+78.83%
+Memory
+75.2 MB
+Beats
+17.39%
+    int totalFruit(vector<int>& fruits) {
+        map<int, int> dict;
+        int l = 0;
+        int res = 0;
+        for(int r = 0; r< fruits.size(); r++) {
+            auto it = dict.find(fruits[r]);
+            if(it == dict.end()) {
+                dict.insert(pair<int, int> (fruits[r], 1));
+            }else{
+                it->second++;
+            }
+
+            while(dict.size() > 2) {
+                it = dict.find(fruits[l]);
+                it->second--;
+                if(it->second == 0) {
+                    // removing pair from dict to refelct no loinger consdierdin the type o fruit
+                    dict.erase(it);
+                }
+                l++;
+            }
+            res = max(res, r-l+1);
+        }
+        return res;
+    }
+};

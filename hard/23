@@ -1,3 +1,49 @@
+
+class Solution {
+public:
+    // 23. Merge k Sorted Lists
+    // time taken: 17 mins
+//     forgot null pointer check when adding node to queue 
+    // Runtime: 58 ms, faster than 35.90% of C++ online submissions for Merge k Sorted Lists.
+// Memory Usage: 13.3 MB, less than 60.25% of C++ online submissions for Merge k Sorted Lists.
+    struct compare{
+        bool operator()(ListNode* i, ListNode* j) {
+            return i->val > j->val; // smallest towards end which is top
+        }
+    };
+    
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<ListNode*, vector<ListNode*>, compare> q;
+        for(ListNode* list: lists) {
+           if(list != nullptr) {
+            q.push(list);
+           }
+        }
+        ListNode* dummyHead = new ListNode();
+        ListNode* head = dummyHead;
+        
+        while(q.empty() == false) {
+//             getting smallest node at the begining of each list
+            ListNode* smallest = q.top();
+            q.pop();
+            
+            ListNode* restOfList = smallest->next;
+            smallest->next = nullptr;
+            
+            
+            head->next = smallest;
+            head = head->next;
+            
+//             adding back remaing list if necessary
+            if(restOfList != nullptr) {
+                q.push(restOfList);
+            }
+        }
+        
+        return dummyHead->next;  
+    }
+};
+
 //     23. Merge k Sorted Lists
     // Time taken: 29 minutes, after first seven minutes switched ideas to go to new aproach with took two minutes to implement so 20 minutes to implement in total due to working out base cases
     // Runtime: 20 ms, faster than 89.39% Memory Usage: 13.7 MB, less than 33.62% 

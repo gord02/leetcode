@@ -1,0 +1,36 @@
+class Solution {
+public:
+    // 472. Concatenated Words
+//     time taken: 25 minutes
+    // Runtime: 573 ms, faster than 30.14% of C++ online submissions for Concatenated Words.
+// Memory Usage: 42.1 MB, less than 77.76% of C++ online submissions for Concatenated Words.
+    set<string> concat;
+    set<string> dict;
+    bool rec(int i, string word, int count) {
+        if(i >= word.size() && count >= 2) {
+            return true;
+        }
+        for(int j =1; j<= word.size(); j++) {
+            string sub = word.substr(i, j);
+            if(dict.find(sub) != dict.end()&& rec(i+j, word, count+1)) {
+                // res.push_back(word);
+                concat.insert(word);
+                break;
+            }
+        }
+        return false;
+    }
+    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+        for(string word: words) {
+            dict.insert(word);
+        }
+        for(string word: words) {
+            rec(0, word, 0);
+        }
+        vector<string> res;
+        for(string word: concat) {
+            res.push_back(word);
+        }
+        return res;
+    }
+};

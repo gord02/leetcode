@@ -1,0 +1,49 @@
+class Solution {
+public:
+// 2064. Minimized Maximum of Products Distributed to Any Store
+// time: 38 minutes, issue wtih divide by zero and ceil, ciel can convert double to int but have to pass in double division or it is usless
+// Runtime
+// 223 ms
+// Beats
+// 68.29%
+// Memory
+// 84.5 MB
+// Beats
+// 19.62%
+    int minimizedMaximum(int n, vector<int>& quantities) {
+        int res = 0;
+        int l = 1;
+        int r = 0;
+        for(int i: quantities) {
+            r = max(r, i);
+        }
+
+        res = r;
+        while(l < r) {
+            int m = (r-l)/2 + l;
+            int count = 0;
+            bool possible = true;
+
+            for(int i =0; i< quantities.size(); i++) {
+                double x = quantities[i];  
+                // cout << x << " / " << m << endl;
+                // cout << "maht: "<<  ceil(x/m) << endl;
+                count += ceil(x/m);
+                // cout << m << " " << count << endl;
+
+                if(count > n) {
+                    possible = false;
+                    break;
+                }
+            }
+          
+            if(possible){
+                r = m;
+                res = r;
+            }else{
+                l = m+1;
+            }
+        }
+        return res;
+    }
+};

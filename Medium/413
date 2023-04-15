@@ -1,4 +1,25 @@
-   // 413. Arithmetic Slices
+class Solution {
+public:
+// 413. Arithmetic Slices
+// couldnt come up with idea orginally, mesed up writing the code as well as the consecutive aspect of the code to check adjacent numbers 
+    int numberOfArithmeticSlices(vector<int>& nums) {
+        int res = 0;
+        for(int i=0; i+2<nums.size(); i++) {
+            cout << "here" << endl;
+            int diff = nums[i+1] - nums[i];
+            for(int j = i+2; j<nums.size(); j++) {
+                if(diff == nums[j] - nums[j-1]) {
+                    res++;
+                }else{
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+//  413. Arithmetic Slices
 //     O(n) on average? worst case O(n^2)? 
 // Runtime: 0 ms, faster than 100.00%, Usage: 7.4 MB, less than 52.20% of C++ online submissions for Arithmetic Slices.
         int numberOfArithmeticSlices(vector<int>& nums) {

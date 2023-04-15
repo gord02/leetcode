@@ -1,0 +1,35 @@
+class Solution {
+public:
+//     13. Roman to Integer
+//     time taken: 24 minutes
+    // Runtime: 24 ms, faster than 36.57% of C++ online submissions for Roman to Integer.
+// Memory Usage: 6.9 MB, less than 56.19% of C++ online submissions for Roman to Integer.
+    int romanToInt(string s) {
+        vector<int> symbols(26, 0);
+        symbols['I' - 'A'] = 1;
+        symbols['V' - 'A'] = 5;
+        symbols['X' - 'A'] = 10;
+        symbols['L' - 'A'] = 50;
+        symbols['C' - 'A'] = 100;
+        symbols['D' - 'A'] = 500;
+        symbols['M' - 'A'] = 1000;
+        int val = 0;
+        int i = 0;
+        while(i < s.size()) {
+            if(i+1 < s.size()) {            
+                if( symbols[s[i]-'A'] >=  symbols[s[i+1]-'A'] ) {
+                    val += symbols[s[i]-'A'];
+                    i++;
+                }else{
+                    val = val + symbols[s[i+1]-'A'] - symbols[s[i]-'A'];
+                    i = i+2;
+                }
+                
+            }else{
+                val += symbols[s[i]-'A'];
+                i++;
+            }
+        }
+        return val;
+    }
+};

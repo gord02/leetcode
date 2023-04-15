@@ -1,0 +1,56 @@
+class Solution {
+public:
+// 2218. Maximum Value of K Coins From Piles
+// time: 50 minutes with errors in code like index checking and using right variable
+// Runtime
+// 348 ms
+// Beats
+// 37.96%
+// Memory
+// 18.1 MB
+// Beats
+// 65.97%
+/*
+// process:
+1. BF appraoch- p piles, k choices from any stack, p^k, or n = p, n^k, where n is acutally a vector. so n is a vector of pointers for top of each list and k is the max amount of choices.
+
+// key intuition:
+if we are taking from x lists, the order from which we take from each of the lists does not matter.  
+this is a stack, we can only remove from the top of the stack, therefore the elements removed will be the first x from each lists if any are removed at all
+
+new BF apporach, take x from all lists and consider that output, where x ranges from 0 to k. this makes a k^n solution where k is number of choices of removal from front of any list and n is the number of lists we have to make choice on. 
+
+// we can of course memoize, since this choice from each index n can be repeated, therefor O(k*n) is final solution runtime, k numbers taken considered for all indices, take best answer at each index. 
+
+*/
+    int rec(int i, int k, vector<vector<int>> &piles, vector<vector<int>>& dp) {
+        if(i >= piles.size()) {
+            return 0;
+        }
+        if(dp[i][k] != -1) {
+            return dp[i][k];
+        }
+        int res= 0;
+        int sum = 0;
+        for(int j =0; j<= k; j++) {
+            if(j == 0) {
+               int pathTaken = rec(i+1, k, piles, dp);
+                res = max(res, pathTaken);
+            }else{
+                if(j > piles[i].size()) {
+                    break;
+                }
+                sum += piles[i][j-1];
+                // cout << "sum: " << sum << endl;
+                int pathTaken = sum + rec(i+1, k-j, piles, dp);
+                res = max(res, pathTaken);
+            }
+        }
+        dp[i][k] = res;
+        return res;
+    }
+    int maxValueOfCoins(vector<vector<int>>& piles, int k) {
+        vector<vector<int>> dp(piles.size(), vector<int> (k+1, -1));
+        return rec(0, k, piles, dp);
+    }
+};

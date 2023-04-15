@@ -1,0 +1,56 @@
+class Solution {
+public:
+// 1011. Capacity To Ship Packages Within D Days
+// time: 29 minutes, small erorr with intializiation of res
+// Runtime
+// 80 ms
+// Beats
+// 30.2%
+// Memory
+// 26 MB
+// Beats
+// 77.7%
+    int shipWithinDays(vector<int>& weights, int days) {
+        int r = 0;
+        // we are FINDING the minium weight that allows us to ship, this wieght ranges from 1 to sum of all wieghts
+        for(int n: weights) {
+            r+= n;
+        }
+        int l = 1;
+        int res = r; // for the case where we only get one day to work with, and since this is the worst possible answr anyway might as well use it not abrtirarly large number 
+
+        // binary search
+        while( l < r) {
+            // sum of wieghts 
+            int sum = 0;
+            // the int m, varible between our ranges 
+            int cap = (r-l)/2 + l;
+            // count of the number of days we need to ship all packages
+            int count = 1;
+            bool possible = true;
+            for(int i = 0; i< weights.size(); i++) {
+                // if we would excced the cappaicty, then send package on another day
+                if(sum + weights[i] > cap) {
+                    sum = weights[i];
+                    count++;
+                }else{
+                    sum += weights[i];
+                }
+                
+                // it was not possible to ship the wieghts in the given amount of days with the given capacity
+                if(count > days || sum > cap) {
+                    possible = false;
+                    break;
+                }
+            }
+            if(possible) {
+                // if weight was achievable, search lower ahlf
+                r=cap;
+                res = cap;
+            }else{
+                l = cap+1;
+            }
+        }
+        return res;
+    }
+};

@@ -1,0 +1,51 @@
+class Solution {
+public:
+    // 994. Rotting Oranges
+//     time takne: 20 minutes, used top instead of front, jumped around in code a bit
+    // Runtime: 12 ms, faster than 51.00% of C++ online submissions for Rotting Oranges.
+// Memory Usage: 14.7 MB, less than 5.20% of C++ online submissions for Rotting Oranges.
+    vector<vector<int>> dirs{{0,1}, {1,0}, {-1,0}, {0,-1}};
+    int orangesRotting(vector<vector<int>>& grid) {
+        queue<vector<int>> q;
+        for(int i=0; i<grid.size(); i++) {
+            for(int j=0; j<grid[i].size(); j++) {
+                if(grid[i][j] == 2) {
+                    q.push({i, j});
+                }
+            }
+        }
+        int lvl = 0;
+        while(q.empty() == false) {
+            int size = q.size();
+            while(size > 0) {
+                int r = q.front()[0];
+                int c = q.front()[1];
+                q.pop();
+                size--;
+                
+                for(vector<int> dir: dirs) {
+                    int i = r + dir[0];
+                    int j = c + dir[1];
+//                     if valid, in grid and an orange
+                    if(i >=0 && i<grid.size() && j>=0 && j<grid[0].size() && grid[i][j] == 1) {
+                        grid[i][j] = 2;
+                        q.push({i, j}); // only pushing newly tunred tomatoes 
+                    }
+                }
+                
+            }
+            if(q.size() > 0) { // if there are more oranges we need to increment level
+                lvl++;
+            }
+        }
+        
+        for(int i=0; i<grid.size(); i++) {
+            for(int j=0; j< grid[i].size(); j++) {
+                if(grid[i][j] == 1) {
+                    return -1; // could't reach this tomato via bfs therefore it wouldnt turn rotten via romixity to rotten tomatoe 
+                }
+            }
+        }
+        return lvl; // no tomatoes left so return how many levels it took to convert it to all rotten
+    }
+};

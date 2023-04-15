@@ -1,0 +1,29 @@
+class NumArray {
+public:
+    // 303. Range Sum Query - Immutable
+//     time taken: 6 minutes
+    // Runtime: 31 ms, faster than 78.15% of C++ online submissions for Range Sum Query - Immutable.
+// Memory Usage: 17.3 MB, less than 8.17% of C++ online submissions for Range Sum Query - Immutable.
+    vector<int> preSum; 
+    NumArray(vector<int>& nums) {
+        int sum = 0;
+        for(int i=0; i< nums.size(); i++) {
+            sum+= nums[i];
+            preSum.push_back(sum);
+        }
+    }
+    
+    int sumRange(int left, int right) {
+        if(left == 0) {
+            return preSum[right];
+        }else{
+            return preSum[right] - preSum[left-1];
+        }
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * int param_1 = obj->sumRange(left,right);
+ */

@@ -1,0 +1,36 @@
+class Solution {
+public:
+    // 2225. Find Players With Zero or One Losses
+//     11 minutes 
+    // Runtime: 1546 ms, faster than 28.88% of C++ online submissions for Find Players With Zero or One Losses.
+// Memory Usage: 178.9 MB, less than 52.49% of C++ online submissions for Find Players With Zero or One Losses.
+    vector<vector<int>> findWinners(vector<vector<int>>& matches) {
+        map<int, int> dict;
+        
+        for(vector<int> match: matches) {
+            int a = match[0];
+            int b = match[1];
+            
+            auto it = dict.find(a);
+            if( it == dict.end()) {
+                dict.insert(make_pair(a, 0));
+            }
+            it = dict.find(b);
+            if(it == dict.end()) {
+                dict.insert(make_pair(b, 1));
+            }else{
+                it->second++;
+            }
+        }
+        vector<vector<int>> res = {{}, {}};
+        for(auto pair: dict) {
+            if(pair.second == 0) {
+                res[0].push_back(pair.first);
+            }
+            else if( pair.second == 1) {
+                res[1].push_back(pair.first);
+            }
+        }
+        return res;
+    }
+};

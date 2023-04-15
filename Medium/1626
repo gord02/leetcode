@@ -1,0 +1,36 @@
+// roughly 30 minutes, failed to realize i was inrcorrectly solving the question, solved for the number of players on a team not the sum. failed to consider base cases for best sum reslut
+class Solution {
+public:
+    static bool func(vector<int> i, vector<int> j) {
+        if( i[0] == j[0]) {
+            return i[1] < j[1];
+        }
+        return i[0] < j[0];
+    }
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        vector<vector<int>> players;
+        for(int i=0; i< scores.size(); i++) {
+            players.push_back({ages[i], scores[i]});
+        }
+        sort(players.begin(), players.end(), func);
+        vector<int> dp(scores.size(), 0);
+
+        for(int i=0; i<dp.size(); i++) {
+            dp[i] = players[i][1]; 
+            best = max(best, dp[i]);
+        }
+
+        int best = 0;
+        for(int i = 1; i< ages.size(); i++) {
+            for(int j = 0; j < i; j++) {
+                // we already known that players are sorted by age, we can build off of a previously made team(sub sequence if that younger player has a score less than or equal to older player at index i)
+                if( players[j][1] <= players[i][1]) {
+                    // if socre is higher, we add one player to existing team
+                    dp[i] = max(dp[i], dp[j] + players[i][1]);
+                }
+            }
+            best = max(best, dp[i]);
+        }
+        return best;
+    }
+};

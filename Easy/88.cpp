@@ -1,5 +1,33 @@
 class Solution {
 public:
+    // 88. Merge Sorted Array
+    // Runtime: 8 ms, faster than 19.39% of C++ online submissions for Merge Sorted Array.
+// Memory Usage: 9 MB, less than 90.42% of C++ online submissions for Merge Sorted Array.
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i = m+n-1;
+        m--;
+        n--;
+        while(m>=0 && n>=0) {
+            if(nums1[m] <= nums2[n]) {
+                nums1[i] = nums2[n];
+                n--;
+            }else{
+                nums1[i] = nums1[m];
+                m--;
+            }
+            i--;
+        }
+        
+        while(n>=0) {
+            nums1[i] = nums2[n];
+            n--;
+            i--;
+        }
+    }
+};
+
+class Solution {
+public:
 //      fill the list nums 1 from the back since at the back there is only 0s so we are not overwriting a numbers we might nned to move later on. We will from the back by comapring the largest elements of the n and m numbers of each list respectvely 
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
         n--;

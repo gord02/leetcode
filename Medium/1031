@@ -1,0 +1,164 @@
+
+class Solution {
+public:
+// iterative BF compute 
+// time:1 + 7 minures, a lot to debug despite knowing solution
+    int maxSumTwoNoOverlap(vector<int>& nums, int firstLen, int secondLen) {
+        // saving on space by not using this
+        // vector<int> preSum(nums.size(), 0);
+        vector<int> maxFirstLenLeft(nums.size(), 0);
+        vector<int> maxFirstLenRight(nums.size(), 0);
+     
+        int l = 0;
+        int sum = 0;
+        for(int r = 0; r<nums.size(); r++) {
+            sum += nums[r];
+            while( r-l >= firstLen) {
+                // decrmenting window
+                sum -= nums[l];
+                l++;
+            }
+            if(r +1 >= firstLen) {
+                // cout << "here" << endl;
+                // cout << "r: "<< r << " firstlen: " << firstLen<<endl;
+                // carries over the max sum achhieved from the left side
+                maxFirstLenLeft[r] = max(maxFirstLenLeft[max(r-1, 0)], sum);
+            }
+        }
+        cout << "pas1" << endl;
+        int r = nums.size()-1;
+        sum = 0;
+        for(int l = nums.size()-1; l>=0; l--) {
+            sum += nums[l];
+            while(r-l >= firstLen) {
+                sum -= nums[r];
+                r--;
+            }
+            if(nums.size() - firstLen >= l) {
+                if(l+1 < nums.size()) {
+                    maxFirstLenRight[l] = max(maxFirstLenRight[l+1], sum);
+                }else{
+                    maxFirstLenRight[l] = sum;
+                }
+            }
+        }
+        for(int i=0; i< nums.size(); i++) {
+            cout << maxFirstLenLeft[i] << " "<< flush;
+        }
+        cout << endl;
+        for(int i=0; i< nums.size(); i++) {
+            cout << maxFirstLenRight[i] << " "<< flush;
+        }
+        cout << endl;
+
+        l = 0;
+        sum = 0;
+        int res = 0;
+        // there needs to be a subsequences of firstLen to the right or else no point in checking 
+        for(int r=0; r< nums.size()-firstLen; r++) {
+            sum += nums[r];
+            while(r-l >= secondLen) {
+                sum -= nums[l];
+                l++;
+            }
+            // there exists a subsrequnce of length firstLen to left of our current subarray
+            if(l >= firstLen) {
+                // l is the begining of our subrray
+                // we carried over the max sum subarray from the left so that we dont need to check all subarrays of length firstLen currently to the left of our subrray of length seocndLen
+                res = max(res, sum + maxFirstLenLeft[l-1]);
+            }
+            // r marks the ending index of subarray
+            // cout << l << " " << r << " " << secondLen << endl;
+            if(r-l +1 >= secondLen) {
+                // cout << "here" << endl;
+                res = max(res, sum + maxFirstLenRight[r+1]);
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    // 1031. Maximum Sum of Two Non-Overlapping Subarrays
+//      very ling time to work out the logic and get everything working 
+//     Runtime: 11 ms, faster than 47.45% of C++ online submissions for Maximum Sum of Two Non-Overlapping Subarrays.
+// Memory Usage: 9 MB, less than 15.20% of C++ online submissions for Maximum Sum of Two Non-Overlapping Subarrays.
+    int maxSumTwoNoOverlap(vector<int>& nums, int firstLen, int secondLen) {
+        
+        vector<int>firstLenWindows(nums.size(), 0);
+        vector<int>secondLenWindows(nums.size(), 0);
+        vector<int>firstLenWindowsL(nums.size(), 0);
+        vector<int>firstLenWindowsR(nums.size(), 0);
+        vector<int>secondLenWindowsL(nums.size(), 0);
+        vector<int>secondLenWindowsR(nums.size(), 0);
+        
+        int sum = 0;
+        for(int i=0; i<nums.size(); i++) {
+            if(i >= firstLen) {
+                sum = sum - nums[i-firstLen]; // drop number outside of window 
+            }
+            sum+=nums[i];
+            if(i >= firstLen -1) {
+                firstLenWindows[i] = sum;
+            }
+        }
+        
+        sum = 0;
+        for(int i=0; i<nums.size(); i++) {
+            if(i >= secondLen) {
+                sum = sum - nums[i-secondLen]; // drop number outside of window 
+            }
+            sum+=nums[i];
+            if(i >= secondLen -1) {
+                secondLenWindows[i] = sum;
+            }
+        }
+ 
+        firstLenWindowsL[0] =  firstLenWindows[0];
+        for(int i=1; i<firstLenWindowsL.size(); i++) {
+           firstLenWindowsL[i]  = max(firstLenWindowsL[i-1], firstLenWindows[i]);
+        }
+
+        firstLenWindowsR[firstLenWindowsR.size()-1] = firstLenWindows[firstLenWindowsR.size()-1]; 
+        for(int i=firstLenWindowsR.size()-2; i>=0; i--) {
+           firstLenWindowsR[i]  = max(firstLenWindowsR[i+1], firstLenWindows[i]);
+        }
+
+        secondLenWindowsL[0] =  secondLenWindows[0];
+        for(int i=1; i<secondLenWindowsL.size(); i++) {
+           secondLenWindowsL[i]  = max(secondLenWindowsL[i-1], secondLenWindows[i]);
+        }
+        secondLenWindowsR[secondLenWindowsR.size()-1] = secondLenWindows[secondLenWindowsR.size()-1]; 
+        for(int i=secondLenWindowsR.size()-2; i>=0; i--) {
+           secondLenWindowsR[i]  = max(secondLenWindowsR[i+1], secondLenWindows[i]);
+        }
+        
+        int best = 0;
+        for(int i = 0; i< secondLenWindows.size(); i++) {
+            int left_ind = i-secondLen-1;
+            if(left_ind >=0 && left_ind + firstLen-1 < i) {
+                best = max(best, secondLenWindows[i] + firstLenWindowsL[left_ind]);
+            }
+//             added right
+            int  right_ind = i+firstLen;
+            if(right_ind <secondLenWindows.size()) {
+                best = max(best, secondLenWindows[i] + firstLenWindowsR[right_ind]);
+            }
+        }
+        
+        for(int i = 0; i< firstLenWindows.size(); i++) {
+            int left_ind = i-firstLen-1;
+            if(left_ind >=0 && left_ind + secondLen-1 < i) {
+                best = max(best, firstLenWindows[i] + secondLenWindowsL[left_ind]);
+            }
+//             added right
+            int  right_ind = i+secondLen;
+            if(right_ind <firstLenWindows.size()) {                
+                best = max(best, firstLenWindows[i] + secondLenWindowsR[right_ind]);
+            }
+        }
+        return best;
+        
+    }
+};

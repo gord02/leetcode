@@ -1,0 +1,108 @@
+class Solution {
+public:
+// 1774. Closest Dessert Cost
+// time : 42 minutes
+// small error with using wrong variable towards end
+Runtime
+249 ms
+Beats
+15.44%
+Memory
+13.3 MB
+Beats
+19.80%
+    int closestCost(vector<int>& baseCosts, vector<int>& toppingCosts, int target) {
+        int maxSum = 0;
+        int maxBase = 0;
+        for(int i: baseCosts) {
+            maxBase = max(i, maxBase);
+        }
+        // max cost is achieved by taking max amount of all toppings 
+        for(int i=0; i< toppingCosts.size(); i++) {
+            maxSum += toppingCosts[i]*2;
+        }
+        // the max possible sum that can be achieved
+        maxSum += maxBase;
+        vector<vector<bool>> dp( toppingCosts.size()+1, vector<bool> (maxSum+1, 0));
+
+        int res = INT_MAX;
+        // initlaization, base case is not choosing any toppings 
+        for(int b: baseCosts) {
+            dp[0][b] = true;
+        }
+
+        // loopes through all possible cost sums
+        for(int j=1; j< dp[0].size(); j++) {
+
+            // loops through the topping costs
+            for(int i=1; i< dp.size(); i++) {
+                // checks if this sum exists before reaching topping cost, if it exists then we can build off of it with topping costs
+                if(dp[i-1][j]) {
+                    dp[i][j] = true; // dont take topping
+                    dp[i][j + toppingCosts[i-1]] = true; // take 1 of topping
+                    dp[i][j + toppingCosts[i-1]*2 ] = true; // take two of topping
+                }
+            }
+
+        }
+        for(int j =0; j< dp[0].size(); j++) {
+            // if sum j exists, we carried down to costs to last row of dp table by updating dp[i][j], not taking anything
+            if( dp[toppingCosts.size()][j]  && abs(res - target) > abs( target - j) ) {
+                res = j;
+            }
+            else if( dp[toppingCosts.size()][j]  && abs(res - target) == abs( target - j)  && j < res) {
+                res = j;
+            }
+        }
+
+
+        return res;
+    }
+};
+
+class Solution {
+public:
+// 1774. Closest Dessert Cost
+// time : 34 mininutes, had to prove to myself
+Runtime
+41 ms
+Beats
+56.10%
+Memory
+9.8 MB
+Beats
+51.74%
+    int rec(int cost, int i, vector<int>& toppings, int t) {
+        if(i >= toppings.size() ) {
+            return cost;
+        }
+
+        int res = INT_MAX;
+        for(int n=0; n<=2; n++) {
+            int val = rec(cost+ n*toppings[i], i+1, toppings, t);
+
+            if( abs(res - t) > abs(val - t) ) {
+                res = val;
+            }
+            else if (abs(res - t) == abs(val - t)  && res > val) {
+                res = val;
+            }
+        }
+        return res;
+    }
+
+    int closestCost(vector<int>& baseCosts, vector<int>& toppingCosts, int t) {
+        int res = INT_MAX;
+        for(int base: baseCosts) {
+            int val = rec(base, 0, toppingCosts, t);
+
+            if(abs (res - t) > abs(val - t) ) {
+                res = val;
+            }
+            if(abs (res - t) == abs(val - t)  && res > val) {
+                res = val;
+            }
+        }
+        return res;
+    }
+};

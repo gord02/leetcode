@@ -1,0 +1,35 @@
+
+class Solution {
+public:
+// tle
+
+// did not go through through test cases!!!
+    static bool func(vector<int> i, vector<int> j) {
+        // if( i[0] == j[0]) {
+        //     return i[1] < j[1];
+        // }
+        // if( i[1] == j[1]) {
+        //     return i[0] < j[0];
+        // }
+        return i[1] < j[1];
+
+        // return i[0] < j[0];
+    }
+    int findMinArrowShots(vector<vector<int>>& points) {
+        if(points.size() == 0) {
+            return 0;
+        }
+        int count = 1;
+        sort(points.begin(), points.end(), func);
+        int lastArrowPos = points[0][1];
+        for(int i = 1; i< points.size(); i++) {
+            if(points[i][0] <= lastArrowPos && lastArrowPos <= points[i][1]) {
+                continue;
+            }
+            count++;
+            // furthest as possible to maximize chances of this necssary arrow for current baloon to be popped, also pops other baloons to the right of current one 
+            lastArrowPos = points[i][1];
+        }
+        return count;
+    }
+};

@@ -1,3 +1,51 @@
+
+// time taken: 26 minutes 
+class Solution{
+    public:
+     vector<vector<int>> threeSum(vector<int>& nums) {
+         sort(nums.begin(), nums.end());
+         vector<vector<int>> res;
+         for(int i=0; i< nums.size(); i++) {
+             
+             if(i > 0 && nums[i] == nums[i-1]) {
+//                  we have repeat, of number so to keep unique triples, move on
+                 continue;
+             }
+             
+             int val = nums[i];
+             int target = 0;
+             if(val < 0) {
+                 target = abs(val);
+             }else{
+                 target = -val;
+             }
+             int l = i+1;
+             int r = nums.size()-1;
+             while( l < r) {
+                 if(nums[l] + nums[r] < target) {
+                     l++;
+                 }
+                 else if(nums[l] + nums[r] > target) {
+                     r--;
+                 }
+                 else if(nums[l] + nums[r] == target) {
+//                      save this triplet
+                     res.push_back({val, nums[l], nums[r]});
+                     l++;
+                     while( l< r && nums[l] == nums[l-1]) {
+                         l++;
+                     }
+                     r--;
+                    while(r > l && nums[r] == nums[r+1]) {
+                         r--;
+                     }
+                 }
+             }
+        }
+         return res;
+     }
+};
+
 class Solution {
 public:
 //     horribly executed 
