@@ -1,6 +1,51 @@
 class Solution {
 public:
 // 1509. Minimum Difference Between Largest and Smallest Value in Three Moves
+// time: 23 minutes
+// Runtime
+// 101 ms
+// Beats
+// 55.38%
+// Memory
+// 35.3 MB
+// Beats
+// 75.63%
+
+// intution:
+// we want to shorten the gap between largest and smallest value, it makes the most sense to modify the largest and smallest values only, by bringing them closer to each other, this creates new max and new min to consider can be easily found with sort
+    int minDifference(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        if(nums.size() <= 3) {
+            return 0;
+        }
+        // intuition:
+        // doesnt matter what the array values are set to, we can basically disregard them and find new maxes and mins
+
+        int res = INT_MAX;
+        // case 1, modify three from front
+        int newMin = nums[3];
+        res = min(res, nums[nums.size() -1] - newMin);
+
+        // case 2, modify three from the back
+        int newMax = nums[nums.size() -1 - 3];
+        res = min(res, newMax - nums[0]);
+
+        // case three modify two in front 1 in back
+         newMin = nums[2];
+         newMax = nums[nums.size() -1 -1];
+        res = min(res, newMax -  newMin);
+        
+        // two from the back
+        newMin = nums[1];
+        newMax = nums[nums.size() -1 -2];
+        res = min(res, newMax -  newMin);
+        return res;
+    }
+};
+
+class Solution {
+public:
+// 1509. Minimum Difference Between Largest and Smallest Value in Three Moves
 // 100 ms
 // Beats
 // 87.9%

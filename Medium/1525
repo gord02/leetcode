@@ -1,0 +1,52 @@
+class Solution {
+public:
+// 1525. Number of Good Ways to Split a String
+// time: 16 minutes
+// Runtime
+// 21 ms
+// Beats
+// 81.8%
+// Memory
+// 8.5 MB
+// Beats
+// 64.74%
+/*
+Inutition, the sleft + sright = s, is very important since this tells us that when we make a split, we split the array in to two havles that are contigious sets
+
+we can realize that removing from right subaarray enlarges the left subarray, 
+left subarray only gains new potetial uniwue charcters and right only losses them,
+
+// we can just count the number of unique chars we have, a char is unique when its been ecnoutered for the very first time, its count is exactly 1
+*/
+    int numSplits(string s) {
+        int leftUnique = 0;
+        int rightUnique = 0;
+        vector<int> leftChars(26, 0);
+        vector<int> rightChars(26, 0);
+        for(char c: s) {
+            rightChars[c - 'a']++;
+            if(rightChars[c-'a'] == 1) {
+                rightUnique++;
+            }
+        }
+        int res = 0;
+        for(int i=0; i< s.size(); i++) {
+            leftChars[s[i] - 'a']++;
+            if( leftChars[s[i] - 'a'] == 1) {
+                leftUnique++;
+            }
+            rightChars[s[i] - 'a']--;
+            if(rightChars[s[i]-'a'] == 0) {
+                rightUnique--;
+            }
+            if(leftUnique == rightUnique) {
+                res++;
+            }
+            // since leftUnique only grows larger and rightUnique only grows smaller, no point in traversing any further
+            if(leftUnique > rightUnique) {
+                break;
+            }
+        }
+        return res;
+    }
+};

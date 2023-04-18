@@ -1,0 +1,91 @@
+class Solution {
+public:
+// 1482. Minimum Number of Days to Make m Bouquets
+// time: 42 with detailed explination like interivew, many typing errors with vars and params, be careful!
+// 301 ms
+// Beats
+// 5.3%
+// Memory
+// 124.1 MB
+// Beats
+// 5.36%
+
+/*
+// intuition: BF: 
+- check all the days, can be optimized
+
+// - indexes CANNOT be used twice
+- bouqet is contiguious, =>sliding window
+
+// since we know the bounds of the days, 1 and maxDay in array, we can do binary search for lowest day satisifitying condition
+*/
+    vector<int> bloomedDays(int day, vector<int> &bloomDay) {
+        vector<int> blooms(bloomDay.size(), 0);
+        for(int i=0; i< blooms.size(); i++) {
+            if(bloomDay[i] <= day) {
+                blooms[i] = 1;
+            }
+        }
+        return blooms;
+    }
+
+    int check(vector<int> &blooms, int k) {
+        int count = 0; // counts number of bouquets
+        // sliding window scan
+        int l = -1;
+        int r = 0;
+        for(int r = 0; r<= blooms.size(); r++) {
+            // valid starting index of l check and checking if we have enough flowers for bouuqet already
+            if(r-l >= k && l != -1) {
+                count++;
+                l = -1; // no longer have valid bouquet
+            }
+            if(r == blooms.size()) {
+                break;
+            }
+             if(blooms[r] == 0) {
+                // reset
+                l = -1;
+                // boq = 0;
+            }else{
+                if(l == -1) {
+                    l = r; // index to start bouquet from
+                }
+            }
+        }
+        return count;
+    }
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        // if(m*k > bloomDay.size()) {
+        //     return -1;
+        // }
+
+        int maxDay = 0;
+        for(int n: bloomDay) {
+            maxDay = max(maxDay, n);
+        }
+        int low = 1;
+        int high = maxDay;
+
+        while( low < high) {
+            int midDay = (high - low)/2 + low;// this is the days we wait for bloom
+            // initalize array of bloomed flowers
+            vector<int> blooms = bloomedDays(midDay, bloomDay);
+            int count = check(blooms, k);
+
+            if(count >= m) {
+                high = midDay; // want mininmum number of days
+            }else{
+                low = midDay + 1;
+            }
+        }
+        // check if final value of low is valid, edge cases 
+        vector<int> blooms = bloomedDays(low, bloomDay);
+        int count = check(blooms, k);
+        if(count >= m) {
+            return low;
+        }
+
+        return -1;
+    }
+};

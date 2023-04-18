@@ -1,0 +1,61 @@
+class Solution {
+public:
+// 1526. Minimum Number of Increments on Subarrays to Form a Target Array
+// time: 45 minutes to code, 10 minutes to debug
+// many issues with the WORKING WITH AND USING my PASSED IN VARIABLES
+
+/*
+// intution: 
+complciated at first, think of BF way, not easy wiether, next step, attempt on paper as human
+- what I saw was that you had index ranges to work from, maniuplate all that you can to achieve minimum value, then once minimum was ahcieved, this index cant be touched again, so work now only on index around the minimum. 
+- this can be done recursively I saw, therefore do so.
+- for each range passed to us in rec, incrmeent all values to the minimum in the target range
+- but what we can also notice is that working backwards can be done and is easier since you only need one array to pass along to rec
+- so in working backwards, we are decrmenting, we decrment by the larget min value in the range.
+ and then HAVING DRECREMENTED, we than split the array before and after indices that now store zero since we are done with that index
+ - what we can realize is that the indices we work with will not be repeated throught the calls. therefore the amount of recusive calls is linear
+ - the amount of work done on each recursive call is linear, therefore overall time to compute is o(n^2)
+*/
+int rec(int l, int r, vector<int>target) {
+    if(l > r || l < 0 || l >= target.size()) {
+        return 0;
+    }
+    cout << "start" << endl;
+    if(l == r) {
+        // mini number of operations needed to get this one value to zero
+        return target[l];
+    }
+    int minVal = INT_MAX;
+    for(int i=l; i<=r; i++) {
+        minVal = min(minVal, target[i]);
+    } 
+    int res = minVal;
+    int startInd = l;
+
+    // have to update for furture recsuvie calls
+    for(int i=l; i<=r; i++) {
+        target[i] = target[i] - minVal;
+    } 
+    // for(int i = 0; i<= target.size(); i++) { // this is the issues, we werent minimizing the search space!!!!!
+    for(int i = l; i<= r+1; i++) { 
+        cout << "i: " << i << endl;
+        // for non minVal elements apperaring after minvalue at end of array
+        if(i == r+1) {
+            res+= rec(startInd, i-1, target);
+            break;
+        }
+        if(target[i] == 0) {
+            cout << "new rec: " << startInd << " " << i-1 << endl;
+            // break of array here
+            res += rec(startInd, i-1, target);
+            cout <<"after"<< endl;
+            startInd = i+1;
+        }
+    }
+    return res;
+}
+// we work backwards from array to zero array 
+    int minNumberOperations(vector<int>& target) {
+        return rec(0, target.size()-1, target);
+    }
+};

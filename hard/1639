@@ -1,0 +1,42 @@
+class Solution {
+public:
+// BE VERY CAREFUL WITH WHICH INDEX AND WHICH BOUNDARY OF THE INDEX, POTENTUALLY INILIZE VARIBLES TO KEEP TRACK OF EVERYTHING!
+    int rec(int i, int k, vector<string>& words, string target, vector<vector<int>> &dp) {
+        if(i == target.size()) {
+            return 1; // found combo
+        }
+        // you still have to fulfill i but dont have any indexes left
+        if(k >= words[0].size()) {
+            return 0; // not acheievable
+        }
+        cout << i << " " << k << endl;
+
+        if(dp[i][k] != -1) {
+            return dp[i][k];
+        }
+        int res = 0;
+        for(string word: words) {
+
+            for(int j=k; j< word.size(); j++) {
+                if(word[j] == target[i]) {
+                    // cout << word << " j: " << j << " i: " << i << endl;
+                    int path = rec(i+1, j+1, words, target, dp);
+                    path = path % 1000000007;
+                    res += path;
+                    res = res % 1000000007;
+                }
+            }
+        }
+        // int skipIndex = rec(i+1, j, words, target, dp);
+        // skipIndex = skipIndex % 1000000007;
+        // res += skipIndex;
+        // res = res % 1000000007;
+        dp[i][k] = res;
+        // cout << i << " " << k << " r: " << res << endl;
+        return res;
+    }
+    int numWays(vector<string>& words, string target) {
+        vector<vector<int>> dp(target.size(), vector<int> (words[0].size(), -1));
+        return rec(0, 0, words, target, dp);
+    }
+};
