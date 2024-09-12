@@ -1,5 +1,66 @@
 class Solution {
 public:
+    // Beats 60.02%of users with C++
+    vector<int> dfs(int node, map<int, vector<int>>&adj,  vector<vector<bool>>& preReq, map<int, vector<int>> &dp) {
+        auto it = dp.find(node);
+        if(it != dp.end()) {
+            return it->second;
+        }
+        vector<int> courses; // pushing directly to this vector leads to potentialy expotinaly ammonut of repaeated values being pushed. Use set to reduce space
+        it = adj.find(node);
+        set<int> nodes;
+        if(it != adj.end()) {
+            for(int next: it->second) {
+                vector<int> vec = dfs(next, adj, preReq, dp);
+                for(int x: vec) {
+                    // all reachable nodes from current node
+                    nodes.insert(x);
+                }
+            }
+        }
+
+        for(int c: nodes) {
+            // the nodes we traversed to from node are stored into an array then returned up, node is prereq of all these nodes if you can traverse to them from node
+            preReq[node][c] = true;
+            courses.push_back(c);
+        }
+        courses.push_back(node);
+        dp.insert(pair<int, vector<int>> (node, courses));
+        return courses;
+    }
+    vector<bool> checkIfPrerequisite(int numCourses, vector<vector<int>>& prerequisites, vector<vector<int>>& queries) {
+        map<int, vector<int>> dp;
+        vector<vector<bool>> preReq(numCourses, vector<bool> (numCourses, false));
+        map<int, vector<int>> adj;
+        for(auto edge: prerequisites) {
+            int a = edge[0];
+            int b = edge[1];
+
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                adj.insert(pair<int, vector<int>> (a, {b}));
+            }else{
+                it->second.push_back(b);
+            }
+        }
+        // directed edges so no need to re visit a node
+
+        for(int i=0; i< numCourses; i++) {
+            dfs(i, adj, preReq, dp);
+        }
+        vector<bool> res;
+        for(auto q: queries) {
+            int a = q[0];
+            int b = q[1];
+            res.push_back( preReq[a][b]);
+        }
+        return res;
+
+    }
+};
+
+class Solution {
+public:
 // 1462. Course Schedule IV
 // Runtime
 // 268 ms

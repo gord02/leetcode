@@ -1,0 +1,77 @@
+class Solution {
+public:
+    int maximumDetonation(vector<vector<int>>& bombs) {
+        map<int, vector<int>> adj;
+
+        // this is flawed! only considers one axis, rest is fine
+        for(int i=0; i< bombs.size(); i++) {
+            int lowerX = bombs[i][0] - bombs[i][2];
+            int highX = bombs[i][0] + bombs[i][2];
+
+            int lowerY = bombs[i][1] - bombs[i][2];
+            int highY = bombs[i][1] + bombs[i][2];
+
+            int aX = bombs[i][0];
+            int aY = bombs[i][1];
+
+            for(int j=0; j< i; j++) {
+                int bX = bombs[j][0];
+                int bY = bombs[j][1];
+                bool map = false;
+                if(lowerX <= bX && bX <= aX) {
+                    // map a to b
+                    map = true;
+                }
+                else if(aX <= bX && bX <= highX) {
+                    // map a to b
+                    map = true;
+                }
+                else if(lowerY <= bY && bY <= aY) {
+                    // map a to b
+                    map = true;
+                }
+                else if(aY <= bY && bY <= highY) {
+                    // map a to b
+                    map = true;
+                }
+                if(map) {
+                    auto it = adj.find(i);
+                    if(it == adj.end()) {
+                        adj.insert(pair<int, vector<int>> (i, {j}));
+                    }else{
+                        it->second.push_back(j);
+                    }
+                }
+            }
+        }
+        int best = 0;
+        // start from each bomb
+        for(int i=0; i< bombs.size(); i++) {
+            set<int> seen;
+            seen.insert(i);
+            queue<int> q;
+            q.push(i);
+            // "BFS" from each starting bombs to all neighbouring bombs
+            while(q.empty() == false) {
+                // int size = q.size();
+                int b = q.front();
+                q.pop();
+                
+                auto it = adj.find(b);
+                if(it != adj.end()) {
+                    for(int next: it->second) {
+                        // won't repeat nodes
+                        if(seen.find(next) == seen.end()) {
+                            seen.insert(next);
+                            q.push(next);
+                        }
+                    }
+                }
+            }
+            int size =  seen.size();
+            best = max(best, size);
+            cout << size << " i: " << i << endl;
+        }
+        return best;
+    }
+};

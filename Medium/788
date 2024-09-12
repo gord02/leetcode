@@ -1,5 +1,44 @@
 class Solution {
 public:
+    // 788. Rotated Digits
+    // time: 15 minutes 
+    string flipped(string num) {
+        for(int j=0; j< num.size(); j++) {
+            // digit could not be flipped
+            if( num[j] == '3' || num[j] == '4' || num[j] == '7') {
+                return "";
+            }else if(num[j] == '2') {
+                num[j] = '5';
+            }else if(num[j] == '5') {
+                num[j] = '2';
+            }
+            else if(num[j] == '6') {
+                num[j] = '9';
+            }
+            else if(num[j] == '9') {
+                num[j] = '6';
+            }
+        }
+        // modified string
+        return num;
+    }
+    int rotatedDigits(int n) {
+        int res = 0;
+        for(int i=2; i<=n; i++) {
+            string num = to_string(i);
+            string newStr = flipped(num);
+
+            // the string version of two number that are the same, should be equivalent therefore we can leave them as strings
+            if(newStr != num && newStr != "") {
+                res++;
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
 // 788. Rotated Digits
 // // time: 15 minutes 
 // Runtime
@@ -27,6 +66,7 @@ public:
                 continue;
             }
             
+            // as long as you have one of these numbers, you know the number sfter flipping will be different from original number 
             if(nums[2] != 0 || nums[5] != 0 || nums[6] != 0 || nums[9] != 0) {
                 count++;
             }

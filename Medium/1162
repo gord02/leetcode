@@ -2,6 +2,11 @@ class Solution {
 public:
     // 1162. As Far from Land as Possible
     // 27 minutes
+
+    // intutition: for a cell to have a value, it needs to be in the vicinity of a
+    //  1 cell therefore another valued cell will not be able to overwrite it with a
+    //  smaller value since each water cell is traversed to by the closest land cell to
+    //  it via bfs and therefore no valued cell will ever need to be revalued
     vector<vector<int>> dirs{{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
     int maxDistance(vector<vector<int>>& grid) {
         queue<vector<int>> q;

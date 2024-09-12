@@ -1,0 +1,51 @@
+class Solution {
+public:
+// 1094. Car Pooling
+// time 24 minutes 
+    bool carPooling(vector<vector<int>>& trips, int cap) {
+        // we store only sum of people entering for a given time period since how to enter doesn't matter, just that the enter at the same time, need total people
+        map<int, int> enter; 
+        map<int, int> exit;
+        int d = 0;
+        for(int i=0; i< trips.size(); i++) {
+            int num = trips[i][0];
+            int from = trips[i][1];
+            int to = trips[i][2];
+
+            d = max(d, to);
+            auto it = enter.find(from);
+            if(it == enter.end()) {
+                enter.insert(pair<int, int> (from, num));
+            }else{
+                // sum up people entering at this distance from car's start
+                it->second+= num;
+            }
+
+            it = exit.find(to);
+            if(it == exit.end()) {
+                exit.insert(pair<int, int> (to, num));
+            }else{
+                // sum up people entering at this distance from car's start
+                it->second+= num;
+            }
+        }
+        int carSize = 0;
+        // from posiiton zero to max distance each dist is a place where people could be getting on
+        for(int i = 0; i<= d; i++) {
+            // add the number of people leaving to carSize or subtract num of people leaving 
+            auto it = enter.find(i);
+            if(it != enter.end()) {
+                carSize += it->second;
+            }
+            it = exit.find(i);
+            if(it != exit.end()) {
+                carSize -= it->second;
+            }
+
+            if(carSize > cap) {
+                return false;
+            }
+        }
+        return true;
+    }
+};

@@ -1,0 +1,69 @@
+class Solution {
+public:
+// 907. Sum of Subarray Minimums
+// Runtime
+// 106 ms
+// Beats
+// 64.77%
+// Memory
+// 39.4 MB
+// Beats
+// 93.18%
+// intution:
+    // a subarray is contignious, either carries over from the left or right, or starts anew at current index
+    // bF is find the miniumum of every subarray but this results in repeatedly traversing over thr same subarray.  we can realize that a subarray's min is either carried over from the side or is the new subarray's adidtional element just added.
+    // Therefore, we can determine the miniumum of the current subrray in constant time, by either updating new max or not. 
+    // what we can do is for each element in the array consider how many subarrays it is the minimum off, then multipy by the value to get how proper value for current number
+    // one thing to note is that the left and right side are indepdent of each other for acheving the dresired minimum. Therefore we need to cross mulitply how many subrrays on the left and on the right have the current minimum
+    int sumSubarrayMins(vector<int>& arr) {
+        stack<int> s;
+        int res = 0;
+        for(int i=0; i<= arr.size(); i++) {
+            if(i == arr.size()) {
+                // pop everything from the stack
+
+                int right = i; //we maintain montonically increasing stack, therefore smallest value is at bottom of the stack so every element in the stack has the same right bound which is the end of the array
+                while(s.size() > 0) {
+                    int ind = s.top();
+                    s.pop();
+                    int left = -1;
+                    if(s.size() > 0) {
+                        left = s.top();
+                    }
+                    int leftSubArrayLen = ind - left;
+                    int rightSubarrayLen = right - ind;
+
+                    long long subarrays = leftSubArrayLen*rightSubarrayLen;
+                    subarrays = subarrays % 1000000007;
+                    subarrays = subarrays*arr[ind];
+                    subarrays = subarrays % 1000000007;
+                    res+= subarrays;
+                    res = res % 1000000007;
+                }
+                break;
+            }
+            while(s.size() > 0 && arr[s.top()] > arr[i]) {
+                // the number in stack is no longer the minimum for subuarrays that follow and inlcude current index, therefore we can pop it and find the answer for it
+                int ind = s.top();
+                s.pop();
+                int left = -1;
+                if(s.size() > 0 ) {
+                    left = s.top();
+                }
+                int right = i;
+
+                int leftSubArrayLen = ind - left;
+                int rightSubarrayLen = right - ind;
+
+                int subarrays = leftSubArrayLen*rightSubarrayLen;
+                subarrays = subarrays % 1000000007;
+                subarrays = subarrays*arr[ind];
+                subarrays = subarrays % 1000000007;
+                res+= subarrays;
+                res = res % 1000000007;
+            }
+            s.push(i);
+        }
+        return res;
+    }
+};

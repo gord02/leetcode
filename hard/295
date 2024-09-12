@@ -1,3 +1,63 @@
+class MedianFinder {
+public:
+    struct maxVal{
+        bool operator()(int i, int j) {
+            return i < j; // puts largest value at back or top of structure
+        }
+    };
+
+    struct minVal {
+        bool operator()(int i, int j) {
+            return i > j;
+        }
+    };
+
+    priority_queue<int, vector<int>, maxVal> lower; 
+    priority_queue<int, vector<int>, minVal> upper; 
+
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        // we maintain a sorted list split into two halves
+        upper.push(num);
+        
+        // in the case that through our previous pushes we added a larger value to lower than the current value being added to our list
+        if(lower.size() > 0 && lower.top() > upper.top()) {
+            int l = lower.top();
+            lower.pop();
+            int u = upper.top();
+            upper.pop();
+
+            lower.push(u);
+            upper.push(l);
+        }
+
+        // balance out the rwo havles to manitain that the lower half as mush values than upper
+        if(upper.size() > lower.size()) {
+            lower.push(upper.top());
+            upper.pop();
+        }
+
+    }
+    
+    double findMedian() {
+        if( (lower.size() + upper.size()) % 2== 0) {
+            return (lower.top() + upper.top())/2.0;
+        }
+        return lower.top();
+    }
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+
+
 // 295. Find Median from Data Stream
 // time taken: 27 minutes 
 // Runtime: 341 ms, faster than 95.35% of C++ online submissions for Find Median from Data Stream.

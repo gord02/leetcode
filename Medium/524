@@ -1,0 +1,51 @@
+class Solution {
+
+public:
+// 524. Longest Word in Dictionary through Deleting
+// time: 12 minutes
+// Runtime
+// 76 ms
+// Beats
+// 25.67%
+// Memory
+// 22.6 MB
+// Beats
+// 29.70%
+
+// we are checking is the dictionary words are a subseuqnces of s. We either take or dont take chars from s, we should take chars that can directly match with chars in the string target, and delete the ones that dont
+    bool isSub(string s, string t) {
+        int p1 = 0;
+        int p2 = 0;
+        while(p1 < s.size() && p2 < t.size()) {
+            // both match therefore move onto next char in s since we cant repaeat use of the same chars and move forward in t to try to match next necessary char
+            if(s[p1] == t[p2]) {
+                p1++;
+                p2++;
+            }else{
+                // char is s wasnt what was needed to be matched, thus delete it
+                p1++;
+            }
+        }
+        // matched all necessary chars
+        if(p2 == t.size()) {
+            return true;
+        }
+        return false;
+    }
+    string findLongestWord(string s, vector<string>& dict) {
+        string res = "";
+        for(int i=0; i< dict.size(); i++) {
+            if(isSub(s, dict[i])) {
+                // either first string found or better(longer) answer than last one
+                if(res == "" || res.size() < dict[i].size()) {
+                    res = dict[i];
+                }
+                // lexiographically smaller 
+                else if(res.size() == dict[i].size() && dict[i] < res) {
+                    res = dict[i];
+                }
+            }
+        }
+        return res;
+    }
+};

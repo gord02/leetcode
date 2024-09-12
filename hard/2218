@@ -1,5 +1,45 @@
 class Solution {
 public:
+// Beats 72.07%of users with C++
+// Memory
+// Details
+// 29.63MB
+// Beats 48.78%of users with C++
+    int rec(int i, int k, vector<vector<int>>&piles, vector<vector<int>>&dp) {
+        if(k == 0) {
+            return 0;
+        }
+        if(i >= piles.size()) {
+            return 0;
+        }
+        if(dp[i][k] != -1) {
+            return dp[i][k];
+        }
+
+        int sum = 0;
+        int res = 0;
+        res = rec(i+1, k, piles, dp); // skip to the next pile without taking anything from current pile 
+        for(int j=1; j<=k; j++) {
+            if(j-1 >= piles[i].size()) {
+                break; //pruning
+            }
+            sum+= piles[i][j-1];// take from the front of the current pile and sum together the part of the pile you took
+            int path = sum + rec(i+1, k-j, piles, dp);
+            res = max(res, path); // choose the best path 
+        }
+        dp[i][k] = res;
+        return res;
+    }
+    int maxValueOfCoins(vector<vector<int>>& piles, int k) {
+        vector<vector<int>> dp(piles.size(), vector<int> (k+1, -1));
+        return rec(0, k, piles, dp);
+    }
+};
+
+
+
+class Solution {
+public:
 // 2218. Maximum Value of K Coins From Piles
 // time: 50 minutes with errors in code like index checking and using right variable
 // Runtime

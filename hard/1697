@@ -1,0 +1,75 @@
+class Solution {
+public:
+// 1697. Checking Existence of Edge Length Limited Paths
+/*
+// importvemnts:
+1. memoize paths and the limit for them
+2. get rid of useless edges, only the smallest value between two nodes matters as an edge, do this with map, mapping vector(path) to smallest distance between two elements
+-> we would need to sort path so we propoerly consider correct overlapping edges
+3. dfs returns minimum max dist used to arrive at node from starting node. we can save this value into a map, and any queruies with similar starting and end node with any larger limit will be true, any smaller limit will be false, final value map for a given path
+optimize the queries not the traversal!
+*/
+    bool dfs(int i, int dist, int lim, set<int> seen, int t, map<int, vector<vector<int>>> &adj) {
+        if(dist < lim && i == t) {
+            return true;
+        }
+        // pruning, this max dist traversed will never less than lim since we take the largest dist traverled so far
+        if(dist >= lim) {
+            return false;
+        }
+        if(seen.find(i) != seen.end()) {
+            return false;
+        }
+        seen.insert(i);
+        // int maxDist = dist;
+        auto it = adj.find(i);
+        bool res = false;
+        if(it != adj.end()) {
+            for(vector<int> path: it->second) {
+                int b = path[0];
+                int d = path[1];
+                res = res | dfs(b, max(dist, d), lim, seen, t, adj );
+            }
+        }
+        return res;
+    }
+    vector<bool> distanceLimitedPathsExist(int n, vector<vector<int>>& edgeList, vector<vector<int>>& queries) {
+        // adjency list
+        map<int, vector<vector<int>>> adj;
+        for(vector<int> edge: edgeList) {
+            int a = edge[0];
+            int b = edge[1];
+            int dist = edge[2];
+            vector<int> pair1 = {b, dist};
+            auto it = adj.find(a);
+            if (it == adj.end()) {
+                adj.insert(pair<int, vector<vector<int>>>  (a, {pair1} ));
+            }else{
+                it->second.push_back(pair1);
+            }
+            pair1 = {a, dist};
+
+            it = adj.find(b);
+            if (it == adj.end()) {
+                adj.insert(pair<int, vector<vector<int>>> (b, {pair1}));
+            }else{
+                it->second.push_back(pair1);
+            }
+        }
+        vector<bool> res;
+        for(vector<int> q: queries) {
+            set<int> seen;
+            int a = q[0];
+            int  b = q[1];
+            int lim = q[2];
+
+            bool result = dfs(a, 0, lim, seen, b, adj);
+            if(result) {
+                res.push_back(true);
+            }else{
+                res.push_back(false);
+            }
+        }
+        return res;
+    }
+};

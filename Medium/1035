@@ -1,0 +1,68 @@
+
+class Solution {
+public:
+    int rec(int i, int j, vector<int>&nums1, vector<int> &nums2, vector<vector<int>>&dp) {
+
+        if(i == nums1.size()) {
+            return 0;
+        }
+        if(j == nums2.size()) {
+            return 0;
+        }
+     
+        if(dp[i][j] != -1) {
+            return dp[i][j];
+        }
+
+        // cout << i << " - "<< j << endl;
+        
+        if(nums1[i] == nums2[j]) {
+            dp[i][j] = 1 + rec(i+1, j+1, nums1, nums2, dp); // might as well take current pair since not taking them has no way of optimizing answer in the future
+        }else{
+            int path1 = rec(i+1, j, nums1, nums2, dp);
+            int path2 = rec(i, j+1, nums1, nums2, dp);
+            dp[i][j] = max(path1, path2);
+        }
+        return dp[i][j];
+    }
+    int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
+        vector<vector<int>> dp(nums1.size(), vector<int> (nums2.size(), -1));
+        return rec(0, 0, nums1, nums2, dp);
+    }
+};
+
+class Solution {
+    // 1035. Uncrossed Lines
+//     Runtime
+// 39 ms
+// Beats
+// 19.89%
+// Memory
+// 12.9 MB
+// Beats
+// 59.98%
+// time: 19 minutes
+// took some time to realalize this could be acheived by recusion. Steps: first realize goal is to find same subseuqence in both arrays. This would be 2^n to gerneate subs for each and then you'd have to compare. This can be optimzted however, solving as a human, you look at the front of the list, a natural start, and then you decided what to do with current numbers, either they match or not. IF they match might as well pair them off. If they dont match, then you have to realize that you either skip the element at the start of list or or list two, and dont revisit this index again so as not to cross lines. This is just recursion take or dont take element but now choice is depedent on both lists. We can even memoize this approach, bringin it down from the 2^(max(n, m)), by realizing our state in reucsion is just i, j. memoize to bring runtime down to O(nm)
+public:
+    int rec(int i, int j, vector<int> &nums1, vector<int> &nums2, vector<vector<int>> &dp) {
+        if(i >= nums1.size() || j >= nums2.size()) {
+            return 0;
+        }
+        if(dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        int res = 0;
+        if(nums1[i] == nums2[j]) {
+            res = 1 + rec(i+1, j+1, nums1, nums2, dp); 
+        }else{
+            res = rec(i+1, j, nums1, nums2, dp);
+            res = max( rec(i, j+1, nums1, nums2, dp), res);
+        }
+        dp[i][j] = res;
+        return res;
+    }
+    int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
+        vector<vector<int>> dp(nums1.size(), vector<int> (nums2.size(), -1));
+        return rec(0, 0, nums1, nums2, dp);
+    }
+};

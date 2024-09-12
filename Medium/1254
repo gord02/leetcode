@@ -1,0 +1,156 @@
+class Solution {
+public:
+// 1254. Number of Closed Islands
+
+// intution: hard to find cells exaclty encolsed by 1s. But we know that a cell that is reachable from the edge of the grid has to not bee surroned by water, either surroned by zero or edges. We can counts number of isladns any isladn not reahcable from edged should be encased by water 
+// time: 49, error with pushing to queue for dfs, didnt push everything necessary 
+    void dfs(int i, int j, vector<vector<int>>&grid, vector<vector<int>>&island, int n) {
+        if(i < 0 || j < 0 || j >= grid[0].size() || i >= grid.size()) {
+            return;
+        }
+        if(grid[i][j] != 0) { // don't mark water as an island
+            return;
+        }
+        // the island number is already set 
+        if(island[i][j] != -1) {
+            return;
+        }
+        island[i][j] = n;
+        // finds remaining area of island 
+        dfs(i+1, j, grid, island, n);
+        dfs(i-1, j, grid, island, n);
+        dfs(i, j+1, grid, island, n);
+        dfs(i, j-1, grid, island, n);
+    }
+    int closedIsland(vector<vector<int>>& grid) {
+        vector<vector<int>> island(grid.size(), vector<int> (grid[0].size(), -1));
+        int islandNum = 0;
+        queue<vector<int>> q;
+        vector<vector<int>> seen(grid.size(), vector<int> (grid[0].size(), 0));
+
+        for(int i=0; i<grid.size(); i++) {
+            for(int j=0; j< grid[i].size(); j++) {
+                // the island cell is not explored yet since not labeled as island
+                if(grid[i][j] == 0 && island[i][j] == -1) {
+                    dfs(i, j, grid, island, islandNum);
+                    islandNum++; // counts the number of islands
+                }
+                // need to add regradless of if the island cell has been tagged or not
+                // island cell is on border, therefore immediately not surronded 
+                if ( grid[i][j] == 0 &&( i == 0 ||  j == 0 || i == grid.size()-1 || j == grid[0].size() -1)) {
+                        q.push({i, j});
+                        seen[i][j] = 1; // mark as seen for dfs 
+                    }
+            }
+            
+        }
+        set<int> notSurrounded;
+        vector<vector<int>> dirs {{0,1}, {1, 0}, {-1, 0}, { 0, -1}};
+        while(q.empty() == false) {
+            int size = q.size();
+            while(size > 0) {
+                size--;
+                auto cell = q.front();
+                int r = cell[0];
+                int c = cell[1];
+                q.pop();
+                
+                // mark the island this zero cell belongs to as not surrounded
+                notSurrounded.insert(island[r][c]);
+
+                for(auto dir: dirs) {
+                    int i = r + dir[0];
+                    int j = c + dir[1];
+
+                    // this adjcent cell is as island cell and is not seen already
+                    if(i >= 0 && j >= 0 && i < grid.size() && j < grid[0].size() &&grid[i][j] == 0 && seen[i][j] == 0) {
+                        seen[i][j] = 1;
+                        q.push({i, j});
+                    }
+                }
+            }
+        }
+        cout << islandNum << " " <<  notSurrounded.size() << endl;
+        return islandNum - notSurrounded.size();
+        
+    }
+};
+
+/*
+[
+[0,0,1,1,0,1,0,0,1,0],
+[1,1,0,1,1,0,1,1,1,0],
+[1,0,1,1,1,0,0,1,1,0],
+[0,1,1,0,0,0,0,1,0,1],
+[0,0,0,0,0,0,1,1,1,0],
+[0,1,0,1,0,1,0,1,1,1],
+[1,0,1,0,1,1,0,0,0,1],
+[1,1,1,1,1,1,0,0,0,0],
+[1,1,1,0,0,1,0,1,0,1],
+[1,1,1,0,1,1,0,1,1,0]]
+
+*/
+
+
+class Solution {
+public:
+    vector<vector<int>> dirs{{0,1}, {1,0}, {-1, 0}, {0, -1}};
+    void dfs(int r, int c, int islandNum, map<vector<int>, int> &island, vector<vector<int>>& grid) {
+   
+        if(island.find({r,c}) != island.end()) {
+            return;
+        }
+        island.insert(pair<vector<int>, int> ({r, c}, islandNum));
+        
+        for(auto dir: dirs) {
+            int x = r + dir[0];
+            int y = c + dir[1];
+            if(x< 0 || y< 0 || x>= grid.size() || y>= grid[0].size()) {
+            continue;
+            }
+            if(grid[x][y] == 0) {
+                dfs(x,y, islandNum, island, grid);
+            }
+        }
+    }
+    int closedIsland(vector<vector<int>>& grid) {
+        int m = grid[0].size();
+        int n = grid.size();
+        int count = 0;
+        map<vector<int>, int> island;
+        for(int i=0; i< grid.size(); i++) {
+            for(int j = 0; j< grid[0].size(); j++) {
+
+                if(grid[i][j] == 0 && island.find({i, j}) == island.end() ) {
+                    count++;
+                    dfs(i, j, count, island, grid);
+                }
+            }
+        }
+        set<int> edgeIslands;
+        for(int i=0; i< grid.size(); i++) {
+            if(grid[i][0] == 0) {
+                auto it = island.find({i, 0});
+                edgeIslands.insert(it->second);
+            }
+            if(grid[i][m-1] == 0) {
+                auto it = island.find({i, m-1});
+                edgeIslands.insert(it->second);
+            }
+        }
+
+        for(int j=0; j< grid[0].size(); j++) {
+            if(grid[0][j] == 0) {
+                auto it = island.find({0, j});
+                edgeIslands.insert(it->second);
+            }
+            if(grid[n-1][j] == 0) {
+                auto it = island.find({n-1, j});
+                edgeIslands.insert(it->second);
+            }
+        }
+
+        return count - edgeIslands.size();
+    }
+
+};

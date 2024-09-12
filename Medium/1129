@@ -1,6 +1,100 @@
 class Solution {
 public:
 // 1129. Shortest Path with Alternating Colors
+    // time: 34 minutes
+    // inutition: DFS is doable but not the best or simiplest way to find SHORTEST PATH even if the paths edges between nodes. BFS has the advantage of allowing use to not have to repeat nodes, as we would have found the shoretes way to arrive at a node if a valid path existed. This is done by starting from node 0 and exploring what can be achieved by taking paths red and blue, and repaeting this step assuming you arrived at a node following a given path, and given that arrival path, you choose the opposite parting path. O(n) time and space
+
+    // Beats 68.80%of users with C++
+
+    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& redEdges, vector<vector<int>>& blueEdges) {
+        map<int ,vector<int>> adjBlue;
+        map<int ,vector<int>> adjRed;
+
+        for(vector<int> edge: blueEdges) {
+            int a = edge[0];
+            int b = edge[1];
+
+            auto it = adjBlue.find(a);
+            if(it == adjBlue.end()) {
+                adjBlue.insert(pair<int, vector<int>> (a, {b}));
+            }else{
+                it->second.push_back(b);
+            }
+        }
+        for(vector<int> edge: redEdges) {
+            int a = edge[0];
+            int b = edge[1];
+
+            auto it = adjRed.find(a);
+            if(it == adjRed.end()) {
+                adjRed.insert(pair<int, vector<int>> (a, {b}));
+            }else{
+                it->second.push_back(b);
+            }
+        }
+
+        queue<vector<int>> q;
+
+        // two states for each node 
+        vector<vector<int>> seen(n, vector<int> (3, 0));
+        seen[0][-1 + 1] = 1;
+        seen[0][1 + 1] = 1;
+
+        q.push({0, -1}); // -1 is blue
+        q.push({0, 1}); // 1 is red
+
+        vector<int> res(n, -1);
+        int lvl = 0;
+        while(q.size() > 0) {
+            int size = q.size();
+            while(size > 0) {
+                size--;
+                int node = q.front()[0];
+                int edge = q.front()[1];
+                q.pop();
+                
+                // getting here the first time is the fastest way to get here via bfs
+                // only need to update once
+                if( res[node] == -1) {
+                    res[node] = lvl;
+                }
+                //  dictates what type of edge you can go to next 
+                if(edge == -1) {
+                   auto it = adjRed.find(node);
+                    if(it != adjRed.end()) {
+                        for(int next: it->second) {
+                            // not explored yet
+                            if(seen[next][edge + 1] == 0) {
+                                // swithcing off to the next node colour
+                                q.push({next, edge*-1}); 
+                            }
+                            seen[next][edge*-1] = 1;
+                        }
+                    }
+                }else{
+                    auto it = adjBlue.find(node);
+                    if(it != adjBlue.end()) {
+                        for(int next: it->second) {
+                            // not explored yet
+                            if(seen[next][edge + 1] == 0) {
+                                q.push({next, edge*-1}); 
+                            }
+                            seen[next][edge + 1] = 1;
+                        }
+                    }
+                }
+
+            }
+            lvl++;
+        }
+        return res;
+    }
+};
+
+
+class Solution {
+public:
+// 1129. Shortest Path with Alternating Colors
 // missed important realization of edge case of loop back to node with different path value attached!!!!, need to update cur node as well apporiartely 
     void dfs(int node,int last, int lvl, map<int, vector<int>> &red, map<int, vector<int>> &blue, vector<int> &res, set<vector<int>>&seen ) {
         if(seen.find({node, last}) != seen.end()) {

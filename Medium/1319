@@ -1,5 +1,75 @@
 class Solution {
 public:
+    // 1319. Number of Operations to Make Network Connected
+    // time: 25 minutes
+    // intuition
+    // the groups are just groups, not optimal way to connect groups together. just a number. 
+    // using disjoint sets we can know if two nodes are connected or not. We can loop through list of connections and connect the nodes if not already, if not connected, decrment number of groups, if connected we have a redundant cable we can make use of later to connect components. 
+    // number of groups and number of cables are just numbers. If we have  cables >= groups -1 we just need groups -1 to connect them all since thats how many it would take to connect the disjoint groups, otherwise we cant connect all groups, return -1
+
+
+    // Beats 97.21%of users with C++ time
+    // Beats 61.69%of users with C++ space
+    bool unit(int x, int y, vector<int>&parent, vector<int>&rank) {
+        int parX = find(x, parent);
+        int parY = find(y, parent);
+
+        // nodes are already in the same group
+        if(parX == parY) {
+            return true;
+        }
+
+        if(rank[parX] >= rank[parY]) {
+            parent[parY] = parX;
+            rank[parX] += rank[parY];
+            rank[parY] = 0; // rank stores size of component, everything is being moved to X's parent 
+        }else{
+            parent[parX] = parY;
+            rank[parY] += rank[parX];
+            rank[parX] = 0;
+        }
+
+        return false;
+    }
+    int find(int x, vector<int>&parent) {
+        if(x == parent[x]) {
+            return x;
+        }
+        parent[x] = find(parent[x], parent);
+        return parent[x];
+    }
+
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        vector<int> parent(n, 0);
+        vector<int> rank(n, 1);
+        for(int i=0; i< parent.size(); i++) {
+            parent[i] = i;
+        }
+        int cables = 0;
+        int groups = n;
+        for(auto edge: connections) {
+            int a = edge[0];
+            int b = edge[1];
+
+            bool connected = unit(a, b, parent, rank);
+            if(connected) {
+                cables++; // the count of usable cables, we now have redundant cable to work with 
+            }else{
+                groups--; // we joined two groups thus reducing number of groups by 1
+            }
+        }
+        // don't have enough cables to join everything
+        if(cables < groups -1) {
+            return -1;
+        }
+        return groups -1;
+    }
+};
+
+
+
+class Solution {
+public:
 // 58 minutes 
 // failed after 25 testcases
     void unit(int x, int y, vector<int> &parent, vector<int> &rank) {

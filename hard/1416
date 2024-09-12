@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int rec(int i, string s, int k, vector<int> &dp) {
+        if(i >=s.size()) {
+            // parsed entire string
+            return 1;
+        }
+        if(dp[i] != -1) {
+            return dp[i];
+        }
+        int res = 0;
+        int n = 0;
+        for(int j=i; j< s.size(); j++) {
+            // converts char of number to number addding it to n
+            n = n*10 + (s[j] - '0');  // since n muilds up twoards k, if we were to break, runtime is log(k), base 10. 
+            // zero is special case, we have to return here since nothing can be done with a zero and trying to add more numbers to it creates issues
+            if(n == 0) {
+                break; // IMPORTANT SPECIAL CASE!!!!!! LEADING ZERO FOR PROCESS STRING!!!!
+            }
+            if(n >= 1 && n <= k) {
+                int choice = rec(j+1, s, k, dp);
+                choice = choice % 1000000007;
+                res += choice;
+                res = res % 1000000007;
+            }else{
+
+                break;
+            }
+        }
+        dp[i] = res;
+        return res;
+    }
+    int numberOfArrays(string s, int k) {
+        vector<int> dp(s.size(), -1);
+        return rec(0, s, k, dp);
+    }
+};

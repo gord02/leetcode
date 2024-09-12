@@ -1,6 +1,64 @@
 class Solution {
 public:
 // 1061. Lexicographically Smallest Equivalent String
+// time: 23 minutes, careful not to submit prematurely
+// Runtime
+// 6 ms
+// Beats
+// 52.36%
+// Memory
+// 6.5 MB
+// Beats
+// 86.39%
+    void unit(int X, int Y, vector<int>&parent) {
+        int parX = find(X, parent);
+        int parY = find(Y, parent);
+
+        if(parX == parY) {
+            return;
+        }
+        if(parX <= parY) {
+            parent[parY] = parX;
+        }else{
+            parent[parX] = parY;
+        }
+    } 
+    int find(int x, vector<int>&parent) {
+        if(x == parent[x]) {
+            return x;
+        }
+        parent[x] = find(parent[x], parent); // path compression, update after returing up
+        return parent[x];
+    } 
+
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        // the rank is the parent index 
+       vector<int> parent(26, 0);
+
+       for(int i=0; i< parent.size(); i++) {
+           parent[i] = i;
+       }
+
+        for(int i=0; i< s1.size(); i++) {
+            int x = s1[i] - 'a';
+            int y = s2[i] - 'a';
+            unit(x, y, parent);
+        }
+
+        string res = baseStr;
+        for(int i=0; i< res.size(); i++) {
+            int letterInd = baseStr[i] - 'a';
+            find(letterInd, parent); // compress any remaining paths
+            // cout <<"letter: " << parent[letterInd] + 'a' << endl;
+            res[i] = parent[letterInd] + 'a';
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+// 1061. Lexicographically Smallest Equivalent String
 // time : 30 minutes,
 // was correct with the disjoint set approach but didnt make sure I was working with chars vs integers correclt in its correct spot
 // Runtime

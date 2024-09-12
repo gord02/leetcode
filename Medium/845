@@ -1,3 +1,34 @@
+class Solution {
+public:
+// 845. Longest Mountain in Array
+// 18 minutes 
+// Beats 65.92%of users with C++
+    int longestMountain(vector<int>& arr) {
+        int res = 0;
+        int i = 0;
+        while( i < arr.size()) {
+            int start = i;
+
+            // finds the peak 
+            while(i + 1 < arr.size() && arr[i] < arr[i+1]) {
+                i++;
+            }
+            int peak = i;
+            while(i + 1 < arr.size() && arr[i] > arr[i+1]) {
+                i++;
+            }
+            // we have a mountain since we have three distinct points create an area of increease, peak and area of decrease
+            if( start != peak && peak != i) {
+                res = max(res, i-start+1);
+            }
+            if(peak == i) {
+                i++; // keep moving forward
+            }
+        }
+        return res;
+    }
+};
+
 
 class Solution {
 public:

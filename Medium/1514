@@ -1,5 +1,70 @@
 class Solution {
 public:
+    struct compare{
+        public:
+        bool operator()(vector<double> i, vector<double> j) {
+            // maxiamize prob, puts max at back which is top of data structure
+            return i[0] < j[0];
+        }
+    };
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start_node, int end_node) {
+        // map node to vector of vectors, each vector contains the node and the prob to get to it
+        map<double, vector<vector<double>> > adj;
+        for(int i=0; i< edges.size(); i++) {
+            int a = edges[i][0];
+            int b = edges[i][1];
+            double prob = succProb[i];
+            vector<double> path(2, prob);
+            path[0] = b;
+            auto it = adj.find(a);
+            if(it == adj.end()) {
+                adj.insert(pair<double, vector<vector<double>> > (a, {path}));
+            }else{
+                it->second.push_back(path);
+            }
+            path[0] = a;
+            it = adj.find(b);
+            if(it == adj.end()) {
+                adj.insert(pair<double, vector<vector<double>> > (b, {path}));
+            }else{
+                it->second.push_back(path);
+            }
+        }
+
+        vector<double> bestProb(n, 0);
+        bestProb[start_node] = 1;
+        priority_queue<vector<double>, vector<vector<double>>, compare> q;
+        q.push({1, start_node*1.0});
+
+        while(q.empty() == false) {
+            vector<double> top = q.top();
+            q.pop();
+            double curProb = top[0];
+            double curNode = top[1];
+            if(curNode == end_node) {
+                return curProb;
+            }
+            auto it = adj.find(curNode);
+            if(it != adj.end()) {
+                for(vector<double> path: it->second) {
+                    double nextNode = path[0];
+                    double cost = path[1];
+
+                    if(cost*curProb > bestProb[nextNode]) {
+                        // we can relax the node(find new optimal way to arrive at node which better the answer derived from this position) so we update the node and traverse from it
+                        q.push({cost*curProb, nextNode});
+                        bestProb[nextNode] =   cost*curProb;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
+
+
+class Solution {
+public:
 //     Runtime: 289 ms, faster than 43.90% of C++ online submissions for Path with Maximum Probability.
 // Memory Usage: 73.5 MB, less than 12.75% of C++ online submissions for Path with Maximum Probability.
 double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {

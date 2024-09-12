@@ -1,0 +1,54 @@
+class Solution {
+public:
+// 438. Find All Anagrams in a String
+// time: 45 minutes 
+// Runtime
+// 17 ms
+// Beats
+// 52.45%
+// Memory
+// 8.7 MB
+// Beats
+// 42.68%
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> sChars(26, 0);
+        vector<int> pChars(26, 0);
+        int needed = 0; // unique number of chars needed
+        for(char c: p) {
+            pChars[c-'a']++;
+            if(pChars[c-'a'] == 1) {
+                needed++;
+            }
+        }
+        int count = 0;
+        vector<int> res;
+        int l = 0;
+        for(int r=0; r< s.size(); r++) {
+            char c = s[r];
+            sChars[c - 'a']++;
+            // after incrementing we fullfilled requiremnet
+            if( sChars[c - 'a'] == pChars[c - 'a']) {
+                count++;
+            }
+            else if(sChars[c - 'a'] > pChars[c - 'a']) {
+                // invalid window of characters, increment l until valid again
+                // it is the this specifc charceter making the window invalid, so find a way to remove one of its instances from the window
+                while(sChars[c - 'a'] > pChars[c - 'a']) {
+                    char ch = s[l]; // it is the index r that broke the window therefore we will need to iterate l upto at most l to fix window
+                    sChars[ ch - 'a']--;
+                    // check the decremetn conditions only once!
+                    if(sChars[ ch - 'a'] +1 == pChars[ch - 'a']) {
+                        // we decrmented a needed charcater in p, to less than its needed count
+                        count--;
+                    }
+                    l++;
+                }
+            }
+            // charcters we encounter are either needed, in excess or invalid chars not in p. The first and second if conditions cover those three cases so we will have unique values of l being pushed to res
+            if(needed == count) {
+                res.push_back(l);
+            }
+        }
+        return res;
+    }
+};

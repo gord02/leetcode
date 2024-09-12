@@ -1,0 +1,69 @@
+class Solution {
+public:
+
+        // this is not a candidate for djisktra, this is because we dont have a weight between cells. We do however need to 
+        // recognize that we shouldn't need to go back to a visited cell, under the condition that the second time arriving at a cell 
+        // required less removal of obstacles. This needs to be factored into visited data structure
+    int shortestPath(vector<vector<int>>& grid, int k) {
+        // vector<vector<int>> bestPath(grid.size(), vector<int> (grid[0].size(), INT_MAX));
+        set<vector<int>> seen;
+        // bestPath[0][0] = 0;
+         
+        vector<vector<int>> dirs{{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+        // priority_queue<vector<int>, vector<vector<int>>, compare>q;
+        queue<vector<int>>q; 
+        q.push({0, 0, k});
+        int level = 0;
+        int n = grid.size();
+        int m = grid[0].size();
+        // 'disktras' retricst it selft, no need to set threshold to looping 
+// this bfs with restrictions not disktras 
+        while(q.empty() == false) { 
+            int size = q.size();
+            while(size > 0) {
+                vector<int> top = q.front();
+                int i = top[0];
+                int j = top[1];
+                int z = top[2];
+                q.pop();
+                size--;
+
+                if(i == n-1 && j == m-1) {
+                    return level;
+                }
+                
+                for(auto dir: dirs) {
+                    int r = i + dir[0];
+                    int c = j + dir[1];
+
+                    if(r >=0 && c>=0 && c< grid[0].size() && r < grid.size()) {
+                        // we can only move to a cell containing 1 if we have more obstacles to remove
+                        
+                        if( grid[r][c] == 1 && z > 0) {
+                            vector<int> state = {r, c, z-1};
+                            auto it = seen.find(state);
+                            if( it == seen.end()) {
+                                q.push(state);
+                                seen.insert(state);
+                            }
+
+                        }
+                        // in both cases of a valid move, only move to that cell if we derived a better way to get to it than before
+                        else if( grid[r][c] == 0) {
+
+                            vector<int> state = {r, c, z};
+                            auto it = seen.find(state);
+                            if( it == seen.end()) {
+                                q.push(state);
+                                seen.insert(state);
+                            }
+                        }
+                        // else if(bestP)
+                    }
+                }
+            }
+            level++;
+        }
+        return -1;
+    }
+};

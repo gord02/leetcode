@@ -1,0 +1,52 @@
+class Solution {
+public:
+// 1296. Divide Array in Sets of K Consecutive Numbers
+
+// intution:
+/*
+    Solving as a human you would just put numbers into different arrays, making new arrays when not cosecutive, not aadding to already full set. then check at the end that the condition was fulfilled. 
+
+    // you could first try to replicate this apporach, use a map to keep track of the vector groups, map last number to vector of sizes. This gets tricky when neededing to remove from one pair and add to another pair.
+
+    What we can do instead is realize that a number at the beginning of the set will need to have k-1 consectuvie elments after it. therefore we can directly search for those exact elements using a map. Update the elements when we find them. an importnat note is that we need to sort the array and use an unoredered map, or use regular ordered map. either way, runtime is nlog n
+*/
+    bool isPossibleDivide(vector<int>& nums, int k) {
+        map<int, int> dict;
+        for(int n: nums) {
+            auto it = dict.find(n);
+            if(it == dict.end()) {
+                dict.insert(pair<int, int> (n, 1));
+            }else{
+                it->second++;
+            }
+        }
+        while(dict.begin() != dict.end()) {
+            int num = dict.begin()->first;
+            // number of occurences of the current number that ideally will be matched to a set of k
+            while(dict.begin()->second != 0) {
+                // the curr number num is the first of the set of k, we need to find the next k-1 elements 
+                int x = num+1;
+                cout << "start" << endl;
+                for(int i=1; i<= k-1; i++) {
+                    auto it = dict.find(x);
+                    if(it == dict.end()) {
+                        return false;
+                    }else{
+                        it->second--;
+                        // no more of needed element left
+                        if(it->second == 0) {
+                            dict.erase(it);
+                        }
+                        cout << "found" << endl;
+                    }
+                    x++;
+                }
+                dict.begin()->second--;
+                cout << "after: " << dict.begin()->second << endl;
+            }
+            auto it = dict.begin(); // value of pair is now zero, so remove it from set
+            dict.erase(it);
+        }
+        return true;
+    }
+};

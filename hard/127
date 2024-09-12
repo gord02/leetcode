@@ -1,0 +1,85 @@
+// 127 
+
+// forgot to relate begin word to rest fo the words, too slow
+
+class Solution {
+public:
+// asuume strings of same length
+    bool seq(string s1, string s2) {
+        int diffs = 0;
+        for(int i=0; i< s1.size(); i++) {
+            if(s1[i] != s2[i]) {
+                diffs++;
+            }
+        }
+        // have to differ by exactly one
+        if(diffs == 1) {
+            return true;
+        }
+        return false;
+    }
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        map<string, vector<string>> adj;
+        set<string> seen;
+        // need to relate all other words to starting word, which is not necessarily in thw wordList, add it
+        wordList.push_back(beginWord);
+        for(int i=1; i< wordList.size(); i++) {
+            for(int j=0; j<i; j++) {
+                bool diff = seq(wordList[i], wordList[j]);
+                // cout <<"diff: "<< diff << endl;
+                if(diff) {
+                    auto it = adj.find(wordList[i]);
+
+                    if(it == adj.end()) {
+                        adj.insert(pair<string, vector<string>> (wordList[i], {wordList[j]}));
+                    }else{
+                        it->second.push_back(wordList[j]);
+                    }
+
+                    it = adj.find(wordList[j]);
+
+                    if(it == adj.end()) {
+                        adj.insert(pair<string, vector<string>> (wordList[j], {wordList[i]}));
+                    }else{
+                        it->second.push_back(wordList[i]);
+                    }
+                }
+            }
+            // cout << "==="<<endl;
+                    }
+        int lvl = 1;
+        queue<string> q;
+        q.push(beginWord);
+
+
+        seen.insert(beginWord); // add to seen when first adding to queue
+
+        while(q.empty() == false) {
+            int size = q.size();
+            while(size > 0) {
+                size--;
+                string cur = q.front();
+                q.pop();
+
+                if(cur == endWord) {
+                    return lvl;
+                }
+                auto it = adj.find(cur);
+
+                if(it != adj.end()) {
+                    // loop through all words in list that are already candiates to be adjcent to current string
+                    for(string nextWord: it->second) {
+                        // dont got to preivoiusly visted since doublbing back doesnt yeild a shorter path to string node
+                        if(seen.find(nextWord) == seen.end()) {
+                            seen.insert(nextWord);
+                            q.push(nextWord);
+                            // cout << "pushing:" << nextWord << endl;
+                        }
+                    }
+                }
+            }
+            lvl++;
+        }
+        return 0;
+    }
+};

@@ -1,0 +1,34 @@
+class Solution {
+public:
+
+// check constraints and prune when applicable!
+    int best = INT_MAX;
+    void rec(int i, vector<int> &cookies, vector<int> groups) {
+        // distrbuted all cookies to groups
+        if(i == cookies.size()) {
+            int largest = 0;
+            // n is the sum of the group
+            for(int n: groups) {
+                largest = max(largest, n);
+            }
+            // found a better combo minimizing the max sum 
+            best = min(best, largest);
+            return;
+        }
+        // we have k groups, the current cookie needs to be added to one, check all combos
+        for(int j=0; j< groups.size(); j++) {
+            // adding cooking to a group 
+            groups[j] += cookies[i];
+            if(groups[j] < best) { // pruning
+                rec(i+1,cookies, groups);
+            }
+            // back trakcing
+            groups[j] -= cookies[i];
+        }
+    }
+    int distributeCookies(vector<int>& cookies, int k) {
+        vector<int> groups(k, 0);
+        rec(0, cookies, groups);
+        return best;
+    }
+};

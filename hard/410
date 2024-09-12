@@ -1,5 +1,10 @@
 class Solution {
 public:
+
+// intuition:
+    // the best way to minimize the largest sum of any subarray is to average out or evenly distrubte total sum across all subarrays. The avergae is the best possible min largest sum of any subarray and the total sum of array is max. We can do a binmary search on this range to find smallest largert min sum that works. We can scan the array and add them up, everytime a number would cause us to excced to the max current target sum, we do a split. If number of splits exceed allowed splits, splits >k. then this target sum was not possible, search upper half of range
+
+
     // 410. Split Array Largest Sum
 //     time: 26 minutes, needed hint towards binary search, took time to fix bugs in code(used m as vairble name when already given AND didnt realizing its m subgroups, not division, subtract by 1)
 //     Runtime: 0 ms, faster than 100.00% of C++ online submissions for Split Array Largest Sum.

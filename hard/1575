@@ -1,0 +1,42 @@
+class Solution {
+public:
+// 1575. Count All Possible Routes
+// time 16 minutes
+
+// bF: O(n^F)
+// optimization intution:
+// same place, with the dame options to move to with the same variables = dp memoization
+// if you have to return a value from ruecsion, you can likely apply memoxiation 
+    int rec(int i, int f, int end, vector<int> &locations, vector<vector<int>>&dp) {
+    
+        // pruninig base case
+        if(f < 0) {
+            return 0; // no path
+        }
+        if(dp[i][f] != -1) {
+            return dp[i][f];
+        }
+        int res = 0;
+        // the is currently one way to get to end since we are already here, but we are allowed to keep going after gettting to end, therefore continue to recusion
+        if(i == end) {
+            res = 1;
+        }
+
+        // go thorugh all posisble options from cur position
+        for(int j=0; j< locations.size(); j++) {
+            if(i != j) {
+                int cost = abs(locations[j] - locations[i]);
+                int path = rec(j, f -cost, end, locations, dp) % 1000000007;
+
+                res += path;
+                res = res % 1000000007;
+            }
+        }
+        dp[i][f] = res;
+        return res;
+    }
+    int countRoutes(vector<int>& locations, int start, int finish, int fuel) {
+        vector<vector<int>> dp(locations.size(), vector<int> (fuel+1, -1));
+        return rec(start, fuel, finish, locations, dp);
+    }
+};

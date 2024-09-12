@@ -1,0 +1,37 @@
+class Solution {
+public:
+map<vector<int>, int>dp;
+    int rec(int i,int carry, vector<int>& prices, int fee) {
+        if(i == prices.size()) {
+            return 0;
+        }
+        vector<int> state = {i, carry};
+        auto it = dp.find(state);
+        if(it != dp.end()) {
+            return it->second;
+        }
+        int res = 0;
+        if(prices[i] <= carry) {
+            // swap out carry value
+            // if carry is the same as current value, since we need to sell before we can buy again, there is nothing that can be done with the carry value
+            // if carry is greater than cur number, we can increase the diff between our buy, which is the carry and when we hopefully sell later on
+            // res = rec(i+1, prices[i], prices, fee, dp);
+            res = rec(i+1, prices[i], prices, fee);
+        }else{
+            // good choice to sell or keep current carry value
+            // int sell = (prices[i] - carry) - fee + rec(i+1,prices[i], prices, fee, dp);
+            int sell = (prices[i] - carry) - fee + rec(i+1,prices[i], prices, fee);
+            // int keep = rec(i+1,carry, prices, fee, dp);
+            int keep = rec(i+1,carry, prices, fee);
+            res = max(sell, keep);
+        }
+        dp.insert(pair<vector<int>, int> (state, res));
+        return res;
+    }
+    int maxProfit(vector<int>& prices, int fee) {
+        // vector<vector<int>> dp(prices.size(), vector<int> ())
+        // map<vector<int>, int> dp;
+        // return rec(1, prices[0], prices,fee, dp);
+        return rec(1, prices[0], prices,fee);
+    }
+};

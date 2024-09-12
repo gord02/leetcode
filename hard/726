@@ -1,0 +1,128 @@
+class Solution {
+public:
+// 726. Number of Atoms
+// time: 1 hour
+// messed up logic for opening brackets, actually needed to remove them 
+// Runtime
+// 4 ms
+// Beats
+// 43.4%
+// Memory
+// 7.2 MB
+// Beats
+// 36.29%
+    string getEle(string s) {
+        int i=0;
+        string ele = "";
+        while(i < s.size() && s[i] != ':') {
+            ele = ele + s[i];
+            i++;
+        }
+        return ele;
+    }
+    int getNum(string s) {
+        int i =0;
+        while(i < s.size() && s[i] != ':') {
+            i++;
+        }
+        i++; // skip ":"
+
+        int n = 0;
+        // gets the number associtated with element
+        while(i < s.size() &&  isdigit(s[i]) ) {
+            n = n*10 + (s[i] - '0');
+            i++;
+        }
+        if(n == 0) {
+            // no number followed the string
+            n = 1;
+        }
+        return n;
+    }
+    string countOfAtoms(string formula) {
+        int i =0;
+        vector<string> elements;
+        while(i < formula.size()) {
+            if(formula[i] == '(') {
+                elements.push_back("(");
+                i++;
+                continue;
+            }
+            if(formula[i] == ')') {
+                i++; //skip the )
+                int n = 0;
+                // gets the number associtated with element
+                while(i < formula.size() &&  isdigit(formula[i]) ) {
+                    n = n*10 + (formula[i] - '0');
+                    i++;
+                }
+                if(n == 0) {
+                    // no number followed the string
+                    n = 1;
+                }
+                // update all necessary elements
+                for(int i=elements.size()-1; i>=0; i--) {
+                    if(elements[i] == "(") {
+                        // have to erase the elements for other nesting!!
+                        elements.erase(elements.begin()+i);
+                        break;
+                    }
+                    string element = getEle(elements[i]);
+                    int num = getNum(elements[i]);
+                    // cout << "num: "<< num << " n: " << n << " ele: " << element << endl;
+                    num = num * n;
+                    string newEle = element+":"+to_string(num);
+                    elements[i] = newEle;
+                }
+                continue;
+            }
+            string element = "";
+            // gets start of formula
+            if( isupper(formula[i]) ) {
+                element = element + formula[i];
+                i++;
+            }
+            // gets lowe case part of element
+            while(i < formula.size() &&  islower(formula[i]) ) {
+                element = element + formula[i];
+                i++;
+            }
+            int n = 0;
+            // gets the number associtated with element
+            while(i < formula.size() &&  isdigit(formula[i]) ) {
+                n = n*10 + (formula[i] - '0');
+                i++;
+            }
+            if(n == 0) {
+                // no number followed the string
+                n = 1;
+            }
+            element+= ":"+to_string(n);
+            // cout << "adding: "<< element << endl;
+
+            elements.push_back(element);
+        }
+        map<string, int> dict;
+        for(int i=0; i< elements.size(); i++) {
+            string element = getEle(elements[i]);
+            if(element == "(") {
+                continue;
+            }
+            int num = getNum(elements[i]);
+            auto it = dict.find(element);
+            if(it == dict.end()) {
+                dict.insert(pair<string, int>(element, num));
+            }else{
+                it->second+= num;
+            }
+        }
+        string res = "";
+        for(pair<string, int> p: dict) {
+            res+= p.first;
+            if(p.second != 1) {
+                res = res + to_string(p.second);
+            }
+        }
+        return res;
+    }
+};

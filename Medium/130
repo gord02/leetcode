@@ -1,0 +1,65 @@
+class Solution {
+public:
+// 130. Surrounded Regions
+// time: 24 minutes
+// small error in typing, put dir[0] twice 
+    void solve(vector<vector<char>>& board) {
+        vector<vector<int>> dirs{{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+        vector<vector<int>> seen(board.size(), vector<int> (board[0].size(), 0));
+        queue<vector<int>> q;
+        int n = board.size();
+        int m = board[0].size();
+
+        // initialize the queue with inherently non captured O cells
+        for(int i=0;i < board.size(); i++) {
+            if(board[i][0] == 'O') {
+                q.push({i, 0});
+                seen[i][0] = true;
+            }
+            if(board[i][m-1] == 'O') {
+                // there sint much harm in pushing the same cell to the q more than once
+                q.push({i, m-1});
+                seen[i][m-1] = true;
+            }
+        }
+        for(int j= 0; j < board[0].size(); j++) {
+            if(board[0][j] == 'O') {
+                q.push({0, j});
+                seen[0][j] = true;
+            }
+            if(board[n-1][j] == 'O') {
+                q.push({n-1, j});
+                seen[n-1][j] = true;
+            }
+        }
+        while(q.size() != 0) {
+            // level traversal syntax isnt important here. just process all values
+            vector<int> cell = q.front();
+            q.pop();
+            for(vector<int> dir: dirs) {
+                int r = dir[0] + cell[0];
+                int c = dir[1] + cell[1];
+
+                // check if valid cell and O cell
+                if(r >= 0 && c>=0 && r < n && c < m && board[r][c] == 'O') {
+                    // cout << r << " "<< c<< endl;
+                    // push only if not seen alrady to prevent recacluting the same cell 
+                    if(seen[r][c] == 0) {
+                        // cout << "push" << endl;
+                        q.push({r, c});
+                        seen[r][c] = 1;
+                    }
+                }
+            }
+        }
+        // flip all O cells not marked as seen, which means they are surronded
+        for(int i=0; i< n; i++) {
+            for(int j =0; j< m; j++) {
+                if(board[i][j] == 'O' && seen[i][j] == 0) {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+        return;
+    }
+};

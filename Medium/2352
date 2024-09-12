@@ -1,0 +1,39 @@
+class Solution {
+public:
+// 2352. Equal Row and Column Pairs
+// time: 16 minutes 
+    int equalPairs(vector<vector<int>>& grid) {
+        map<vector<int> , int> rows;
+        map<vector<int> , int> cols;
+
+        for(vector<int> row: grid) {
+            auto it = rows.find(row);
+            if(it == rows.end()) {
+                rows.insert(pair<vector<int>, int> (row, 1));
+            }else{
+                it->second++;
+            }
+        }
+        for(int c=0; c< grid[0].size(); c++) {
+            vector<int> col;
+            for(int r=0; r< grid.size(); r++) {
+                col.push_back(grid[r][c]);
+            }
+            auto it = cols.find(col);
+            if(it == cols.end()) {
+                cols.insert(pair<vector<int>, int> (col, 1));
+            }else{
+                it->second++;
+            }
+        }
+        int res = 0;
+        for(pair<vector<int>, int> row: rows) {
+            int rowNum = row.second;
+            auto it = cols.find(row.first);
+            if(it != cols.end()) {
+                res += rowNum*it->second;
+            }
+        }
+        return res;
+    }
+};

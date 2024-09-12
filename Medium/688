@@ -1,0 +1,37 @@
+class Solution {
+public:
+// time: 25 minutes
+// 688. Knight Probability in Chessboard
+/*
+// DP iteraitve:
+iterative approch can be devleoped from the state(r, c, k). We just need to run through all the combinations of state. The subproblems are different k values which build off of each other. We have a 3d array, for each k value, we explore all the cells that exist in the gird. to answer the solution to dp[row][col][k], we need to check the 8 different movements that could have been made to reach current position. We need to check if the current space was reachable from any of the eight possibe movments. this tells us that k-1 for the other 8 cells is a solution we can build off of. 
+We sum the results achieved from the 8 moves into the cell, after first multiplying the carried answer by 1/8.0
+*/
+    vector<vector<int>> moves {{2,1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+    double rec(int r, int c, int k, int n, map<vector<int>, double> &dp) {
+        if(r < 0 || r >= n || c < 0 || c >= n) {
+            return 0;
+        }
+        if(k == 0) {
+            return 1;
+        }
+        vector<int> state = {r,c,k};
+        auto it = dp.find(state);
+        if(it != dp.end()) {
+            return it->second;
+        }
+        double res = 0;
+        for(vector<int> move: moves) {
+            int i = r + move[0];
+            int j = c + move[1];
+            // each move is 1/8 probability of happening
+            res += 1/8.0*rec(i, j, k-1, n, dp);
+        }
+        dp.insert(pair<vector<int>, double> (state, res));
+        return res;
+    }
+    double knightProbability(int n, int k, int row, int column) {
+        map<vector<int>, double> dp;
+        return rec(row, column, k, n, dp);
+    }
+};

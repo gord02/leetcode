@@ -1,3 +1,31 @@
+class Solution {
+public:
+// intution, numbers in the range of 1 to N(size of the array) have a rightful position in the array, we should move that value to that position, this can be done in cosntant time, since we wont need to repeatedly swap at the same index since each number has only one rightful place and is either already there, is about to be moved there or does tno have a rightful place
+    int firstMissingPositive(vector<int>& nums) { 
+        int N = nums.size();
+        int i =0;
+        while(i < N) {
+            while(nums[i] >= 1 && nums[i] <= N && nums[i] != nums[nums[i] -1]) {
+                // swap the number into its rightful place
+                swap(nums[i], nums[nums[i] - 1]);
+            }
+            i++;
+        }
+
+        int x = 1;
+        i = 0;
+        while(i < N) {
+            if(nums[i] != x) {
+                return x;
+            }
+            x++;
+            i++;
+        }
+        return x;
+    }
+
+};
+
 // More precisely actually, it's that we will look at each number at most 
 twice(calculate the conditions), but swap once. Consider, you swap 
 cur_index with some index behind, in that case, you will need to look at 

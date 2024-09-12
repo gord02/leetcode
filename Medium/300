@@ -1,0 +1,27 @@
+class Solution {
+public:
+// 300. Longest Increasing Subsequence
+// time: 20 minutes
+// Runtime
+// 320 ms
+// Beats
+// 57.87%
+// Memory
+// 10.6 MB
+// Beats
+// 59.23%
+// my BF recursive apporach didnt work since we have to not fix a starting value, pass in last value that is out of nomral range, if lst out of range we know any number can start sequence
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> dp(nums.size(), 1);
+        int best = 1;
+        for(int i=1; i< nums.size(); i++) {
+            for(int j=0; j<i; j++) {
+                if(nums[j] < nums[i]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+            best = max(best, dp[i]);
+        }
+        return best;
+    }
+};

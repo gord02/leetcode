@@ -1,0 +1,55 @@
+class Solution {
+public:
+// 518. Coin Change II
+// time 25 minutes
+// Runtime
+// 272 ms
+// Beats
+// 5.18%
+// Memory
+// 18.2 MB
+// Beats
+// 61.84%
+
+/*
+Given the state, i and amt, what is the subproblem? we can choose the amt as the subproblem and this builds up to our ulitmiate given amount answer. For each coin we check if this coin can be used to generate the amount, if you cant use the coin, take from above. else, check  amt - coin(only if coin is smaller than or equal to amt) in the same row since you can take multiple of the same coin. add these two options together. 
+
+We can reduce the dp table to just two rows, since our transition only invloves current row and previous row
+
+*/
+    int rec(int i, int amt, vector<int> &coins, vector<vector<int>> &dp) {
+        // pruning, and base case since we only subtract positive values 
+        if(amt == 0) {
+            return 1;
+        }
+        // couldnt make it to amt == 0 with entire array
+        if(i == coins.size()) {
+            return 0;
+        }
+        if(dp[i][amt] != -1) {
+            return dp[i][amt];
+        }
+        int res = 0;
+        int m = 0;
+        while(m*coins[i] <= amt) {
+            res+= rec(i+1, amt - m*coins[i], coins, dp);
+            m++;
+        }
+        dp[i][amt] = res;
+        return res;
+    }
+    int change(int amount, vector<int>& coins) {
+        // int m = 0;
+        // int minVal = INT_MAX;
+        // for(int i=0; i< coins.size(); i++) {
+        //     minVal = min(minVal, coins[i]);
+        // }
+
+        // // max number of any coin we would might need to take 
+        // m = ((double) amount)/ minVal;
+
+        // return rec(0, amount, m, coins);
+        vector<vector<int>> dp(coins.size(), vector<int> (amount+1, -1));
+        return rec(0, amount, coins, dp);
+    }
+};

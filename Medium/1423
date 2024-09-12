@@ -1,0 +1,65 @@
+class Solution {
+public:
+// 1423. Maximum Points You Can Obtain from Cards
+
+    int maxScore(vector<int>& cardPoints, int k) {
+        // Beats 94.21%of users with C++
+        int sum =0;
+        int i =0;
+        while(i < k) {
+            sum+= cardPoints[i];
+            i++;
+        }
+        i = k-1; // make sure it doesnt go over! needs to start here
+        // special case
+        // if( cardPoints.size() == k) {
+        //     return sum;
+        // }
+        // cout << sum << endl;
+        int res = 0;
+        res = sum;
+        int j = cardPoints.size()-1;
+        while(i >= 0 && j >=0) {
+            // cout << i << " " << j<< endl;
+            sum -= cardPoints[i];
+            sum += cardPoints[j];
+            i--;
+            j--;
+            res = max(res, sum);
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+// BF, 2^k, you have two choives take from the left or the right, you make k total choices. Memozie by saving the combos of state, left index and right index, o(n*n).
+
+// Other approach, have to take k from the back, k from the front or some combo of ks from front and back. this is linear amount, we know which elements are evicted and which are being taken. Compute the combos linearly 
+    int maxScore(vector<int>& cardPoints, int k) {
+        int sum = 0;
+        int l = 0;
+        int r = cardPoints.size()-1;
+        while(l < k)  {
+            sum += cardPoints[l];
+            l++;
+        }
+        l--;
+        int res = sum;
+        
+        // special case!!!!!!
+        if(k == cardPoints.size()) {
+            return sum;
+        }
+        while(l >=0) {
+            sum -= cardPoints[l];
+            cout << "sum: "<< sum << " "<< l << " " << r << endl;
+            sum += cardPoints[r];
+            r--;
+            l--;
+            res = max(res, sum);
+            cout << "res; " << res << endl;
+        }
+        return res;
+    }
+};

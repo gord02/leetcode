@@ -1,0 +1,87 @@
+class Solution {
+public:
+// 45 minutes 
+// 934. Shortest Bridge
+
+    // gather up one island into the seen set
+    void dfs(int r, int c, vector<vector<int>>&grid, set<vector<int>>&seen) {
+        if(r < 0 || r >=grid.size() || c< 0 || c>=grid[0].size()) {
+            return;
+        }
+        if(grid[r][c] == 0) {
+            return;
+        }
+        if(seen.find({r,c}) != seen.end()) {
+            return;
+        }
+        seen.insert({r,c});
+        dfs(r+1, c, grid, seen);
+        dfs(r-1, c, grid, seen);
+        dfs(r, c+1, grid, seen);
+        dfs(r, c-1, grid, seen);
+    }
+    int shortestBridge(vector<vector<int>>& grid) {
+        set<vector<int>> seen;
+        int found = 0;
+        for(int i=0; i< grid.size(); i++) {
+            for(int j = 0; j< grid[0].size(); j++) {
+                if(grid[i][j] == 1) {
+                    dfs(i, j, grid, seen);
+                    found = 1;
+                    break;
+                }
+            }
+            if(found == 1) {
+                break;
+            }
+        }
+        queue<vector<int>> q;
+        vector<vector<int>> dirs = {{0,1}, {1,0}, {-1, 0}, {0, -1}};
+        // starting from one island in the queue, find the shorterst path to the other using bfs
+        cout << "size of seen: " << seen.size() << endl;
+        set<vector<int>> island = seen; // !!!!!!!!!!!!!!!!!!
+
+        for(vector<int> cell: island) {
+            for(auto dir: dirs) {
+                int r = cell[0] + dir[0];
+                int c = cell[1] + dir[1];
+
+                if(r >= 0 && r <grid.size() &&c>=0 && c<grid[0].size()) {
+                    if(seen.find({r,c}) == seen.end() && grid[r][c] == 0) {
+                        q.push({r, c});
+                        seen.insert({r,c});
+                    }
+                }
+            }
+        }
+        cout <<"size:"<< q.size() << endl;
+        int lvl = 0;
+        while (q.size() > 0) {
+            int size = q.size();
+            while(size > 0) {
+                size--;
+                vector<int> cell = q.front();
+                int i = cell[0];
+                int j = cell[1];
+                q.pop();
+                if(grid[i][j] == 1) {
+                    return lvl;
+                }
+                // travel to all adjecnet nodes, if cell has not been vistied already, add to queue
+                for(auto dir: dirs) {
+                    int r = cell[0] + dir[0];
+                    int c = cell[1] + dir[1];
+
+                    if(r >= 0 && r <grid.size() &&c>=0 && c<grid[0].size()) {
+                        if(seen.find({r,c}) == seen.end()) {
+                            q.push({r, c});
+                            seen.insert({r,c});
+                        }
+                    }
+                }
+            }
+            lvl++;
+        }
+        return 0;
+    }
+};

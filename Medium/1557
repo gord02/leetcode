@@ -1,0 +1,26 @@
+class Solution {
+public:
+// 1557. Minimum Number of Vertices to Reach All Nodes
+
+// time: 12 minutes
+    vector<int> findSmallestSetOfVertices(int n, vector<vector<int>>& edges) {
+        // add al zero in degree nodes to resulting vector and reutrn. other than these nodes, all other nodes are reacahble via some path
+        // we know there is no cycle therefore a path has to have a start which is a zero indegree node
+// there is no way to arrive at zero degree nodes unless starting from them 
+
+
+        vector<int> ins(n, 0);
+        for(auto edge: edges) {
+            int a = edge[0];
+            int b = edge[1];
+            ins[b]++;
+        }
+        vector<int> res;
+        for(int i=0; i< ins.size();i++) {
+            if(ins[i] == 0) {
+                res.push_back(i);
+            }
+        }
+        return res;
+    }
+};

@@ -1,6 +1,11 @@
 {
     "files.associations": {
+        "1514": "cpp",
         "*.ejs": "html",
-        "__node_handle": "cpp"
+        "__node_handle": "cpp",
+        "__locale": "cpp",
+        "__string": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
     }
 }

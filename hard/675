@@ -1,0 +1,124 @@
+class Solution {
+public:
+// almost got it, check constraints FIRST BEFORE STARTING !
+// just replace disjoint set code her with dfs to check for reachability
+    struct compare{
+        bool operator()(vector<int> i, vector<int> j) {
+            // first value is the digit of cell
+            // we want min prioirty, smallest towards end
+            return i[0] > j[0];
+        }
+    };
+
+    vector<vector<int>> dirs{{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+    void unit(int x, int y, vector<int> &parent, vector<int> &rank) {
+        int parX = find(x, parent);
+        int parY = find(y, parent);
+
+        if(parX == parY) {
+            return;
+        }
+        if(rank[parX] == rank[parY]) {
+            rank[parX]++;
+            parent[parY] = parX;
+        }
+        else if(rank[parX]  > rank[parY]) {
+            parent[parY] = parX;
+        }else{
+            parent[parX] = parY;
+        }
+    }
+
+    int find(int x, vector<int> &parent) {
+        if(parent[x] == x) {
+            return x;
+        }
+        parent[x] = find(parent[x], parent);
+        return parent[x];
+    }
+
+    int cutOffTree(vector<vector<int>>& forest) {
+        if(forest[0][0] == 0) {
+            return -1;
+        }
+        // 1 <= m, n <= 50
+        // 0 <= forest[i][j] <= 109 // ASK ABOUT THE CONSTRAINTS!!!!!!
+        vector<int> parent(forest.size() * forest[0].size() +1, 0);
+        vector<int> rank(forest.size() * forest[0].size() +1, 0);
+        for(int i=0; i< parent.size(); i++) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+        // connect cells
+        for(int i=0; i< forest.size(); i++) {
+            for(int j =0; j< forest[0].size(); j++) {
+                if(forest[i][j] != 0) {
+                    for(vector<int> dir: dirs) {
+                        int x = i + dir[0];
+                        int y = j + dir[1];
+
+                        // cant move to zero cells
+                        if(x >= 0 && x< forest.size() && y >=0 && y < forest[0].size() && forest[x][y] != 0 ) {
+                            int n = forest[i][j];
+                            int z = forest[x][y];
+                            unit(n, z, parent, rank);
+                        }
+                    }
+                }
+            }
+        }
+        priority_queue<vector<int>, vector<vector<int>>, compare> q;
+        for(int i=0; i< forest.size(); i++) {
+            for(int j =0; j< forest[0].size(); j++) {
+                if(forest[i][j]!= 0) {
+                    q.push({forest[i][j], i, j});
+                }
+            }
+        }
+
+        vector<int> last = {0,0,0};
+        // connecting origin to its adjencet cells
+         for(vector<int> dir: dirs) {
+            int x = 0 + dir[0];
+            int y = 0 + dir[1];
+
+            // cant move to zero cells
+            if(x >= 0 && x< forest.size() && y >=0 && y < forest[0].size() && forest[x][y] != 0 ) {
+                int z = forest[x][y];
+                unit(0, z,  parent, rank);
+            }
+        }
+        // for(int i=0; i< parent.size(); i++) {
+           
+        //     cout <<  find(i, parent) << " "<< flush;
+        // }
+        // cout << endl;
+
+        int steps = 0;
+        while(q.empty() == false) {
+            vector<int> top = q.top();
+            q.pop();
+
+            int num = top[0];
+            if(num == 1) {
+                // we do not need to walk to one
+                continue;
+            }
+            int x = top[1];
+            int y = top[2];
+
+            // at the start of the traversal
+         
+            // check if reachable
+            if(find(last[0], parent) != find(num, parent)) {
+                    // next tree is not reacahble
+                return -1;
+            }else{
+                steps+= abs(last[1] - x) + abs(last[2] - y);
+            }
+
+            last = {num, x, y};
+        }
+        return steps;
+    }
+};

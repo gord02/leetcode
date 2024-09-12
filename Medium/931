@@ -1,5 +1,38 @@
 class Solution {
 public:
+// 931. Minimum Falling Path Sum
+// time: 14 min
+// bf: from each starting position, traverse all paths from starting node, get smallest sum achieved. O(n * n^2) 
+// intution: for each cell we can ask ourselves, how did we arrive at this cell? In this question, there are three ways at most to arrive at a cell. Loop through all three and save the smallest valued way to arrive. Repeat until at bottom row.
+// First row is default, no addition needed
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+    //    editing  orgiinal matrix
+    // start from second row, no need to transition to first row, starting row
+        for(int i=1; i< matrix.size(); i++) {
+            for(int j=0; j< matrix[i].size(); j++) {
+                int smallest = INT_MAX;
+                for(int k=-1; k<=1; k++) {
+                    int c = j + k;
+                    // valid column to choose from
+                    if(c >= 0 && c < matrix[i].size()) {
+                        smallest = min(smallest, matrix[i-1][c]);
+                    }
+                }
+                // add the smallest number in previous row to current value of cell
+                matrix[i][j] += smallest;
+            }
+        } 
+
+        int res = INT_MAX; 
+        for(int j=0; j < matrix[0].size(); j++) {
+            res = min(res, matrix[matrix.size()-1][j]);
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
 //     931. Minimum Falling Path Sum
 // time taken: 23 minutes with explanation. 
 // Runtime
